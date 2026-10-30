@@ -1,9 +1,8 @@
 // Locks every /admin page behind a username and password.
 // The real username and password are NOT in this file. They live in Vercel:
 // Project → Settings → Environment Variables → ADMIN_USER and ADMIN_PASS.
+// Which paths run this file is set in vercel.json (proxy.matcher). Vercel refuses to build if it is set here too.
 import { next } from '@vercel/functions';
-
-export const config = { matcher: ['/admin', '/admin/:path*'] };
 
 // Compare two strings without stopping at the first different character.
 function same(a, b) {
