@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Strings Practice Sheet · Class 10 Python</title>
+<meta name="description" content="110 code questions on Python strings for Class 10 ICSE.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=JetBrains+Mono:wght@400;600;700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+.sec{display:flex;flex-direction:column;gap:14px;padding-top:8px;border-top:1px solid var(--line)}
+.q{display:flex;flex-direction:column;gap:8px;min-width:0}
+.q p{max-width:70ch}
+.instr ul{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:4px}
+.fill{font-family:var(--mono);color:var(--muted)}
+@media print{.sec{break-inside:auto}.q{break-inside:avoid}}
+</style>
+</head>
+<body>
+<header class="site-header"><div class="in"><a class="brand" href="/"><span class="p">&gt;&gt;&gt;</span>Class 10 Python</a><nav class="nav" aria-label="Main"><a href="/">Home</a><a href="/quiz">Quizzes</a><a href="/lab">Visual Lab</a><a href="/practice" aria-current="page">Practice sheet</a></nav></div></header>
+<main class="wrap">
+<header style="display:flex;flex-direction:column;gap:8px"><p class="eyebrow">Class 10 ICSE · Python · Strings</p><h1>Strings Practice Sheet</h1><p class="muted">110 questions across all 10 string lessons.</p></header>
+<section class="panel instr"><p class="fill">Name: ____________________ · Section: _____ · Roll no.: _____ · Date: __________</p>
+<ul><li><b>Predict the output:</b> write exactly what Python prints, line by line. Spaces and capital letters count.</li>
+<li><b>Find the error:</b> name the error (for example <code>TypeError</code>), say why it happens, and write the corrected line.</li>
+<li><b>Write a program:</b> write complete code that runs.</li>
+<li>Solve every question on paper first. Then type it into Python and check.</li>
+<li>If code raises an error, the error is the answer. Write it as <code>Error: &lt;ErrorName&gt;</code>.</li></ul>
+<div class="row no-print"><span class="muted">Printing? Use your browser's Print command; the menu bar is left out.</span></div></section>
+<section class="sec"><h2>1. Introduction to Strings</h2><p class="muted">Questions 1–10</p><div class="q"><p><b>Q1.</b> Predict the output.</p><pre class="code">print(type(&quot;42&quot;))
+print(type(42))</pre></div><div class="q"><p><b>Q2.</b> Predict the output.</p><pre class="code">x = &quot;7&quot;
+y = 7
+print(x == y)</pre></div><div class="q"><p><b>Q3.</b> Predict the output.</p><pre class="code">print(len(&quot;Hello World&quot;))</pre></div><div class="q"><p><b>Q4.</b> Predict the output.</p><pre class="code">s = &quot;   &quot;
+print(len(s))
+print(len(&quot;&quot;))</pre></div><div class="q"><p><b>Q5.</b> Predict the output.</p><pre class="code">print(&quot;5&quot; + &quot;5&quot;)
+print(5 + 5)</pre></div><div class="q"><p><b>Q6.</b> Predict the output.</p><pre class="code">print(int(&quot;12&quot;) + 3)
+print(str(12) + &quot;3&quot;)</pre></div><div class="q"><p><b>Q7.</b> Predict the output.</p><pre class="code">word = &quot;ICSE&quot;
+print(word[0], word[3])</pre></div><div class="q"><p><b>Q8.</b> Predict the output.</p><pre class="code">a = &quot;Python&quot;
+b = &quot;python&quot;
+print(a == b)</pre></div><div class="q"><p><b>Q9.</b> Which of these values are strings? Write the letters.</p><p>(a) <code>&#x27;A&#x27;</code> (b) <code>&quot;123&quot;</code> (c) <code>123</code> (d) <code>&quot;&quot;</code> (e) <code>True</code> (f) <code>&quot;True&quot;</code></p></div><div class="q"><p><b>Q10.</b> Write a program. Ask for the user&#x27;s full name and print how many characters it has, counting spaces.</p></div></section><section class="sec"><h2>2. Creating a String</h2><p class="muted">Questions 11–20</p><div class="q"><p><b>Q11.</b> Find the error. Name it, explain it, and write the correct code.</p><pre class="code">s = &#x27;It&#x27;s Python&#x27;
+print(s)</pre></div><div class="q"><p><b>Q12.</b> Predict the output.</p><pre class="code">print(&quot;He said &#x27;Hi&#x27;&quot;)</pre></div><div class="q"><p><b>Q13.</b> Predict the output.</p><pre class="code">a = str(10.50)
+print(a, len(a))</pre></div><div class="q"><p><b>Q14.</b> Predict the output.</p><pre class="code">b = str(True)
+print(b + &quot;!&quot;)</pre></div><div class="q"><p><b>Q15.</b> Predict the output.</p><pre class="code">c = &#x27;&#x27;
+print(len(c), type(c))</pre></div><div class="q"><p><b>Q16.</b> Predict the output. The user types <code>007</code> when asked.</p><pre class="code">code = input(&quot;Code: &quot;)
+print(code + &quot;1&quot;)</pre></div><div class="q"><p><b>Q17.</b> Predict the output. The user types <code>15</code> when asked.</p><pre class="code">n = input(&quot;Number: &quot;)
+print(n * 2)</pre></div><div class="q"><p><b>Q18.</b> Predict the output.</p><pre class="code">s = &quot;3&quot; + str(4) + &quot;5&quot;
+print(s, len(s))</pre></div><div class="q"><p><b>Q19.</b> Which line causes an error? Give the reason.</p><p>(a) <code>s = &quot;Hello&#x27;</code> (b) <code>s = &#x27;Hello&#x27;</code> (c) <code>s = &quot;&quot;&quot;Hello&quot;&quot;&quot;</code> (d) <code>s = &quot;Hello&quot;</code></p></div><div class="q"><p><b>Q20.</b> Write a program. Read two numbers with <code>input()</code> and print their sum. Then explain in one line why the program prints <code>1020</code> if you forget to convert the inputs.</p></div></section><section class="sec"><h2>3. Traversing a String</h2><p class="muted">Questions 21–30</p><div class="q"><p><b>Q21.</b> Predict the output.</p><pre class="code">for ch in &quot;ICSE&quot;:
+    print(ch, end=&quot;-&quot;)</pre></div><div class="q"><p><b>Q22.</b> Predict the output.</p><pre class="code">count = 0
+for ch in &quot;banana&quot;:
+    if ch == &quot;a&quot;:
+        count += 1
+print(count)</pre></div><div class="q"><p><b>Q23.</b> Predict the output.</p><pre class="code">result = &quot;&quot;
+for ch in &quot;abc&quot;:
+    result = ch + result
+print(result)</pre></div><div class="q"><p><b>Q24.</b> Predict the output.</p><pre class="code">for ch in &quot;a1b2&quot;:
+    if ch in &quot;0123456789&quot;:
+        print(ch)</pre></div><div class="q"><p><b>Q25.</b> Predict the output.</p><pre class="code">out = &quot;&quot;
+for ch in &quot;Python&quot;:
+    out = out + ch * 2
+print(out)</pre></div><div class="q"><p><b>Q26.</b> Predict the output.</p><pre class="code">v = 0
+for ch in &quot;Education&quot;:
+    if ch in &quot;aeiou&quot;:
+        v += 1
+print(v)</pre></div><div class="q"><p><b>Q27.</b> How many times does the loop body run? Explain.</p><pre class="code">for ch in &quot;Hello World&quot;:
+    print(ch)</pre></div><div class="q"><p><b>Q28.</b> Find the error. Name it, explain it, and write the correct code.</p><pre class="code">for ch in &quot;cat&quot;:
+    print(ch[1])</pre></div><div class="q"><p><b>Q29.</b> Predict the output.</p><pre class="code">for ch in &quot;xyz&quot;:
+    print(ch, end=&quot;&quot;)
+print(&quot;!&quot;)</pre></div><div class="q"><p><b>Q30.</b> Write a program. Read a sentence and print the number of spaces in it and the number of words. Assume words are separated by single spaces.</p></div></section><section class="sec"><h2>4. Range in String</h2><p class="muted">Questions 31–40</p><div class="q"><p><b>Q31.</b> Predict the output.</p><pre class="code">s = &quot;LOOP&quot;
+for i in range(len(s)):
+    print(i, s[i])</pre></div><div class="q"><p><b>Q32.</b> Predict the output.</p><pre class="code">s = &quot;PYTHON&quot;
+for i in range(0, len(s), 2):
+    print(s[i], end=&quot;&quot;)</pre></div><div class="q"><p><b>Q33.</b> Predict the output.</p><pre class="code">s = &quot;hello&quot;
+for i in range(len(s) - 1, -1, -1):
+    print(s[i], end=&quot;&quot;)</pre></div><div class="q"><p><b>Q34.</b> Predict the output.</p><pre class="code">s = &quot;abcdef&quot;
+for i in range(1, len(s), 2):
+    print(s[i], end=&quot;&quot;)</pre></div><div class="q"><p><b>Q35.</b> Predict the output.</p><pre class="code">s = &quot;banana&quot;
+for i in range(len(s)):
+    if s[i] == &quot;n&quot;:
+        print(i)</pre></div><div class="q"><p><b>Q36.</b> Predict the output.</p><pre class="code">s = &quot;ICSE&quot;
+print(list(range(len(s))))</pre></div><div class="q"><p><b>Q37.</b> Find the error. Name it, explain it, and write the correct code.</p><pre class="code">s = &quot;Hi&quot;
+for i in range(len(s) + 1):
+    print(s[i])</pre></div><div class="q"><p><b>Q38.</b> Predict the output.</p><pre class="code">s = &quot;radar&quot;
+same = True
+for i in range(len(s)):
+    if s[i] != s[len(s) - 1 - i]:
+        same = False
+print(same)</pre></div><div class="q"><p><b>Q39.</b> Predict the output.</p><pre class="code">s = &quot;aXbYc&quot;
+out = &quot;&quot;
+for i in range(len(s)):
+    if i % 2 == 0:
+        out += s[i]
+print(out)</pre></div><div class="q"><p><b>Q40.</b> Write a program. Read a word and print the position (index) of its first space, without using <code>find()</code>. Print <code>-1</code> if there is no space.</p></div></section><section class="sec"><h2>5. Single-line vs Multi-line Strings</h2><p class="muted">Questions 41–50</p><div class="q"><p><b>Q41.</b> Predict the output.</p><pre class="code">s = &quot;&quot;&quot;A
+B&quot;&quot;&quot;
+print(len(s))</pre></div><div class="q"><p><b>Q42.</b> Predict the output.</p><pre class="code">print(&quot;&quot;&quot;Line1
+Line2&quot;&quot;&quot;)</pre></div><div class="q"><p><b>Q43.</b> Predict the output.</p><pre class="code">poem = &#x27;&#x27;&#x27;Roses are red
+Violets are blue&#x27;&#x27;&#x27;
+lines = 1
+for ch in poem:
+    if ch == &quot;\n&quot;:
+        lines += 1
+print(lines)</pre></div><div class="q"><p><b>Q44.</b> Find the error. Name it, explain it, and write the correct code.</p><pre class="code">s = &quot;Hello
+World&quot;
+print(s)</pre></div><div class="q"><p><b>Q45.</b> Predict the output.</p><pre class="code">a = &quot;&quot;&quot;ICSE&quot;&quot;&quot;
+b = &quot;ICSE&quot;
+print(a == b)</pre></div><div class="q"><p><b>Q46.</b> Predict the output.</p><pre class="code">s = &quot;&quot;&quot;
+Hi
+&quot;&quot;&quot;
+print(len(s))</pre></div><div class="q"><p><b>Q47.</b> Predict the output.</p><pre class="code">s = (&quot;Good &quot;
+     &quot;Morning&quot;)
+print(s)
+print(len(s))</pre></div><div class="q"><p><b>Q48.</b> Predict the output.</p><pre class="code">poem = &quot;&quot;&quot;a
+b
+c&quot;&quot;&quot;
+for i in range(len(poem)):
+    if poem[i] == &quot;\n&quot;:
+        print(i)</pre></div><div class="q"><p><b>Q49.</b> A string is written with triple quotes but all on one line: <code>s = &quot;&quot;&quot;Hello&quot;&quot;&quot;</code>. Is <code>s</code> a multi-line string? Explain.</p></div><div class="q"><p><b>Q50.</b> Write a program. Store your school&#x27;s address on 3 lines using triple quotes. Print it, then print how many characters it has.</p></div></section><section class="sec"><h2>6. String Concatenation</h2><p class="muted">Questions 51–60</p><div class="q"><p><b>Q51.</b> Predict the output.</p><pre class="code">print(&quot;Ram&quot; + &quot;Shyam&quot;)
+print(&quot;Ram&quot; + &quot; &quot; + &quot;Shyam&quot;)</pre></div><div class="q"><p><b>Q52.</b> Predict the output.</p><pre class="code">print(&quot;Ha&quot; * 3 + &quot;!&quot;)</pre></div><div class="q"><p><b>Q53.</b> Predict the output.</p><pre class="code">print(&quot;=&quot; * 10)</pre></div><div class="q"><p><b>Q54.</b> Find the error. Name it, explain it, and write the correct code.</p><pre class="code">age = 15
+print(&quot;Age: &quot; + age)</pre></div><div class="q"><p><b>Q55.</b> Predict the output.</p><pre class="code">a = &quot;5&quot;
+b = &quot;10&quot;
+print(a + b, int(a) + int(b))</pre></div><div class="q"><p><b>Q56.</b> Predict the output.</p><pre class="code">s = &quot;&quot;
+for i in range(4):
+    s = s + str(i)
+print(s)</pre></div><div class="q"><p><b>Q57.</b> Predict the output.</p><pre class="code">print(&quot;ab&quot; * 0, &quot;end&quot;)</pre></div><div class="q"><p><b>Q58.</b> Predict the output.</p><pre class="code">x = &quot;Hi&quot;
+x += &quot; there&quot;
+x *= 2
+print(x)</pre></div><div class="q"><p><b>Q59.</b> Predict the output.</p><pre class="code">print(3 * &quot;7&quot; + &quot;1&quot;)</pre></div><div class="q"><p><b>Q60.</b> Write a program. Using <code>*</code> inside a loop, print this pattern for n = 4:</p><pre class="code">*
+**
+***
+****</pre></div></section><section class="sec"><h2>7. Escape Sequences</h2><p class="muted">Questions 61–70</p><div class="q"><p><b>Q61.</b> Predict the output.</p><pre class="code">print(&quot;A\tB&quot;)</pre></div><div class="q"><p><b>Q62.</b> Predict the output.</p><pre class="code">print(&quot;Line1\nLine2&quot;)</pre></div><div class="q"><p><b>Q63.</b> Predict the output.</p><pre class="code">print(len(&quot;A\nB&quot;))</pre></div><div class="q"><p><b>Q64.</b> Predict the output.</p><pre class="code">print(&quot;C:\\new\\folder&quot;)</pre></div><div class="q"><p><b>Q65.</b> Predict the output.</p><pre class="code">print(&#x27;It\&#x27;s fine&#x27;)</pre></div><div class="q"><p><b>Q66.</b> Predict the output.</p><pre class="code">print(&quot;She said \&quot;Yes\&quot;&quot;)</pre></div><div class="q"><p><b>Q67.</b> Predict the output.</p><pre class="code">print(len(&quot;\\n&quot;))</pre></div><div class="q"><p><b>Q68.</b> Predict the output. Careful: this path is meant to be <code>C:\new\table</code>.</p><pre class="code">print(&quot;C:\new\table&quot;)</pre></div><div class="q"><p><b>Q69.</b> Predict the output.</p><pre class="code">print(&quot;a\\tb&quot;)</pre></div><div class="q"><p><b>Q70.</b> Write a program. Use ONE <code>print()</code> statement, with one string, to print exactly this (the gap is a tab):</p><pre class="code">Name:	Asha
+Class:	10</pre></div></section><section class="sec"><h2>8. String Slicing</h2><p class="muted">Questions 71–85</p><p>Questions 71–84 use this string. Write the index of every letter, positive and negative, above it before you start.</p><pre class="code">s = &quot;COMPUTER&quot;</pre><div class="q"><p><b>Q71.</b> Predict the output.</p><pre class="code">print(s[0], s[-1])</pre></div><div class="q"><p><b>Q72.</b> Predict the output.</p><pre class="code">print(s[3], s[-4])</pre></div><div class="q"><p><b>Q73.</b> Predict the output.</p><pre class="code">print(s[2:5])</pre></div><div class="q"><p><b>Q74.</b> Predict the output.</p><pre class="code">print(s[:4])
+print(s[4:])</pre></div><div class="q"><p><b>Q75.</b> Predict the output.</p><pre class="code">print(s[:])
+print(s[:] == s)</pre></div><div class="q"><p><b>Q76.</b> Predict the output.</p><pre class="code">print(s[-3:])</pre></div><div class="q"><p><b>Q77.</b> Predict the output.</p><pre class="code">print(s[-5:-2])</pre></div><div class="q"><p><b>Q78.</b> Predict the output.</p><pre class="code">print(s[::2])</pre></div><div class="q"><p><b>Q79.</b> Predict the output.</p><pre class="code">print(s[1::2])</pre></div><div class="q"><p><b>Q80.</b> Predict the output.</p><pre class="code">print(s[::-1])</pre></div><div class="q"><p><b>Q81.</b> Predict the output.</p><pre class="code">print(s[6:2:-1])</pre></div><div class="q"><p><b>Q82.</b> Predict the output.</p><pre class="code">print(s[-1:-4:-1])</pre></div><div class="q"><p><b>Q83.</b> Which of these print an empty line, and which raise an error? Explain each.</p><pre class="code">print(s[2:2])
+print(s[10:])
+print(s[10])</pre></div><div class="q"><p><b>Q84.</b> Fill in the blanks so the code prints <code>PUTE</code>. Give two different answers: one with positive indexes and one with negative indexes.</p><pre class="code">print(s[___:___])</pre></div><div class="q"><p><b>Q85.</b> Write a program. A roll number is stored as <code>roll = &quot;2027ICSE0451&quot;</code>. Using only slicing, print the year (first 4 characters), the board (next 4) and the number (last 4) on separate lines. Then read any word and print whether it is a palindrome, using <code>[::-1]</code>.</p></div></section><section class="sec"><h2>9. Strings are Immutable</h2><p class="muted">Questions 86–95</p><div class="q"><p><b>Q86.</b> Find the error. Name it, explain it, and write the correct code.</p><pre class="code">s = &quot;cat&quot;
+s[0] = &quot;b&quot;
+print(s)</pre></div><div class="q"><p><b>Q87.</b> Predict the output.</p><pre class="code">s = &quot;cat&quot;
+s = &quot;b&quot; + s[1:]
+print(s)</pre></div><div class="q"><p><b>Q88.</b> Predict the output.</p><pre class="code">s = &quot;hello&quot;
+s.upper()
+print(s)</pre></div><div class="q"><p><b>Q89.</b> Predict the output.</p><pre class="code">s = &quot;hello&quot;
+t = s.upper()
+print(s, t)</pre></div><div class="q"><p><b>Q90.</b> Predict the output.</p><pre class="code">a = &quot;ICSE&quot;
+b = a
+a = a + &quot;!&quot;
+print(a, b)</pre></div><div class="q"><p><b>Q91.</b> Predict the output.</p><pre class="code">s = &quot;Python&quot;
+s.replace(&quot;P&quot;, &quot;J&quot;)
+print(s)</pre></div><div class="q"><p><b>Q92.</b> Predict the output.</p><pre class="code">s = &quot;abc&quot;
+t = s
+s += &quot;d&quot;
+print(s)
+print(t)</pre></div><div class="q"><p><b>Q93.</b> True or False? Explain: <code>s += &quot;x&quot;</code> changes the original string object.</p></div><div class="q"><p><b>Q94.</b> Which of these will work on <code>s = &quot;pen&quot;</code>? Give the reason for each one that fails.</p><p>(a) <code>s[1] = &quot;a&quot;</code> (b) <code>s = s[0] + &quot;a&quot; + s[2]</code> (c) <code>del s[0]</code> (d) <code>s.append(&quot;s&quot;)</code></p></div><div class="q"><p><b>Q95.</b> Write a program. <code>word = &quot;pen&quot;</code>. Without using <code>replace()</code>, change it to <code>&quot;pan&quot;</code> and print it. Then change <code>&quot;computer&quot;</code> to <code>&quot;Computer&quot;</code> the same way.</p></div></section><section class="sec"><h2>10. String Methods</h2><p class="muted">Questions 96–110</p><div class="q"><p><b>Q96.</b> <em>Format checking.</em> Predict the output.</p><pre class="code">print(&quot;icse&quot;.islower(), &quot;ICSE&quot;.isupper(), &quot;Icse&quot;.isupper())</pre></div><div class="q"><p><b>Q97.</b> <em>Format checking.</em> Predict the output.</p><pre class="code">print(&quot;abc123&quot;.isalnum(), &quot;abc 123&quot;.isalnum(), &quot;abc&quot;.isalpha())</pre></div><div class="q"><p><b>Q98.</b> <em>Format checking.</em> Predict the output.</p><pre class="code">print(&quot;2027&quot;.isdigit(), &quot;20.5&quot;.isdigit(), &quot;&quot;.isdigit())</pre></div><div class="q"><p><b>Q99.</b> <em>Format checking.</em> Predict the output.</p><pre class="code">print(&quot;hello.py&quot;.endswith(&quot;.py&quot;))
+print(&quot;hello.py&quot;.startswith(&quot;Hello&quot;))</pre></div><div class="q"><p><b>Q100.</b> <em>Format checking.</em> Predict the output.</p><pre class="code">s = &quot;ICSE2027&quot;
+print(s.isupper(), s.isalpha(), s.isalnum())</pre></div><div class="q"><p><b>Q101.</b> <em>Case conversion.</em> Predict the output.</p><pre class="code">s = &quot;Board Exam 2027&quot;
+print(s.upper())
+print(s.lower())
+print(s)</pre></div><div class="q"><p><b>Q102.</b> <em>Token searching.</em> Predict the output.</p><pre class="code">s = &quot;banana&quot;
+print(s.find(&quot;an&quot;), s.find(&quot;x&quot;))
+print(s.count(&quot;a&quot;), s.count(&quot;an&quot;))</pre></div><div class="q"><p><b>Q103.</b> <em>Token searching.</em> Predict the output.</p><pre class="code">s = &quot;Hello World&quot;
+print(s.lower().count(&quot;o&quot;))
+print(s.upper().find(&quot;W&quot;))
+print(s.find(&quot;w&quot;))</pre></div><div class="q"><p><b>Q104.</b> <em>Replacement.</em> Predict the output.</p><pre class="code">print(&quot;2026-10-19&quot;.replace(&quot;-&quot;, &quot;/&quot;))
+print(&quot;aaaa&quot;.replace(&quot;a&quot;, &quot;b&quot;, 2))</pre></div><div class="q"><p><b>Q105.</b> <em>Replacement.</em> Predict the output.</p><pre class="code">s = &quot;I like Java&quot;
+t = s.replace(&quot;Java&quot;, &quot;Python&quot;)
+print(s)
+print(t)</pre></div><div class="q"><p><b>Q106.</b> <em>Breaking and joining.</em> Predict the output.</p><pre class="code">print(&quot;Python is fun&quot;.split())
+print(&quot;10,20,30&quot;.split(&quot;,&quot;))</pre></div><div class="q"><p><b>Q107.</b> <em>Breaking and joining.</em> Predict the output. (There are two spaces between <code>b</code> and <code>c</code>.)</p><pre class="code">print(&quot;a b  c&quot;.split())
+print(&quot;a b  c&quot;.split(&quot; &quot;))</pre></div><div class="q"><p><b>Q108.</b> <em>Breaking and joining.</em> Predict the output.</p><pre class="code">print(&quot;-&quot;.join([&quot;A&quot;, &quot;B&quot;, &quot;C&quot;]))
+print(&quot;&quot;.join([&quot;x&quot;, &quot;y&quot;, &quot;z&quot;]))
+print(&quot; &quot;.join(&quot;ICSE&quot;))</pre></div><div class="q"><p><b>Q109.</b> <em>Breaking and joining.</em> Find the error. Name it, explain it, and write the correct code.</p><pre class="code">marks = [90, 85, 77]
+print(&quot;, &quot;.join(marks))</pre></div><div class="q"><p><b>Q110.</b> <em>Mixed.</em> Write a program. (a) Read a date like <code>19/10/2026</code> and print it as <code>2026-10-19</code> using <code>split()</code> and <code>join()</code>.</p><p>(b) Read an email address and print <code>Valid</code> if it contains exactly one <code>@</code> and ends with <code>.com</code>, else print <code>Invalid</code>.</p></div></section>
+</main>
+</body>
+</html>

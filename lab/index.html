@@ -1,0 +1,1811 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Visual Lab · Class 10 Python</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=JetBrains+Mono:wght@400;600;700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap">
+<style>
+/* Layout: a lab bench. Pickers on top, the live visual is the big surface, code + output sit beside it like a notebook. */
+:root{
+  --paper:#F4F4EF; --panel:#FFFFFF; --sunk:#ECEBE4; --ink:#16213A; --muted:#55607A; --line:#D9D7CD;
+  --blue:#2457D6; --blue-soft:#E2EAFF; --orange:#B0520A; --orange-soft:#FFE7CF;
+  --green:#11704A; --green-soft:#D9F2E4; --red:#A32121; --red-soft:#FCE1E1; --violet:#5B3FA0; --violet-soft:#ECE4FF;
+  --code-bg:#16213A; --code-fg:#E6ECF8; --code-kw:#FFB86B; --code-str:#8EE6A0; --code-num:#8CC4FF; --code-com:#93A3C0; --code-fn:#F3D37A; --code-line:#26345A;
+  --display:'Fredoka','Trebuchet MS',system-ui,sans-serif;
+  --body:'Nunito Sans','Segoe UI',system-ui,Arial,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,Consolas,'Courier New',monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#0F1527; --panel:#172036; --sunk:#121A2E; --ink:#E7ECF7; --muted:#A3AFCA; --line:#2A3655;
+  --blue:#86A8FF; --blue-soft:#1E2C58; --orange:#FFAE6B; --orange-soft:#45291A;
+  --green:#6ED6A0; --green-soft:#133627; --red:#FF8B8B; --red-soft:#46202A; --violet:#BBA4FF; --violet-soft:#2C2455;
+  --code-bg:#0A1020; --code-line:#1C2850; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#0F1527; --panel:#172036; --sunk:#121A2E; --ink:#E7ECF7; --muted:#A3AFCA; --line:#2A3655;
+  --blue:#86A8FF; --blue-soft:#1E2C58; --orange:#FFAE6B; --orange-soft:#45291A;
+  --green:#6ED6A0; --green-soft:#133627; --red:#FF8B8B; --red-soft:#46202A; --violet:#BBA4FF; --violet-soft:#2C2455;
+  --code-bg:#0A1020; --code-line:#1C2850; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font:16px/1.5 var(--body)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+.wrap{max-width:1280px;margin:0 auto;padding-inline:clamp(16px,3vw,32px);padding-block:20px 56px;display:flex;flex-direction:column;gap:22px}
+
+/* header */
+.top{display:flex;flex-wrap:wrap;gap:16px 28px;align-items:flex-end;justify-content:space-between;padding-bottom:18px;border-bottom:1px solid var(--line)}
+.brand{display:flex;gap:14px;align-items:center;min-width:0}
+.prompt{font:700 1.05rem var(--mono);color:var(--panel);background:var(--blue);padding:.45rem .6rem;border-radius:10px;letter-spacing:.02em}
+.brand h1{font:600 clamp(1.5rem,3vw,2rem)/1.1 var(--display);margin:0;text-wrap:balance}
+.brand p{margin:2px 0 0;color:var(--muted);font-size:.95rem}
+.pickers{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
+.pick{display:flex;flex-direction:column;gap:5px;font:700 .72rem var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);min-width:0}
+.pick select{font:600 1rem var(--body);text-transform:none;letter-spacing:0;color:var(--ink);background:var(--panel);border:2px solid var(--line);border-radius:10px;padding:.5rem .7rem;min-width:0;max-width:100%;cursor:pointer}
+.pick select:hover{border-color:var(--blue)}
+#modSel{width:15.5rem}#topSel{width:20rem}
+.nav{display:flex;align-items:center;gap:8px}
+.nav button{width:42px;height:42px;border-radius:10px;border:2px solid var(--line);background:var(--panel);font:700 1.1rem var(--mono);cursor:pointer}
+.nav button:hover{border-color:var(--blue);color:var(--blue)}
+#pos{font:600 .9rem var(--mono);color:var(--muted);min-width:4.5em;text-align:center;font-variant-numeric:tabular-nums}
+
+/* topic intro */
+.intro{display:flex;flex-direction:column;gap:6px;max-width:72ch}
+.eyebrow{font:700 .78rem var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--orange);margin:0}
+.intro h2{font:600 clamp(1.6rem,3.4vw,2.3rem)/1.12 var(--display);margin:0;text-wrap:balance}
+.intro p#blurb{margin:0;color:var(--muted);font-size:1.05rem}
+
+/* work area */
+.work{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:920px){.work{grid-template-columns:minmax(0,1fr)}}
+.bench{background:var(--panel);border:1px solid var(--line);border-radius:16px;display:flex;flex-direction:column;min-width:0}
+.stage{padding:clamp(16px,2.4vw,28px);min-height:300px;display:flex;flex-direction:column;gap:20px;overflow-x:auto}
+.controls{border-top:1px solid var(--line);background:var(--sunk);border-radius:0 0 16px 16px;padding:16px clamp(14px,2vw,22px);display:flex;flex-wrap:wrap;gap:14px 18px;align-items:flex-end}
+.controls:empty{display:none}
+.side{display:flex;flex-direction:column;gap:8px;min-width:0}
+.plabel{font:700 .72rem var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+pre.code{background:var(--code-bg);color:var(--code-fg);font:400 .9rem/1.65 var(--mono);padding:14px 0;border-radius:12px;margin:0;overflow-x:auto;tab-size:4}
+pre.code .ln{display:block;padding:0 16px;white-space:pre}
+pre.code .ln.on{background:var(--code-line);box-shadow:inset 3px 0 0 var(--code-kw)}
+pre.code .ln.skip{opacity:.38}
+pre.code .ln.ran{background:color-mix(in srgb,var(--code-str) 14%,transparent)}
+.c-kw{color:var(--code-kw)}.c-str{color:var(--code-str)}.c-num{color:var(--code-num)}.c-com{color:var(--code-com);font-style:italic}.c-fn{color:var(--code-fn)}
+.out{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font:.9rem/1.6 var(--mono);white-space:pre-wrap;word-break:break-word;min-height:3.2em;tab-size:8;overflow-x:auto}
+.out.err{background:var(--red-soft);border-color:var(--red);color:var(--red)}
+.out.muted{color:var(--muted)}
+.tip{font-size:.95rem;color:var(--muted);padding:10px 0 0;border-top:1px dashed var(--line);margin-top:6px}
+.tip b{color:var(--ink)}
+
+/* controls */
+.ctl{display:flex;flex-direction:column;gap:5px;min-width:0}
+.ctl>label{font:700 .74rem var(--body);color:var(--muted);letter-spacing:.04em}
+.ctl>label output{font:700 .82rem var(--mono);color:var(--blue);margin-left:4px}
+.ctl input[type=text],.ctl select,.ctl textarea{background:var(--panel);border:2px solid var(--line);border-radius:9px;padding:.42rem .6rem;font:500 .95rem var(--mono);min-width:0;max-width:100%}
+.ctl input[type=text]{width:11rem}.ctl input.wide{width:17rem}
+.ctl textarea{width:min(26rem,100%);resize:vertical;line-height:1.5}
+.ctl input[type=range]{width:9.5rem;accent-color:var(--blue)}
+.ctl.check{flex-direction:row;align-items:center;gap:8px;padding-bottom:8px}
+.ctl.check input{width:18px;height:18px;accent-color:var(--blue)}
+.ctl.check label{font:600 .9rem var(--body);color:var(--ink);letter-spacing:0}
+.ctl-sub{display:contents}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+.btn{font:600 .92rem var(--body);padding:.45rem .85rem;border:2px solid var(--blue);color:var(--blue);background:var(--panel);border-radius:9px;cursor:pointer;white-space:nowrap}
+.btn:hover{background:var(--blue-soft)}
+.btn.primary{background:var(--blue);color:var(--panel)}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.warn{border-color:var(--red);color:var(--red)}
+.btn.warn:hover{background:var(--red-soft)}
+.btn.mono{font-family:var(--mono);font-weight:600;font-size:.86rem}
+.btn:disabled{opacity:.4;cursor:default}
+
+/* visual atoms */
+.row{display:flex;flex-wrap:wrap;gap:14px 18px;align-items:center}
+.col{display:flex;flex-direction:column;gap:12px;min-width:0}
+.cap{font:700 .74rem var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.cells{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-start}
+.cell{display:flex;flex-direction:column;align-items:center;gap:3px;position:relative}
+.box{min-width:52px;height:52px;padding:0 10px;display:grid;place-items:center;border:2px solid var(--blue);border-radius:10px;background:var(--panel);font:600 1.25rem var(--mono);white-space:pre;transition:background .2s,border-color .2s,opacity .2s}
+.cells.small .box{min-width:40px;height:40px;font-size:1rem;padding:0 7px}
+.box.soft{border-style:dashed;color:var(--muted)}
+.box.hl{background:var(--orange-soft);border-color:var(--orange)}
+.box.done{background:var(--blue-soft)}
+.box.dim{opacity:.32}
+.box.ok,.box.new{background:var(--green-soft);border-color:var(--green)}
+.box.bad{background:var(--red-soft);border-color:var(--red);color:var(--red)}
+.box.ca{background:var(--blue-soft)}
+.box.cb{background:var(--orange-soft);border-color:var(--orange)}
+.box.cv,.box.nl{background:var(--violet-soft);border-color:var(--violet);color:var(--violet)}
+.box.t-int{background:var(--blue-soft)}
+.box.t-float{background:var(--green-soft);border-color:var(--green)}
+.box.t-str{background:var(--orange-soft);border-color:var(--orange)}
+.box.t-bool{background:var(--violet-soft);border-color:var(--violet)}
+.box.t-NoneType{background:var(--sunk);border-color:var(--muted)}
+.ix{font:700 .78rem var(--mono);color:var(--blue);font-variant-numeric:tabular-nums}
+.ix.neg{color:var(--orange)}
+.badge{position:absolute;top:-9px;right:-7px;z-index:1;min-width:22px;height:22px;border-radius:11px;background:var(--orange);color:var(--panel);font:700 .74rem/22px var(--mono);text-align:center;padding:0 5px}
+.empty{font:500 1rem var(--mono);color:var(--muted);padding:12px 16px;border:2px dashed var(--line);border-radius:10px}
+.qrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.qmark{font:600 3rem/1 var(--display);color:var(--orange)}
+.op{font:600 2rem/1 var(--display);color:var(--blue);padding:0 4px}
+.arrow{display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--orange)}
+.arrow .a{font:600 2.2rem/1 var(--display)}
+.arrow .l{font:600 .8rem var(--mono);white-space:nowrap}
+.stats{display:flex;flex-wrap:wrap;gap:10px}
+.stat{background:var(--sunk);border-radius:10px;padding:8px 12px;display:flex;flex-direction:column;gap:1px;min-width:0}
+.stat .k{font:500 .78rem var(--mono);color:var(--muted)}
+.stat .v{font:700 1.08rem var(--mono);font-variant-numeric:tabular-nums}
+.vars{display:flex;flex-wrap:wrap;gap:12px}
+.var{display:flex;align-items:stretch;border:2px solid var(--violet);border-radius:10px;overflow:hidden;font:600 1.05rem var(--mono)}
+.var .n{background:var(--violet);color:var(--panel);padding:6px 10px}
+.var .v{padding:6px 12px;background:var(--panel);min-width:3.5em}
+.tag{display:inline-flex;align-items:center;gap:6px;font:700 1rem var(--mono);color:var(--violet);background:var(--violet-soft);border:2px solid var(--violet);border-radius:999px;padding:4px 12px;white-space:nowrap}
+.tile{background:var(--orange-soft);border:2px solid var(--orange);border-radius:12px;padding:10px 16px;font:700 1.5rem var(--mono);display:inline-flex;align-items:center;gap:10px;max-width:100%;overflow-x:auto}
+.tile small{font:600 .8rem var(--body);color:var(--muted)}
+.errbox{background:var(--red-soft);border:2px solid var(--red);color:var(--red);border-radius:12px;padding:10px 14px;font:600 .92rem/1.5 var(--mono);white-space:pre-wrap;max-width:100%}
+.okbox{background:var(--green-soft);border:2px solid var(--green);color:var(--green);border-radius:12px;padding:10px 14px;font:600 .92rem/1.5 var(--mono);white-space:pre-wrap}
+.note{font-size:.95rem;color:var(--muted);max-width:62ch;margin:0}
+.panel{border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0;background:var(--panel)}
+.panel.sunk{background:var(--sunk);border-color:transparent}
+.panel h3{font:600 1.15rem var(--display);margin:0}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:16px}
+.shake{animation:shake .45s}
+@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.pop{animation:pop .5s}
+@keyframes pop{0%{transform:scale(.6);opacity:0}100%{transform:none;opacity:1}}
+
+/* 2D grid */
+.grid{display:inline-grid;gap:6px;align-items:center}
+.g{min-width:48px;height:44px;display:grid;place-items:center;border:2px solid var(--blue);border-radius:9px;background:var(--panel);font:600 1.05rem var(--mono);padding:0 8px;cursor:default;font-variant-numeric:tabular-nums;transition:background .2s,opacity .2s}
+.g.click{cursor:pointer}.g.click:hover{border-color:var(--orange)}
+.g.lab{border:none;background:none;color:var(--blue);font-size:.8rem;min-width:28px}
+.g.rowhl{background:var(--blue-soft)}
+.g.hl{background:var(--orange-soft);border-color:var(--orange)}
+.g.res{background:var(--green-soft);border-color:var(--green)}
+.g.dim{opacity:.3}
+
+/* tables */
+.tw{overflow-x:auto;max-width:100%}
+table.df{border-collapse:separate;border-spacing:0;font:.92rem var(--mono);font-variant-numeric:tabular-nums}
+table.df th,table.df td{padding:.42rem .75rem;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap;transition:background .2s,opacity .2s}
+table.df th{background:var(--blue-soft);font-weight:700}
+table.df th:first-child{border-top-left-radius:8px}table.df th:last-child{border-top-right-radius:8px}
+table.df td.ix,table.df th.ix{color:var(--muted);text-align:left;font-weight:700}
+table.df td.s{text-align:left}
+table.df td.nan{color:var(--red);background:var(--red-soft);font-style:italic}
+table.df tr.keep td{background:var(--green-soft)}
+table.df tr.drop td{opacity:.3}
+table.df .colhl{background:var(--orange-soft)}
+table.df th.colhl{background:var(--orange-soft);color:var(--orange)}
+table.df td.chg{background:var(--green-soft);color:var(--green);font-weight:700}
+table.df td.T{color:var(--green);font-weight:700}table.df td.F{color:var(--muted)}
+table.df.mini{font-size:.82rem}table.df.mini th,table.df.mini td{padding:.3rem .55rem}
+
+/* files and trees */
+.file{border:2px solid var(--line);border-radius:12px;overflow:hidden;min-width:0;background:var(--panel)}
+.file.on{border-color:var(--orange)}
+.file-h{background:var(--sunk);padding:6px 12px;font:700 .85rem var(--mono);display:flex;justify-content:space-between;gap:8px}
+.file pre{margin:0;padding:10px 0;font:.86rem/1.6 var(--mono);overflow-x:auto}
+.file pre .ln{display:block;padding:0 12px;white-space:pre}
+.file pre .ln.on{background:var(--orange-soft)}
+.file pre .ln.ran{background:var(--green-soft)}
+.file pre .ln.skip{opacity:.35}
+.file pre .c-kw{color:var(--orange)}.file pre .c-str{color:var(--green)}.file pre .c-num{color:var(--blue)}.file pre .c-com{color:var(--muted)}.file pre .c-fn{color:var(--violet)}
+.tree{display:flex;flex-direction:column;gap:3px;font:.95rem var(--mono)}
+.node{display:flex;align-items:center;gap:8px;padding:5px 10px;border-radius:8px;border:2px solid transparent;background:none;text-align:left;cursor:pointer;white-space:pre}
+.node:hover{background:var(--sunk)}
+.node.on{border-color:var(--orange);background:var(--orange-soft)}
+.node.tgt{border-color:var(--blue);background:var(--blue-soft)}
+.node .ic{font-weight:700;width:1.4em;text-align:center;color:var(--blue)}
+.node.dir .ic{color:var(--orange)}
+.node.new{animation:pop .5s}
+.node .why{font:600 .75rem var(--body);color:var(--muted);margin-left:6px}
+.toolbox{border:2px solid var(--line);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:8px;min-width:0;transition:border-color .2s,background .2s}
+.toolbox.on{border-color:var(--blue);background:var(--blue-soft)}
+.toolbox h4{margin:0;font:700 1rem var(--mono)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:600 .82rem var(--mono);padding:3px 9px;border-radius:999px;border:1.5px solid var(--line);background:var(--panel)}
+.chip.on{border-color:var(--orange);background:var(--orange-soft);color:var(--orange)}
+.chip.mod{border-color:var(--blue);color:var(--blue)}
+.chip.bad{border-color:var(--red);color:var(--red);background:var(--red-soft);text-decoration:line-through}
+.nest{border:2px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px;transition:border-color .2s,background .2s;min-width:0}
+.nest.on{border-color:var(--orange);background:var(--orange-soft)}
+.nest .nh{font:700 .95rem var(--mono);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.nest .nh span{font:600 .74rem var(--body);color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.steps{display:flex;gap:6px;flex-wrap:wrap}
+.dot{width:12px;height:12px;border-radius:50%;background:var(--line)}
+.dot.on{background:var(--orange)}
+.flowv{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+.fstep{display:flex;gap:10px;align-items:center;font:600 .92rem var(--mono);padding:8px 12px;border-radius:10px;border:2px solid var(--line);background:var(--panel);transition:all .25s}
+.fstep .num{width:24px;height:24px;border-radius:50%;background:var(--line);color:var(--panel);font:700 .78rem/24px var(--mono);text-align:center}
+.fstep.on{border-color:var(--green);background:var(--green-soft)}
+.fstep.on .num{background:var(--green)}
+.fstep.off{opacity:.4}
+.fstep.bad{border-color:var(--red);background:var(--red-soft)}
+.fstep.bad .num{background:var(--red)}
+
+/* charts */
+.chart{width:100%;max-width:680px;height:auto;display:block}
+.chart text{font-family:var(--body);fill:var(--muted);font-size:13px}
+.chart .ttl{font:600 17px var(--display);fill:var(--ink)}
+.chart .axl{font-size:14px;fill:var(--ink);font-weight:600}
+.chart .fig{fill:var(--panel)}
+.chart .axes{fill:none}
+.chart .gridl{stroke:var(--line);stroke-width:1}
+.chart .axis{stroke:var(--ink);stroke-width:1.5}
+.chart .val{fill:var(--ink);font-weight:700;font-size:12px}
+.chart .glow{stroke:var(--orange)!important;stroke-width:4!important}
+.chart text.glow{fill:var(--orange)!important;stroke:none!important;font-weight:700}
+.chart rect.glow{fill:color-mix(in srgb,var(--orange) 14%,transparent)!important}
+.bars{display:flex;align-items:flex-end;gap:10px;height:220px;padding:0 8px;border-bottom:2px solid var(--ink);position:relative;min-width:0}
+.barc{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;flex:1;min-width:36px;height:100%}
+.bar{width:100%;max-width:56px;background:var(--blue);border-radius:6px 6px 0 0;transition:height .35s,background .2s}
+.bar.hl{background:var(--orange)}.bar.dim{opacity:.3}
+.barv{font:700 .82rem var(--mono)}
+.barlabels{display:flex;gap:10px;padding:0 8px}.barlabels span{flex:1;min-width:36px;text-align:center;font:600 .8rem var(--body);color:var(--muted)}
+.meanline{position:absolute;left:0;right:0;border-top:2px dashed var(--orange)}
+.meanline span{position:absolute;right:4px;top:-1.5em;font:700 .78rem var(--mono);color:var(--orange);background:var(--panel);padding:0 4px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (max-width:560px){.box{min-width:42px;height:44px;font-size:1.05rem}.qmark{font-size:2.2rem}#modSel,#topSel{width:100%}.pick{flex:1 1 100%}.ctl input[type=text],.ctl input.wide{width:100%}}
+</style>
+
+</head>
+<body>
+<style>.homebar{max-width:1280px;margin:0 auto;padding:10px max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px))}.homebar a{font:700 .9rem var(--body);color:var(--blue);text-decoration:none}.homebar a:hover{text-decoration:underline}</style><div class="homebar"><a href="/">← Class 10 Python home</a></div><div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <span class="prompt" aria-hidden="true">&gt;&gt;&gt;</span>
+      <div><h1>Python Visual Lab</h1><p>Class 10 · one live visual for every lesson</p></div>
+    </div>
+    <div class="pickers">
+      <label class="pick" for="modSel">Module<select id="modSel"></select></label>
+      <label class="pick" for="topSel">Topic<select id="topSel"></select></label>
+      <div class="nav"><button type="button" id="prevBtn" aria-label="Previous topic">←</button><span id="pos">1 / 49</span><button type="button" id="nextBtn" aria-label="Next topic">→</button></div>
+    </div>
+  </header>
+  <section class="intro" aria-live="polite">
+    <p class="eyebrow" id="eyebrow">Strings · 1 of 10</p>
+    <h2 id="topicTitle">Loading…</h2>
+    <p id="blurb"></p>
+  </section>
+  <div class="work">
+    <section class="bench" aria-label="Visual">
+      <div class="stage" id="stage"></div>
+      <div class="controls" id="controls"></div>
+    </section>
+    <aside class="side">
+      <div class="plabel">Code</div>
+      <pre class="code" id="code"></pre>
+      <div class="plabel">Output</div>
+      <div class="out" id="out" aria-live="polite"></div>
+      <div class="tip" id="tip"></div>
+    </aside>
+  </div>
+</div>
+
+<script>
+'use strict';
+const MODULES=[{id:'str',name:'Strings'},{id:'list',name:'Lists'},{id:'mod',name:'Modules & Packages'},{id:'np',name:'NumPy'},{id:'pd',name:'Pandas'},{id:'plt',name:'Matplotlib'}];
+const TOPICS=[];
+function topic(mod,id,title,blurb,tip,build){TOPICS.push({mod,id,title,blurb,tip,build});}
+const $=(s,el=document)=>el.querySelector(s);
+/* skip empty slots (null/false) when adding children */
+['replaceChildren','append'].forEach(fn=>{const orig=Element.prototype[fn];Element.prototype[fn]=function(...k){return orig.apply(this,k.flat(Infinity).filter(x=>x!=null&&x!==false));};});
+const REDUCED=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function h(tag,props,...kids){
+  const el=document.createElement(tag);
+  if(props)for(const [k,v] of Object.entries(props)){
+    if(v==null||v===false)continue;
+    if(k==='class')el.className=v;
+    else if(k==='style')el.style.cssText=v;
+    else if(k.startsWith('on')&&typeof v==='function')el.addEventListener(k.slice(2),v);
+    else if(k==='text')el.textContent=v;
+    else if(k==='html')el.innerHTML=v;
+    else if(k==='value')el.value=v;
+    else el.setAttribute(k,v===true?'':v);
+  }
+  for(const kid of kids.flat(Infinity)){if(kid==null||kid===false)continue;el.append(kid instanceof Node?kid:document.createTextNode(String(kid)));}
+  return el;
+}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ---------- python-ish highlighting ---------- */
+const KW=new Set('False None True and as def elif else for from if import in is not or return while lambda pass'.split(' '));
+const BI=new Set('print len range type str int float list input sum min max sorted round bool tuple dict'.split(' '));
+function hlLines(src){
+  const re=/(#[^\n]*)|("""[\s\S]*?"""|'''[\s\S]*?'''|"(?:\\.|[^"\\\n])*"?|'(?:\\.|[^'\\\n])*'?)|(\b\d+(?:\.\d+)?\b)|([A-Za-z_]\w*)/g;
+  const out=[[]];let last=0;
+  const push=(text,cls)=>{text.split('\n').forEach((p,k)=>{if(k>0)out.push([]);if(p)out[out.length-1].push(cls?`<span class="${cls}">${esc(p)}</span>`:esc(p));});};
+  let m;while((m=re.exec(src))){
+    push(src.slice(last,m.index));
+    let cls=null;if(m[1])cls='c-com';else if(m[2])cls='c-str';else if(m[3])cls='c-num';else if(KW.has(m[4]))cls='c-kw';else if(BI.has(m[4]))cls='c-fn';
+    push(m[0],cls);last=m.index+m[0].length;
+  }
+  push(src.slice(last));
+  return out.map(a=>a.join(''));
+}
+function codeHTML(src,lineCls){return hlLines(src).map((l,i)=>`<span class="ln ${lineCls?lineCls(i)||'':''}">${l||' '}</span>`).join('');}
+function codeBlock(src,lineCls){const p=h('pre');p.innerHTML=codeHTML(src,lineCls);return p;}
+function fileCard(name,src,lineCls,{on=false,note}={}){return h('div',{class:'file'+(on?' on':'')},h('div',{class:'file-h'},h('span',{},name),note?h('span',{style:'color:var(--muted);font-weight:600'},note):null),codeBlock(src,lineCls));}
+
+/* ---------- python value formatting ---------- */
+function pyStr(s){let q="'";if(s.includes("'")&&!s.includes('"'))q='"';let r='';for(const c of s){if(c==='\\')r+='\\\\';else if(c==='\n')r+='\\n';else if(c==='\t')r+='\\t';else if(c===q)r+='\\'+q;else r+=c;}return q+r+q;}
+function pyFloat(v){if(!isFinite(v))return isNaN(v)?'nan':(v>0?'inf':'-inf');if(Number.isInteger(v)&&Math.abs(v)<1e16)return v.toFixed(1);return String(v);}
+function pyVal(v){
+  if(typeof v==='string')return pyStr(v);
+  if(typeof v==='boolean')return v?'True':'False';
+  if(v===null||v===undefined)return 'None';
+  if(Array.isArray(v))return '['+v.map(pyVal).join(', ')+']';
+  if(typeof v==='object'&&'src' in v)return v.src;
+  if(typeof v==='object'&&v.f!==undefined)return pyFloat(v.f);
+  return String(v);
+}
+const visCh=c=>c===' '?'␣':c==='\n'?'↵':c==='\t'?'⇥':c;
+
+/* python slice semantics */
+function sliceIdx(n,start,stop,step){
+  if(step==null)step=1;
+  if(step===0)throw new Error('ValueError: slice step cannot be zero');
+  const r=[];
+  if(step>0){
+    if(start==null)start=0;else if(start<0){start+=n;if(start<0)start=0;}else if(start>n)start=n;
+    if(stop==null)stop=n;else if(stop<0){stop+=n;if(stop<0)stop=0;}else if(stop>n)stop=n;
+    for(let i=start;i<stop;i+=step)r.push(i);
+  }else{
+    if(start==null)start=n-1;else if(start<0){start+=n;if(start<0)start=-1;}else if(start>=n)start=n-1;
+    if(stop==null)stop=-1;else if(stop<0){stop+=n;if(stop<0)stop=-1;}else if(stop>=n)stop=n-1;
+    for(let i=start;i>stop;i+=step)r.push(i);
+  }
+  return r;
+}
+
+/* parse comma separated python literals */
+function lit(t){
+  if(/^(['"])[\s\S]*\1$/.test(t)&&t.length>=2)return {type:'str',val:t.slice(1,-1),src:pyStr(t.slice(1,-1))};
+  if(t==='True'||t==='False')return {type:'bool',val:t==='True',src:t};
+  if(t==='None')return {type:'NoneType',val:null,src:'None'};
+  if(/^[-+]?\d+$/.test(t)){const v=parseInt(t,10);return {type:'int',val:v,src:String(v)};}
+  if(/^[-+]?(\d+\.\d*|\.\d+)(e[-+]?\d+)?$/i.test(t)){const v=parseFloat(t);return {type:'float',val:v,src:pyFloat(v)};}
+  return {type:'?',src:t};
+}
+function parseLits(text){
+  const toks=[];let cur='',q=null;
+  for(const c of text){if(q){cur+=c;if(c===q)q=null;continue;}if(c==='"'||c==="'"){q=c;cur+=c;continue;}if(c===','){toks.push(cur);cur='';continue;}cur+=c;}
+  if(q)return {error:'SyntaxError: unterminated string literal'};
+  toks.push(cur);
+  if(toks.length===1&&toks[0].trim()==='')return {items:[]};
+  const items=[];
+  for(let i=0;i<toks.length;i++){
+    const t=toks[i].trim();
+    if(t===''){if(i===toks.length-1&&i>0)continue;return {error:'SyntaxError: invalid syntax (two commas with nothing between)'};}
+    const it=lit(t);
+    if(it.type==='?')return {error:`NameError: name '${t.split(/\s/)[0]}' is not defined\n(put text inside quotes)`};
+    items.push(it);
+  }
+  return {items};
+}
+function parseNums(text){const r=parseLits(text);if(r.error)return r;const bad=r.items.find(i=>i.type!=='int'&&i.type!=='float');if(bad)return {error:`Use numbers only here (found ${bad.src})`};return {nums:r.items.map(i=>i.val),items:r.items};}
+
+/* ---------- numpy-style formatting ---------- */
+function fmtF(v){let s=String(+v.toFixed(8));if(s.includes('e'))s=v.toExponential(4);if(!s.includes('.')&&!s.includes('e'))s+='.';return s;}
+function npParts(vals,dtype){
+  if(dtype==='bool')return vals.map(v=>v?'True':'False').map(s=>s.padStart(5));
+  if(dtype.startsWith('<U'))return vals.map(v=>`'${v}'`);
+  if(dtype.startsWith('int')){const s=vals.map(v=>String(v));const w=Math.max(...s.map(x=>x.length));return s.map(x=>x.padStart(w));}
+  const s=vals.map(fmtF);
+  const ip=s.map(x=>x.split('.')[0]),fp=s.map(x=>x.split('.')[1]||'');
+  const wi=Math.max(...ip.map(x=>x.length)),wf=Math.max(...fp.map(x=>x.length));
+  return s.map((_,i)=>ip[i].padStart(wi)+'.'+fp[i].padEnd(wf));
+}
+function npRepr(arr,dtype){
+  if(!Array.isArray(arr))return dtype==='bool'?(arr?'True':'False'):dtype.startsWith('int')?String(arr):pyFloat(arr);
+  if(arr.length===0)return '[]';
+  if(Array.isArray(arr[0])){
+    const flat=npParts(arr.flat(),dtype);const c=arr[0].length;
+    const rows=arr.map((_,r)=>'['+flat.slice(r*c,r*c+c).join(' ')+']');
+    return '['+rows.join('\n ')+']';
+  }
+  return '['+npParts(arr,dtype).join(' ')+']';
+}
+function dtypeOf(nums){return nums.every(Number.isInteger)?'int64':'float64';}
+
+/* ---------- controls ---------- */
+let CTLN=0;
+function Text(label,value,cb,{wide=false,ph=''}={}){const id='ctl'+(++CTLN);const i=h('input',{type:'text',id,value,placeholder:ph,spellcheck:'false',autocomplete:'off',class:wide?'wide':null,oninput:e=>cb(e.target.value)});const w=h('div',{class:'ctl'},h('label',{for:id},label),i);w.input=i;return w;}
+function Area(label,value,cb,rows=4){const id='ctl'+(++CTLN);const i=h('textarea',{id,rows,spellcheck:'false',oninput:e=>cb(e.target.value)});i.value=value;const w=h('div',{class:'ctl'},h('label',{for:id},label),i);w.input=i;return w;}
+function Range(label,min,max,value,cb,{step=1,fmt=v=>v}={}){const id='ctl'+(++CTLN);const o=h('output',{},fmt(value));const i=h('input',{type:'range',id,min,max,step,value,oninput:e=>{const v=+e.target.value;o.textContent=fmt(v);cb(v);}});const w=h('div',{class:'ctl'},h('label',{for:id},label,o),i);w.input=i;w.set=v=>{i.value=v;o.textContent=fmt(+v);};return w;}
+function Select(label,opts,value,cb){const id='ctl'+(++CTLN);const s=h('select',{id,onchange:e=>cb(e.target.value)},opts.map(o=>{const [v,t]=Array.isArray(o)?o:[o,o];return h('option',{value:v},t);}));s.value=value;const w=h('div',{class:'ctl'},h('label',{for:id},label),s);w.input=s;return w;}
+function Check(label,checked,cb){const id='ctl'+(++CTLN);const i=h('input',{type:'checkbox',id,onchange:e=>cb(e.target.checked)});i.checked=checked;const w=h('div',{class:'ctl check'},i,h('label',{for:id},label));w.input=i;return w;}
+function Btn(text,fn,kind){return h('button',{type:'button',class:'btn'+(kind?' '+kind:''),onclick:fn},text);}
+function Btns(...list){return h('div',{class:'btns'},list.map(b=>Array.isArray(b)?Btn(...b):b));}
+
+/* ---------- visual atoms ---------- */
+function cellRow(items,{idx=true,neg=false,cls,badge,small}={}){
+  const n=items.length;
+  if(!n)return h('div',{class:'empty'},'empty');
+  return h('div',{class:'cells'+(small?' small':'')},items.map((t,i)=>{const b=badge?badge(i):null;return h('div',{class:'cell'},b!=null?h('span',{class:'badge'},b):null,h('div',{class:'box '+(cls?cls(i)||'':'')},t),idx?h('span',{class:'ix'},i):null,neg?h('span',{class:'ix neg'},i-n):null);}));
+}
+function stats(pairs){return h('div',{class:'stats'},pairs.map(([k,v])=>h('div',{class:'stat'},h('span',{class:'k'},k),h('span',{class:'v'},v))));}
+function arrow(label,dir='right'){return h('div',{class:'arrow'},h('span',{class:'a'},dir==='down'?'↓':'→'),label?h('span',{class:'l'},label):null);}
+function cap(t){return h('div',{class:'cap'},t);}
+function varTag(n,v){return h('div',{class:'var'},h('span',{class:'n'},n),h('span',{class:'v'},v));}
+function brackets(inner,open='[',close=']'){return h('div',{class:'qrow'},h('span',{class:'qmark'},open),inner,h('span',{class:'qmark'},close));}
+function errbox(t){return h('div',{class:'errbox shake'},t);}
+function grid2(M,{cls,click,rowLab,colLab,labels=true}={}){
+  const R=M.length,C=M[0]?M[0].length:0;
+  const g=h('div',{class:'grid',style:`grid-template-columns:${labels?'auto ':''}repeat(${C},auto)`});
+  if(labels){g.append(h('div',{class:'g lab'},''));for(let c=0;c<C;c++)g.append(h('div',{class:'g lab'},colLab?colLab(c):c));}
+  for(let r=0;r<R;r++){
+    if(labels)g.append(h('div',{class:'g lab'},rowLab?rowLab(r):r));
+    for(let c=0;c<C;c++){const el=h('div',{class:'g '+(cls?cls(r,c)||'':'')+(click?' click':''),onclick:click?()=>click(r,c):null,role:click?'button':null,tabindex:click?'0':null},M[r][c]);if(click)el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();click(r,c);}});g.append(el);}
+  }
+  return g;
+}
+
+/* step-through player */
+function Stepper(ctx,getN,onStep,onReset,speed=800){
+  let i=-1,t=null;
+  const play=Btn('Play',()=>toggle(),'primary');
+  function step(){const n=getN();if(i>=n-1){stop();return;}i++;onStep(i);if(i>=n-1)stop();}
+  function stop(){if(t){clearInterval(t);t=null;}play.textContent=i>=getN()-1&&i>=0?'Replay':'Play';}
+  function toggle(){if(t){stop();return;}if(i>=getN()-1){i=-1;onReset();}play.textContent='Pause';step();if(i<getN()-1)t=ctx.every(speed,step);else stop();}
+  function reset(){if(t){clearInterval(t);t=null;}i=-1;play.textContent='Play';onReset();}
+  return {el:Btns(play,Btn('Step',()=>{if(t){clearInterval(t);t=null;}step();play.textContent=i>=getN()-1?'Replay':'Play';}),Btn('Reset',reset)),reset,get i(){return i;}};
+}
+
+/* reorder animation */
+function flip(container,mutate){
+  const first=new Map();container.querySelectorAll('[data-k]').forEach(el=>first.set(el.dataset.k,el.getBoundingClientRect()));
+  mutate();
+  if(REDUCED)return;
+  container.querySelectorAll('[data-k]').forEach(el=>{const f=first.get(el.dataset.k);if(!f)return;const l=el.getBoundingClientRect();const dx=f.left-l.left,dy=f.top-l.top;if(dx||dy)el.animate([{transform:`translate(${dx}px,${dy}px)`},{transform:'none'}],{duration:480,easing:'cubic-bezier(.2,.7,.2,1)'});});
+}
+const seq=(a,b)=>Array.from({length:b-a},(_,i)=>a+i);
+const sum=a=>a.reduce((x,y)=>x+y,0);
+const mean=a=>sum(a)/a.length;
+function median(a){const s=[...a].sort((x,y)=>x-y),n=s.length;return n%2?s[(n-1)/2]:(s[n/2-1]+s[n/2])/2;}
+function stdev(a,ddof=0){const m=mean(a);return Math.sqrt(sum(a.map(x=>(x-m)**2))/(a.length-ddof));}
+function quantile(a,q){const s=[...a].sort((x,y)=>x-y);const p=(s.length-1)*q,lo=Math.floor(p),hi=Math.ceil(p);return s[lo]+(s[hi]-s[lo])*(p-lo);}
+/* =================== STRINGS =================== */
+topic('str','str-intro','Introduction to strings',
+'A string is text. Python stores it as a row of characters, in order, between quotes. Type anything and watch it split into characters.',
+'Spaces, digits and punctuation are characters too. On screen <b>␣</b> stands for a space so you can see it.',
+ctx=>{
+  let s='Python 3';
+  const draw=()=>{
+    const ch=[...s];const k={letters:0,digits:0,spaces:0,other:0};
+    ch.forEach(c=>{if(/\p{L}/u.test(c))k.letters++;else if(/\d/.test(c))k.digits++;else if(/\s/.test(c))k.spaces++;else k.other++;});
+    ctx.stage.replaceChildren(
+      h('div',{class:'row'},h('span',{class:'tag'},'word'),arrow()),
+      brackets(ch.length?cellRow(ch.map(visCh),{cls:i=>/\s/.test(ch[i])?'soft':''}):h('div',{class:'empty'},'empty string'),'"','"'),
+      stats([['len(word)',ch.length],['letters',k.letters],['digits',k.digits],['spaces',k.spaces],['other',k.other],['type',"str"]]));
+    ctx.code(`word = ${pyStr(s)}\nprint(word)\nprint(len(word))\nprint(type(word))`);
+    ctx.out(`${s}\n${ch.length}\n<class 'str'>`);
+  };
+  ctx.add(Text('word =',s,v=>{s=v;draw();},{wide:true}));
+  draw();
+});
+
+topic('str','str-create','Creating a string',
+'There are a few ways to make a string. Pick one, change the text, and see what Python accepts.',
+'If the text has an apostrophe, wrap it in <b>double quotes</b>. The quote marks are not part of the string.',
+ctx=>{
+  let way='single',text="It's fun",typed='Asha',num=15;
+  const sub=h('div',{class:'ctl-sub'});
+  const ways=[['single',"Single quotes  ' '"],['double','Double quotes  " "'],['triple','Triple quotes  """ """'],['input','From the keyboard: input()'],['str','From a number: str()']];
+  const controls=()=>{
+    sub.replaceChildren();
+    if(['single','double','triple'].includes(way))sub.append(Text('text',text,v=>{text=v;draw();},{wide:true}));
+    else if(way==='input')sub.append(Text('the user types',typed,v=>{typed=v;draw();}));
+    else sub.append(Range('n =',0,999,num,v=>{num=v;draw();}));
+  };
+  const draw=()=>{
+    let code,val=null,err=null,pre=null;
+    if(way==='single'){code=`s = '${text}'`;if(text.includes("'"))err="SyntaxError: unterminated string literal\nThe ' inside the text ends the string too early.\nFix: use double quotes.";else val=text;}
+    else if(way==='double'){code=`s = "${text}"`;if(text.includes('"'))err='SyntaxError: unterminated string literal\nThe " inside the text ends the string too early.\nFix: use single quotes.';else val=text;}
+    else if(way==='triple'){code=`s = """${text}"""`;if(text.includes('"""'))err='SyntaxError: the text itself contains """';else val=text;}
+    else if(way==='input'){code='s = input("Name: ")';val=typed;pre=h('div',{class:'panel sunk'},cap('Console'),h('div',{style:'font:600 1.05rem var(--mono)'},'Name: ',h('span',{style:'color:var(--blue)'},typed)));}
+    else{code=`n = ${num}\ns = str(n)`;val=String(num);pre=h('div',{class:'row'},h('div',{class:'box cv',style:'min-width:80px'},num),h('span',{class:'note'},'int'),arrow('str(n)'));}
+    code+='\nprint(s)\nprint(type(s))';
+    const kids=[];if(pre)kids.push(pre);
+    if(err){kids.push(errbox(err));ctx.out(err.split('\n')[0],'err');}
+    else{
+      kids.push(h('div',{class:'row'},h('span',{class:'tag'},'s'),arrow()),brackets(cellRow([...val].map(visCh),{cls:i=>val[i]===' '?'soft':''}),"'","'"));
+      if(way==='input')kids.push(h('p',{class:'note'},'Whatever the user types comes back as a string, even if they type digits.'));
+      if(way==='str')kids.push(h('p',{class:'note'},`The number ${num} became the text ${pyStr(val)}. You can no longer do maths with it until you convert it back with int().`));
+      ctx.out(`${val}\n<class 'str'>`);
+    }
+    ctx.stage.replaceChildren(...kids);ctx.code(code);
+  };
+  ctx.add(Select('way',ways,way,v=>{way=v;controls();draw();}),sub);controls();draw();
+});
+
+topic('str','str-traverse','Traversing a string',
+'Traversing means visiting every character, one at a time, from left to right. Press Play to run the loop.',
+'Ask the class to predict what <b>ch</b> holds on the next turn before pressing Step.',
+ctx=>{
+  let word='Python',printed=[];
+  const draw=i=>{
+    const ch=[...word];
+    ctx.stage.replaceChildren(cellRow(ch.map(visCh),{cls:k=>k===i?'hl':k<i?'done':''}),
+      h('div',{class:'vars'},varTag('ch',i>=0?pyStr(ch[i]):'—'),varTag('turn',`${i+1} of ${ch.length}`)));
+    ctx.code(`word = ${pyStr(word)}\nfor ch in word:\n    print(ch)`,i>=0?2:null);
+    ctx.out(printed.length?printed.join('\n'):'Press Play or Step',printed.length?'':'muted');
+  };
+  const st=Stepper(ctx,()=>[...word].length,i=>{printed.push([...word][i]);draw(i);},()=>{printed=[];draw(-1);});
+  ctx.add(Text('word =',word,v=>{word=v;st.reset();}),st.el);draw(-1);
+});
+
+topic('str','str-range','Range in a string',
+'range(len(word)) gives the positions 0, 1, 2 … The loop visits each position, and word[i] fetches the character there.',
+'Use this form when you need the <b>position</b> as well as the character.',
+ctx=>{
+  let word='Python',printed=[];
+  const draw=i=>{
+    const ch=[...word];
+    ctx.stage.replaceChildren(
+      cap(`range(len(word)) = range(${ch.length})`),cellRow(ch.map((_,k)=>String(k)),{idx:false,small:true,cls:k=>k===i?'hl':k<i?'done':'soft'}),
+      cap('word'),cellRow(ch.map(visCh),{cls:k=>k===i?'hl':k<i?'done':''}),
+      h('div',{class:'vars'},varTag('i',i>=0?i:'—'),varTag('word[i]',i>=0?pyStr(ch[i]):'—')));
+    ctx.code(`word = ${pyStr(word)}\nfor i in range(len(word)):\n    print(i, word[i])`,i>=0?2:null);
+    ctx.out(printed.length?printed.join('\n'):'Press Play or Step',printed.length?'':'muted');
+  };
+  const st=Stepper(ctx,()=>[...word].length,i=>{printed.push(i+' '+[...word][i]);draw(i);},()=>{printed=[];draw(-1);});
+  ctx.add(Text('word =',word,v=>{word=v;st.reset();}),st.el);draw(-1);
+});
+
+topic('str','str-lines','Single-line vs multi-line strings',
+'Triple quotes let a string run over several lines. The line break is stored as one hidden character, \\n.',
+'Both ways store exactly the same string. Triple quotes are just easier to read for long text.',
+ctx=>{
+  let txt='Python is fun.\nPractise daily.',mode='triple';
+  const draw=()=>{
+    let code,err=null;
+    if(mode==='triple')code=`note = """${txt}"""`;
+    else if(mode==='escape')code=`note = ${pyStr(txt)}`;
+    else{code=`note = "${txt}"`;if(txt.includes('\n'))err='SyntaxError: unterminated string literal\nOrdinary quotes cannot span lines.\nUse triple quotes, or write \\n for the break.';}
+    code+='\nprint(note)\nprint(len(note))';
+    const ch=[...txt];
+    if(err){ctx.stage.replaceChildren(errbox(err));ctx.out(err.split('\n')[0],'err');}
+    else{
+      ctx.stage.replaceChildren(cap('What Python stores'),cellRow(ch.map(visCh),{small:true,cls:i=>ch[i]==='\n'?'nl':ch[i]===' '?'soft':''}),
+        stats([['len(note)',ch.length],['lines',txt.split('\n').length],["count of \\n",ch.filter(c=>c==='\n').length]]),
+        h('p',{class:'note'},'The purple ↵ box is the line break \\n. It counts as one character.'));
+      ctx.out(`${txt}\n${ch.length}`);
+    }
+    ctx.code(code);
+  };
+  ctx.add(Area('text (press Enter for a new line)',txt,v=>{txt=v;draw();},3),
+    Select('write it with',[['triple','Triple quotes """ """'],['escape','Single line using \\n'],['plain','Ordinary quotes + Enter (error)']],mode,v=>{mode=v;draw();}));
+  draw();
+});
+
+topic('str','str-concat','String concatenation',
+'+ joins two strings end to end. * repeats a string. Both build a new string.',
+'+ needs text on <b>both</b> sides. Turn a number into text first with str().',
+ctx=>{
+  let a='Good',b='Day',n=3,space=false,op='plus';
+  const sub=h('div',{class:'ctl-sub'});
+  const controls=()=>{sub.replaceChildren();
+    if(op==='plus')sub.append(Text('a =',a,v=>{a=v;draw();}),Text('b =',b,v=>{b=v;draw();}),Check('add a space between',space,v=>{space=v;draw();}));
+    else if(op==='times')sub.append(Text('a =',a,v=>{a=v;draw();}),Range('n =',0,6,n,v=>{n=v;draw();}));
+    else sub.append(Text('text =',a,v=>{a=v;draw();}),Range('number =',0,99,n,v=>{n=v;draw();}));};
+  const draw=()=>{
+    const A=[...a],B=[...b];
+    if(op==='plus'){
+      const mid=space?[' ']:[];const res=[...A,...mid,...B];
+      ctx.stage.replaceChildren(h('div',{class:'row'},cellRow(A.map(visCh),{idx:false,cls:()=>'ca'}),h('span',{class:'op'},'+'),space?h('div',{class:'row'},cellRow(['␣'],{idx:false,cls:()=>'soft'}),h('span',{class:'op'},'+')):null,cellRow(B.map(visCh),{idx:false,cls:()=>'cb'})),
+        arrow('gives','down'),cellRow(res.map(visCh),{cls:i=>i<A.length?'ca':i<A.length+mid.length?'soft':'cb'}));
+      ctx.code(`a = ${pyStr(a)}\nb = ${pyStr(b)}\nresult = a ${space?'+ " " ':''}+ b\nprint(result)`);ctx.out(res.join(''));
+    }else if(op==='times'){
+      const res=[];for(let k=0;k<n;k++)res.push(...A.map(c=>[c,k]));
+      ctx.stage.replaceChildren(h('div',{class:'row'},cellRow(A.map(visCh),{idx:false,cls:()=>'ca'}),h('span',{class:'op'},'× '+n)),arrow('gives','down'),
+        res.length?cellRow(res.map(([c])=>visCh(c)),{cls:i=>res[i][1]%2?'cb':'ca'}):h('div',{class:'empty'},"'' (empty string)"));
+      ctx.code(`a = ${pyStr(a)}\nresult = a * ${n}\nprint(result)`);ctx.out(res.map(r=>r[0]).join(''));
+    }else{
+      const err='TypeError: can only concatenate str (not "int") to str';
+      ctx.stage.replaceChildren(h('div',{class:'row'},cellRow(A.map(visCh),{idx:false,cls:()=>'ca'}),h('span',{class:'op'},'+'),h('div',{class:'box cv'},n),h('span',{class:'note'},'(int)')),
+        errbox(err),cap('Fix: convert the number to text'),h('div',{class:'row'},cellRow([...A,...String(n)].map(visCh),{cls:i=>i<A.length?'ca':'cv'})));
+      ctx.code(`text = ${pyStr(a)}\nprint(text + ${n})        # error\nprint(text + str(${n}))   # works`,1);
+      ctx.out(err,'err');
+    }
+  };
+  ctx.add(Select('operation',[['plus','a + b  (join)'],['times','a * n  (repeat)'],['num','text + number']],op,v=>{op=v;if(v==='num'){a='Age: ';n=15;}else if(a==='Age: ')a='Good';controls();draw();}),sub);controls();draw();
+});
+
+topic('str','str-escape','Escape sequences',
+'A backslash \\ inside a string starts an escape sequence: two typed characters that stand for one special character.',
+'Click the chips to add escape sequences. Notice that <b>\\n</b> is typed as two characters but stored as one.',
+ctx=>{
+  let raw='Name:\\tAsha\\nClass:\\t9';
+  const MAP={n:'\n',t:'\t','\\':'\\',"'":"'",'"':'"'};
+  const parse=r=>{const out=[];for(let i=0;i<r.length;i++){const c=r[i];
+    if(c==='\\'){if(i===r.length-1)return {error:'SyntaxError: unterminated string literal\nA backslash at the very end escapes the closing quote.'};const d=r[i+1];if(d in MAP){out.push({src:'\\'+d,val:MAP[d],esc:true});i++;}else out.push({src:'\\',val:'\\'});}
+    else if(c==='"')return {error:'SyntaxError: a plain " ends the string early.\nType \\" to put a quote inside the text.'};
+    else out.push({src:c,val:c});}return {out};};
+  const input=Text('text inside the quotes',raw,v=>{raw=v;draw();},{wide:true});
+  const draw=()=>{
+    const r=parse(raw);ctx.code(`s = "${raw}"\nprint(s)\nprint(len(s))`);
+    if(r.error){ctx.stage.replaceChildren(errbox(r.error));ctx.out(r.error.split('\n')[0],'err');return;}
+    const t=r.out;const val=t.map(x=>x.val).join('');
+    ctx.stage.replaceChildren(
+      cap('What you type'),cellRow(t.map(x=>x.src===' '?'␣':x.src),{idx:false,small:true,cls:i=>t[i].esc?'cv':''}),
+      arrow('Python reads it as','down'),
+      cap('What is stored'),cellRow(t.map(x=>visCh(x.val)),{small:true,cls:i=>t[i].esc?'cv':''}),
+      stats([['typed characters',raw.length],['len(s)',[...val].length]]),
+      h('div',{class:'tw'},h('table',{class:'df mini'},h('tr',{},h('th',{class:'ix'},'code'),h('th',{style:'text-align:left'},'means')),
+        [['\\n','new line'],['\\t','tab (jump to the next column)'],['\\\\','one backslash'],["\\'",'single quote'],['\\"','double quote']].map(([a,b])=>h('tr',{},h('td',{class:'ix'},a),h('td',{class:'s'},b))))));
+    ctx.out(`${val}\n${[...val].length}`);
+  };
+  ctx.add(input,Btns(...['\\n','\\t','\\\\',"\\'",'\\"'].map(e=>Btn(e,()=>{raw+=e;input.input.value=raw;draw();},'mono'))),Btns(['Reset',()=>{raw='Name:\\tAsha\\nClass:\\t9';input.input.value=raw;draw();}]));
+  draw();
+});
+
+/* shared slicing lab for strings and lists */
+function sliceLab(ctx,{name,initial,parse,show,repr,label,start='1',stop='4',step=''}){
+  let src=initial;
+  const sub=h('div',{class:'ctl-sub'});
+  const build=()=>{
+    const p=parse(src);const N=p.items?p.items.length:0;
+    const opt=[['','(blank)']];for(let k=-N;k<=N;k++)opt.push([String(k),String(k)]);
+    const ok=v=>v===''||(+v>=-N&&+v<=N);if(!ok(start))start='';if(!ok(stop))stop='';
+    sub.replaceChildren(Select('start',opt,start,v=>{start=v;draw();}),Select('stop',opt,stop,v=>{stop=v;draw();}),
+      Select('step',[['','(blank)'],'1','2','3','-1','-2','-3',['0','0 (error)']],step,v=>{step=v;draw();}));
+  };
+  const draw=()=>{
+    const p=parse(src);const expr=`${name}[${start}:${stop}${step!==''?':'+step:''}]`;
+    ctx.code(`${name} = ${p.items?repr(p.items):src}\npart = ${expr}\nprint(part)`);
+    if(p.error){ctx.stage.replaceChildren(errbox(p.error));ctx.out(p.error,'err');return;}
+    const it=p.items;let idx;
+    try{idx=sliceIdx(it.length,start===''?null:+start,stop===''?null:+stop,step===''?null:+step);}
+    catch(e){ctx.stage.replaceChildren(cellRow(it.map(show),{neg:true}),errbox(e.message));ctx.out(e.message,'err');return;}
+    const res=idx.map(i=>it[i]);const st=step===''?1:+step;
+    ctx.stage.replaceChildren(
+      h('div',{class:'row'},h('span',{class:'tag'},expr)),
+      cellRow(it.map(show),{neg:true,cls:i=>idx.includes(i)?'hl':'dim',badge:i=>{const k=idx.indexOf(i);return k>=0?k+1:null;}}),
+      h('p',{class:'note'},`Blue numbers count from the left, orange from the right. Orange badges show the order items are picked${st<0?' (backwards, because step is negative)':''}. The stop position is never included.`),
+      arrow('result','down'),res.length?cellRow(res.map(show),{cls:()=>'ok'}):h('div',{class:'empty'},'empty'),
+      stats([['picked indexes',idx.length?idx.join(', '):'none'],['length',res.length]]));
+    ctx.out(repr(res));
+  };
+  ctx.add(Text(label,src,v=>{src=v;build();draw();},{wide:true}),sub);build();draw();
+}
+topic('str','str-slice','String slicing',
+'word[start:stop:step] cuts out a piece of a string. Change start, stop and step and watch which characters get picked.',
+'Try step = -1 with start and stop blank. That is the famous word[::-1] reverse trick.',
+ctx=>sliceLab(ctx,{name:'word',initial:'Python',label:'word =',parse:s=>({items:[...s]}),show:visCh,repr:a=>pyStr(a.join(''))}));
+
+topic('str','str-immutable','Strings are immutable',
+'Immutable means a string can never be changed after it is made. You can only build a new string and point the name at it.',
+'The name <b>word</b> is like a sticky label. Changing a string really means moving the label to a new string.',
+ctx=>{
+  let objs,cur,log,shakeId=null;
+  const reset=()=>{objs=[{id:1,text:'cat'}];cur=1;log=["word = 'cat'"];shakeId=null;draw();ctx.out('cat');};
+  const curObj=()=>objs.find(o=>o.id===cur);
+  const make=t=>{const o={id:objs.length+1,text:t};objs.push(o);return o;};
+  const draw=()=>{
+    ctx.stage.replaceChildren(...objs.map(o=>h('div',{class:'row'+(o.id===shakeId?' shake':'')},
+      o.id===cur?h('span',{class:'tag'},'word →'):h('span',{class:'tag',style:'opacity:.35;text-decoration:line-through'},'word'),
+      h('div',{class:'panel'+(o.id===cur?'':' sunk'),style:o.id===cur?'':'opacity:.55'},h('div',{class:'cap'},`string object #${o.id}`+(o.id===cur?'':' · no name points here')),
+        h('div',{class:'row'},cellRow([...o.text].map(visCh),{small:true}),o.id===cur&&shakeId===o.id?h('span',{class:'tag',style:'color:var(--red);border-color:var(--red);background:var(--red-soft)'},'locked'):null)))));
+    ctx.code(log.join('\n'),log.length-1);
+  };
+  const run=(line,fn)=>{log.push(line);shakeId=null;fn();draw();};
+  ctx.add(Btns(
+    Btn("word[0] = 'b'",()=>run("word[0] = 'b'",()=>{shakeId=cur;ctx.out("TypeError: 'str' object does not support item assignment",'err');}),'mono'),
+    Btn("word = 'b' + word[1:]",()=>run("word = 'b' + word[1:]",()=>{const o=make('b'+[...curObj().text].slice(1).join(''));cur=o.id;ctx.out(`word is now ${pyStr(o.text)}, a brand new string`);}),'mono'),
+    Btn('word.upper()',()=>run('word.upper()',()=>{const o=make(curObj().text.toUpperCase());ctx.out(`${pyStr(o.text)} was made, but no name points to it.\nword is still ${pyStr(curObj().text)}`);}),'mono'),
+    Btn('word = word.upper()',()=>run('word = word.upper()',()=>{const o=make(curObj().text.toUpperCase());cur=o.id;ctx.out(`word is now ${pyStr(o.text)}`);}),'mono'),
+    Btn('Reset',reset)));
+  reset();
+});
+
+topic('str','str-methods','String methods',
+'Methods are built-in tools you call with a dot: s.upper(), s.find("t"). Pick one, change the text, and see the result.',
+'String methods <b>return a new value</b>. The original s stays exactly the same.',
+ctx=>{
+  let s='  Hello Python World  ',m='strip',a1='o',a2='0';
+  const title=t=>{let out='',prev=false;for(const c of t){const cased=c.toLowerCase()!==c.toUpperCase();out+=cased?(prev?c.toLowerCase():c.toUpperCase()):c;prev=cased;}return out;};
+  const occ=(t,sub)=>{const r=[];if(!sub)return r;let i=0;while((i=t.indexOf(sub,i))!==-1){for(let k=0;k<sub.length;k++)r.push(i+k);i+=sub.length;}return r;};
+  const isCased=c=>c.toLowerCase()!==c.toUpperCase();
+  const M={
+    upper:{f:t=>t.toUpperCase()},lower:{f:t=>t.toLowerCase()},title:{f:title},
+    capitalize:{f:t=>t?t[0].toUpperCase()+t.slice(1).toLowerCase():t},
+    swapcase:{f:t=>[...t].map(c=>c===c.toUpperCase()?c.toLowerCase():c.toUpperCase()).join('')},
+    strip:{f:t=>t.trim()},lstrip:{f:t=>t.replace(/^\s+/,'')},rstrip:{f:t=>t.replace(/\s+$/,'')},
+    replace:{args:['old','new'],f:(t,x,y)=>x===''?y+[...t].join(y)+y:t.split(x).join(y),hl:(t,x)=>occ(t,x)},
+    find:{args:['sub'],f:(t,x)=>t.indexOf(x),hl:(t,x)=>{const i=t.indexOf(x);return i<0?[]:seq(i,i+x.length);}},
+    index:{args:['sub'],f:(t,x)=>{const i=t.indexOf(x);if(i<0)throw new Error('ValueError: substring not found');return i;},hl:(t,x)=>{const i=t.indexOf(x);return i<0?[]:seq(i,i+x.length);}},
+    count:{args:['sub'],f:(t,x)=>x===''?[...t].length+1:t.split(x).length-1,hl:(t,x)=>occ(t,x)},
+    startswith:{args:['prefix'],f:(t,x)=>t.startsWith(x),hl:(t,x)=>t.startsWith(x)?seq(0,x.length):[]},
+    endswith:{args:['suffix'],f:(t,x)=>t.endsWith(x),hl:(t,x)=>t.endsWith(x)?seq(t.length-x.length,t.length):[]},
+    split:{args:['sep (blank = spaces)'],f:(t,x)=>x===''?t.split(/\s+/).filter(Boolean):t.split(x)},
+    isalpha:{f:t=>t.length>0&&[...t].every(c=>/\p{L}/u.test(c))},isdigit:{f:t=>t.length>0&&/^\d+$/.test(t)},
+    isupper:{f:t=>[...t].some(isCased)&&t===t.toUpperCase()},islower:{f:t=>[...t].some(isCased)&&t===t.toLowerCase()},
+    isspace:{f:t=>t.length>0&&/^\s+$/.test(t)},len:{f:t=>[...t].length,fn:true},
+  };
+  const sub=h('div',{class:'ctl-sub'});
+  const controls=()=>{sub.replaceChildren();const ar=M[m].args||[];
+    if(ar[0])sub.append(Text(ar[0],a1,v=>{a1=v;draw();}));if(ar[1])sub.append(Text(ar[1],a2,v=>{a2=v;draw();}));};
+  const draw=()=>{
+    const def=M[m];const ar=def.args||[];
+    const call=def.fn?`len(s)`:`s.${m}(${ar.length===0?'':ar.length===1?(m==='split'&&a1===''?'':pyStr(a1)):pyStr(a1)+', '+pyStr(a2)})`;
+    ctx.code(`s = ${pyStr(s)}\nresult = ${call}\nprint(result)`);
+    const hl=def.hl?def.hl(s,a1):[];
+    const top=[cap('s'),cellRow([...s].map(visCh),{cls:i=>hl.includes(i)?'hl':s[i]===' '?'soft':''}),arrow(call,'down')];
+    let r;try{r=def.f(s,a1,a2);}catch(e){ctx.stage.replaceChildren(...top,errbox(e.message));ctx.out(e.message,'err');return;}
+    let view,printed;
+    if(typeof r==='string'){view=cellRow([...r].map(visCh),{cls:i=>r[i]===' '?'soft':'ok'});printed=r;}
+    else if(Array.isArray(r)){view=brackets(h('div',{class:'chips'},r.map(x=>h('span',{class:'chip on'},pyStr(x)))));printed=pyVal(r);}
+    else if(typeof r==='boolean'){view=h('div',{class:'tile'},r?'True':'False',h('small',{},'bool'));printed=r?'True':'False';}
+    else{view=h('div',{class:'tile'},r,h('small',{},'int'));printed=String(r);}
+    ctx.stage.replaceChildren(...top,view,h('p',{class:'note'},`s is unchanged: ${pyStr(s)}`));ctx.out(printed);
+  };
+  const names=Object.keys(M).map(k=>[k,M[k].fn?'len(s)':`${k}(${(M[k].args||[]).map(x=>x.split(' ')[0]).join(', ')})`]);
+  ctx.add(Text('s =',s,v=>{s=v;draw();},{wide:true}),Select('method',names,m,v=>{m=v;if(v==='replace'){a1='o';a2='0';}else if(['find','index','count'].includes(v))a1='o';else if(v==='startswith')a1='  He';else if(v==='endswith')a1='ld  ';else if(v==='split')a1='';controls();draw();}),sub);
+  controls();draw();
+});
+/* =================== LISTS =================== */
+topic('list','list-intro','Introduction to lists',
+'A list keeps many items in one variable, in order, inside square brackets. Add items and watch the positions.',
+'Lists keep their order and can grow or shrink. Positions start at <b>0</b>, just like strings.',
+ctx=>{
+  let cart=['milk','eggs','bread','rice'],item='jam',ops=[];
+  const base=pyVal(cart);
+  const draw=fresh=>{
+    ctx.stage.replaceChildren(h('div',{class:'row'},h('span',{class:'tag'},'cart'),arrow()),
+      brackets(cellRow(cart.map(pyStr),{neg:true,cls:i=>fresh&&i===cart.length-1?'new pop':''})),
+      stats([['len(cart)',cart.length],['first: cart[0]',cart.length?pyStr(cart[0]):'—'],['last: cart[-1]',cart.length?pyStr(cart[cart.length-1]):'—']]));
+    ctx.code([`cart = ${base}`,...ops,'print(cart)','print(len(cart))'].join('\n'),ops.length?ops.length:null);
+    ctx.out(`${pyVal(cart)}\n${cart.length}`);
+  };
+  ctx.add(Text('new item',item,v=>{item=v;}),Btns(
+    Btn('cart.append(item)',()=>{cart.push(item);ops.push(`cart.append(${pyStr(item)})`);draw(true);},'primary'),
+    Btn('cart.pop()',()=>{if(!cart.length){ctx.out('IndexError: pop from empty list','err');return;}cart.pop();ops.push('cart.pop()');draw();}),
+    Btn('Reset',()=>{cart=['milk','eggs','bread','rice'];ops=[];draw();})));
+  draw();
+});
+
+topic('list','list-create','Creating a list',
+'You can write a list by hand, or build one from a string, a range, or by repetition. Pick a way to see the list it makes.',
+'list(range(1, 5)) stops <b>before</b> 5. Same stop rule as slicing.',
+ctx=>{
+  let way='values',vals='78, 85, 92',str='abc',a=1,b=6,st='1',n=4,v0='0',sent='Asha Ravi Meera';
+  const sub=h('div',{class:'ctl-sub'});
+  const controls=()=>{sub.replaceChildren();
+    if(way==='values')sub.append(Text('values',vals,x=>{vals=x;draw();},{wide:true}));
+    if(way==='string')sub.append(Text('text',str,x=>{str=x;draw();}));
+    if(way==='range')sub.append(Range('start',-5,10,a,x=>{a=x;draw();}),Range('stop',-5,15,b,x=>{b=x;draw();}),Select('step',['1','2','3','-1','-2'],st,x=>{st=x;draw();}));
+    if(way==='repeat')sub.append(Text('item',v0,x=>{v0=x;draw();}),Range('n',0,8,n,x=>{n=x;draw();}));
+    if(way==='split')sub.append(Text('sentence',sent,x=>{sent=x;draw();},{wide:true}));};
+  const draw=()=>{
+    let code,items,err=null;
+    if(way==='empty'){code='items = []';items=[];}
+    else if(way==='values'){const p=parseLits(vals);code=`items = [${vals}]`;if(p.error)err=p.error;else items=p.items.map(i=>i.src);}
+    else if(way==='string'){code=`items = list(${pyStr(str)})`;items=[...str].map(pyStr);}
+    else if(way==='range'){const s=+st;code=`items = list(range(${a}, ${b}${s!==1?', '+s:''}))`;items=[];if(s>0)for(let i=a;i<b;i+=s)items.push(String(i));else for(let i=a;i>b;i+=s)items.push(String(i));}
+    else if(way==='repeat'){const p=parseLits(v0);code=`items = [${v0}] * ${n}`;if(p.error||p.items.length!==1)err=p.error||'Type one value';else items=Array(n).fill(p.items[0].src);}
+    else{code=`items = ${pyStr(sent)}.split()`;items=sent.split(/\s+/).filter(Boolean).map(pyStr);}
+    ctx.code(code+'\nprint(items)\nprint(len(items))');
+    if(err){ctx.stage.replaceChildren(errbox(err));ctx.out(err.split('\n')[0],'err');return;}
+    ctx.stage.replaceChildren(h('div',{class:'row'},h('span',{class:'tag'},'items'),arrow()),brackets(cellRow(items)),stats([['len(items)',items.length]]));
+    ctx.out(`[${items.join(', ')}]\n${items.length}`);
+  };
+  ctx.add(Select('way',[['empty','Empty list []'],['values','Write the values'],['string','list() from a string'],['range','list(range(...))'],['repeat','Repeat: [x] * n'],['split','Split a sentence']],way,x=>{way=x;controls();draw();}),sub);controls();draw();
+});
+
+topic('list','list-access','Accessing elements: 1D vs 2D',
+'A 1D list needs one index. A 2D list is a list of lists, like a table: the first index picks the row, the second picks the column.',
+'Click any cell in the 2D grid to see the two indexes that reach it.',
+ctx=>{
+  let mode='1D',i='1',r=1,c='2';
+  const marks=[78,85,92,64,70];const G=[[1,2,3,4],[5,6,7,8],[9,10,11,12]];
+  const sub=h('div',{class:'ctl-sub'});let rSel,cSel;
+  const controls=()=>{sub.replaceChildren();
+    if(mode==='1D')sub.append(Select('index',seq(-6,6).map(String),i,x=>{i=x;draw();}));
+    else{rSel=Select('row',['0','1','2'],String(r),x=>{r=+x;draw();});cSel=Select('column',[['all','(whole row)'],'0','1','2','3'],c,x=>{c=x;draw();});sub.append(rSel,cSel);}};
+  const draw=()=>{
+    if(mode==='1D'){
+      const k=+i,n=marks.length,ok=k>=-n&&k<n,real=k<0?k+n:k;
+      ctx.stage.replaceChildren(h('div',{class:'row'},h('span',{class:'tag'},'marks')),cellRow(marks.map(String),{neg:true,cls:j=>ok&&j===real?'hl':''}),
+        ok?h('div',{class:'tile'},`marks[${k}] → ${marks[real]}`):errbox('IndexError: list index out of range\nValid indexes are -5 to 4.'));
+      ctx.code(`marks = ${pyVal(marks)}\nprint(marks[${k}])`);ctx.out(ok?String(marks[real]):'IndexError: list index out of range',ok?'':'err');
+    }else{
+      const whole=c==='all';
+      ctx.stage.replaceChildren(h('div',{class:'row'},h('span',{class:'tag'},'grid')),
+        grid2(G,{cls:(R,C)=>R===r&&(whole||C===+c)?'hl':R===r?'rowhl':'',click:(R,C)=>{r=R;c=String(C);rSel.input.value=String(R);cSel.input.value=c;draw();},rowLab:R=>'row '+R,colLab:C=>'col '+C}),
+        h('div',{class:'tile'},whole?`grid[${r}] → ${pyVal(G[r])}`:`grid[${r}][${c}] → ${G[r][+c]}`),
+        h('p',{class:'note'},whole?`grid[${r}] picks row ${r}, which is itself a list.`:`grid[${r}] picks row ${r}, then [${c}] picks position ${c} inside that row.`));
+      ctx.code(`grid = [[1, 2, 3, 4],\n        [5, 6, 7, 8],\n        [9, 10, 11, 12]]\nprint(${whole?`grid[${r}]`:`grid[${r}][${c}]`})`);
+      ctx.out(whole?pyVal(G[r]):String(G[r][+c]));
+    }
+  };
+  ctx.add(Select('list type',[['1D','1D list'],['2D','2D list (table)']],mode,x=>{mode=x;controls();draw();}),sub);controls();draw();
+});
+
+topic('list','list-traverse','Traversing a list',
+'A for loop visits each item of the list in order. The loop variable holds one item per turn.',
+'Switch to the marks version to see a running total being built inside the loop.',
+ctx=>{
+  let kind='cart',printed=[],total=0;
+  const D={cart:['milk','eggs','bread','rice'],marks:[78,85,92,64]};
+  const draw=i=>{
+    const L=D[kind];
+    ctx.stage.replaceChildren(h('div',{class:'row'},h('span',{class:'tag'},kind)),cellRow(L.map(pyVal),{cls:k=>k===i?'hl':k<i?'done':''}),
+      h('div',{class:'vars'},varTag(kind==='cart'?'item':'m',i>=0?pyVal(L[i]):'—'),kind==='marks'?varTag('total',total):null));
+    if(kind==='cart')ctx.code(`cart = ${pyVal(L)}\nfor item in cart:\n    print(item)`,i>=0?2:null);
+    else ctx.code(`marks = ${pyVal(L)}\ntotal = 0\nfor m in marks:\n    total = total + m\n    print(total)`,i>=0?[3,4]:null);
+    ctx.out(printed.length?printed.join('\n'):'Press Play or Step',printed.length?'':'muted');
+  };
+  const st=Stepper(ctx,()=>D[kind].length,i=>{const v=D[kind][i];if(kind==='marks'){total+=v;printed.push(String(total));}else printed.push(v);draw(i);},()=>{printed=[];total=0;draw(-1);});
+  ctx.add(Select('example',[['cart','Shopping list'],['marks','Marks with a running total']],kind,v=>{kind=v;st.reset();}),st.el);draw(-1);
+});
+
+topic('list','list-range','Range in a list',
+'Looping over range(len(marks)) gives you each position i, so you can write a new value back into marks[i].',
+'A plain <b>for m in marks</b> loop cannot change the list. You need the index to write back.',
+ctx=>{
+  const orig=[78,85,92,64,70];let marks=[...orig],bonus=5,op='add';
+  const f=v=>op==='add'?v+bonus:op==='sub'?v-bonus:v*2;
+  const expr=op==='add'?`marks[i] + ${bonus}`:op==='sub'?`marks[i] - ${bonus}`:'marks[i] * 2';
+  const draw=i=>{
+    ctx.stage.replaceChildren(cap('before'),cellRow(orig.map(String),{idx:false,small:true,cls:()=>'soft'}),
+      cap('marks now'),cellRow(marks.map(String),{cls:k=>k===i?'hl':k<i?'ok':''}),
+      h('div',{class:'vars'},varTag('i',i>=0?i:'—'),varTag('marks[i]',i>=0?marks[i]:'—')));
+    ctx.code(`marks = ${pyVal(orig)}\nfor i in range(len(marks)):\n    marks[i] = ${op==='add'?`marks[i] + ${bonus}`:op==='sub'?`marks[i] - ${bonus}`:'marks[i] * 2'}\nprint(marks)`,i>=0?2:null);
+    ctx.out(i>=orig.length-1?pyVal(marks):'Press Play or Step',i>=orig.length-1?'':'muted');
+  };
+  const st=Stepper(ctx,()=>orig.length,i=>{marks[i]=f(marks[i]);draw(i);},()=>{marks=[...orig];draw(-1);});
+  const bonusR=Range('amount',1,10,bonus,v=>{bonus=v;st.reset();});
+  ctx.add(Select('change',[['add','add a bonus'],['sub','subtract a penalty'],['dbl','double each mark']],op,v=>{op=v;st.reset();}),bonusR,st.el);draw(-1);
+});
+
+topic('list','list-types','Homogeneous vs heterogeneous lists',
+'A homogeneous list holds one type of value. A heterogeneous list mixes types. Python allows both. Type values and see their types.',
+'Text needs quotes. Without them Python thinks it is a variable name and raises a NameError.',
+ctx=>{
+  let txt='"Asha", 14, 5.4, True';
+  const input=Text('values (comma separated)',txt,v=>{txt=v;draw();},{wide:true});
+  const draw=()=>{
+    const p=parseLits(txt);ctx.code(`data = [${txt}]\nfor x in data:\n    print(x, type(x))`);
+    if(p.error){ctx.stage.replaceChildren(errbox(p.error));ctx.out(p.error.split('\n')[0],'err');return;}
+    const it=p.items;const types=[...new Set(it.map(x=>x.type))];
+    const verdict=it.length===0?'Empty list':types.length===1?`Homogeneous: every item is ${types[0]}`:`Heterogeneous: ${types.length} types mixed`;
+    ctx.stage.replaceChildren(brackets(it.length?h('div',{class:'cells'},it.map((x,i)=>h('div',{class:'cell'},h('div',{class:'box t-'+x.type},x.src),h('span',{class:'ix'},x.type)))):h('div',{class:'empty'},'empty')),
+      h('div',{class:'tile',style:types.length>1?'':'background:var(--green-soft);border-color:var(--green)'},verdict),
+      h('div',{class:'chips'},['int','float','str','bool','NoneType'].map(t=>h('span',{class:'chip',style:types.includes(t)?'border-color:var(--ink)':'opacity:.5'},h('span',{class:'box t-'+t,style:'display:inline-block;min-width:12px;height:12px;padding:0;border-width:2px;border-radius:3px;vertical-align:-1px;margin-right:6px'}),t))));
+    ctx.out(it.map(x=>`${x.type==='str'?x.val:x.src} <class '${x.type}'>`).join('\n')||'(nothing printed)');
+  };
+  ctx.add(input,Btns(...[['All whole numbers','4, 8, 15, 16'],['All text','"red", "green", "blue"'],['Mixed','"Asha", 14, 5.4, True'],['Forgot quotes','Asha, 14']].map(([t,v])=>Btn(t,()=>{txt=v;input.input.value=v;draw();}))));
+  draw();
+});
+
+topic('list','list-concat','List concatenation and repetition',
+'+ joins two lists into a new list. * repeats a list. The original lists are not changed.',
+'[0] * 5 is a quick way to make five zeros, for example empty score slots.',
+ctx=>{
+  let a='1, 2, 3',b='4, 5',n=3,op='plus';
+  const sub=h('div',{class:'ctl-sub'});
+  const controls=()=>{sub.replaceChildren(Text('a =',a,v=>{a=v;draw();}));
+    if(op==='plus')sub.append(Text('b =',b,v=>{b=v;draw();}));else sub.append(Range(op==='times'?'n =':'number =',0,6,n,v=>{n=v;draw();}));};
+  const draw=()=>{
+    const A=parseLits(a),B=parseLits(b);
+    if(A.error||(op==='plus'&&B.error)){const e=A.error||B.error;ctx.stage.replaceChildren(errbox(e));ctx.out(e,'err');return;}
+    const x=A.items.map(i=>i.src);
+    if(op==='plus'){const y=B.items.map(i=>i.src);const res=[...x,...y];
+      ctx.stage.replaceChildren(h('div',{class:'row'},brackets(cellRow(x,{idx:false,cls:()=>'ca'})),h('span',{class:'op'},'+'),brackets(cellRow(y,{idx:false,cls:()=>'cb'}))),arrow('new list','down'),brackets(cellRow(res,{cls:i=>i<x.length?'ca':'cb'})));
+      ctx.code(`a = [${a}]\nb = [${b}]\nc = a + b\nprint(c)\nprint(a)   # unchanged`);ctx.out(`[${res.join(', ')}]\n[${x.join(', ')}]`);}
+    else if(op==='times'){const res=[];for(let k=0;k<n;k++)x.forEach(v=>res.push([v,k]));
+      ctx.stage.replaceChildren(h('div',{class:'row'},brackets(cellRow(x,{idx:false,cls:()=>'ca'})),h('span',{class:'op'},'× '+n)),arrow('new list','down'),brackets(cellRow(res.map(r=>r[0]),{cls:i=>res[i][1]%2?'cb':'ca'})));
+      ctx.code(`a = [${a}]\nc = a * ${n}\nprint(c)`);ctx.out(`[${res.map(r=>r[0]).join(', ')}]`);}
+    else{const e='TypeError: can only concatenate list (not "int") to list';
+      ctx.stage.replaceChildren(h('div',{class:'row'},brackets(cellRow(x,{idx:false,cls:()=>'ca'})),h('span',{class:'op'},'+'),h('div',{class:'box cv'},n)),errbox(e),cap('Fix: wrap the number in a list'),brackets(cellRow([...x,String(n)],{cls:i=>i<x.length?'ca':'cv'})));
+      ctx.code(`a = [${a}]\nprint(a + ${n})     # error\nprint(a + [${n}])   # works`,1);ctx.out(e,'err');}
+  };
+  ctx.add(Select('operation',[['plus','a + b'],['times','a * n'],['num','a + number']],op,v=>{op=v;controls();draw();}),sub);controls();draw();
+});
+
+topic('list','list-sort','Sorting and reversing a list',
+'sort() puts the list in order, sort(reverse=True) puts it in reverse order, and reverse() just flips it. Watch the items move.',
+'sort() and reverse() change the list itself. sorted(nums) gives back a <b>new</b> sorted list and leaves nums alone.',
+ctx=>{
+  let kind='nums',items,log,copy=null;let key=0;
+  const fresh=()=>{const base=kind==='nums'?[45,12,78,31,56,23]:['Ravi','Asha','Zoya','Dev','Meera','Kabir'];items=base.map(v=>({k:'k'+(key++),v}));log=[`${kind} = ${pyVal(base)}`];copy=null;};
+  const row=h('div',{class:'cells'});
+  const paint=()=>{row.replaceChildren(...items.map((it,i)=>h('div',{class:'cell','data-k':it.k},h('div',{class:'box'},pyVal(it.v)),h('span',{class:'ix'},i))));};
+  const draw=()=>{ctx.stage.replaceChildren(h('div',{class:'row'},h('span',{class:'tag'},kind)),row,copy?h('div',{class:'col'},h('div',{class:'row'},h('span',{class:'tag'},'new_list'),h('span',{class:'note'},'made by sorted(), a separate list')),cellRow(copy.map(pyVal),{cls:()=>'ok'})):null);
+    ctx.code(log.join('\n')+`\nprint(${kind})`+(copy?'\nprint(new_list)':''),log.length-1);ctx.out(pyVal(items.map(i=>i.v))+(copy?'\n'+pyVal(copy):''));};
+  const cmp=(x,y)=>kind==='nums'?x.v-y.v:(x.v<y.v?-1:x.v>y.v?1:0);
+  const act=(line,fn)=>{log.push(line);flip(row,()=>{fn();paint();});draw();};
+  fresh();paint();
+  ctx.add(Select('list',[['nums','Numbers'],['names','Names']],kind,v=>{kind=v;fresh();paint();draw();}),Btns(
+    Btn(`sort()`,()=>act(`${kind}.sort()`,()=>items.sort(cmp)),'primary mono'),
+    Btn('sort(reverse=True)',()=>act(`${kind}.sort(reverse=True)`,()=>items.sort((x,y)=>cmp(y,x))),'mono'),
+    Btn('reverse()',()=>act(`${kind}.reverse()`,()=>items.reverse()),'mono'),
+    Btn('sorted() copy',()=>{log.push(`new_list = sorted(${kind})`);copy=[...items].sort(cmp).map(i=>i.v);draw();},'mono'),
+    Btn('Shuffle',()=>{flip(row,()=>{for(let i=items.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[items[i],items[j]]=[items[j],items[i]];}paint();});log=[`${kind} = ${pyVal(items.map(i=>i.v))}`];copy=null;draw();})));
+  draw();
+});
+
+topic('list','list-slice','List slicing',
+'Slicing works on lists exactly like on strings: list[start:stop:step]. The result is a new list.',
+'Change the list itself too. Try text items like "a", "b", "c".',
+ctx=>sliceLab(ctx,{name:'data',initial:'10, 20, 30, 40, 50, 60',label:'data = [ ... ]',parse:s=>{const p=parseLits(s);return p.error?p:{items:p.items};},show:x=>x.src,repr:a=>'['+a.map(x=>x.src).join(', ')+']',start:'1',stop:'4'}));
+
+topic('list','list-mutable','Lists are mutable',
+'Mutable means changeable. You can replace one item of a list in place. Try the same thing on a string and Python refuses.',
+'The list stays the <b>same object</b> after the change. Only the item inside it is replaced.',
+ctx=>{
+  let L=[78,85,92],li='1',lv=90,flash=-1,w='cat',wi='0',wv='b',wErr=false;
+  const draw=()=>{
+    ctx.stage.replaceChildren(h('div',{class:'two'},
+      h('div',{class:'panel'},h('h3',{},'List: mutable'),h('div',{class:'cap'},'list object #1'),cellRow(L.map(String),{cls:i=>i===flash?'ok pop':''}),h('div',{class:'okbox'},`marks[${li}] = ${lv}  ✓ works`)),
+      h('div',{class:'panel'},h('h3',{},'String: immutable'),h('div',{class:'cap'},'string object #1'),h('div',{class:wErr?'shake':''},cellRow([...w].map(visCh),{cls:i=>wErr&&i===+wi?'bad':''})),h('div',{class:'errbox'},`word[${wi}] = ${pyStr(wv)}\nTypeError: 'str' object does not\nsupport item assignment`))));
+  };
+  const code=(which)=>ctx.code(`marks = [78, 85, 92]\nmarks[${li}] = ${lv}\nprint(marks)\n\nword = 'cat'\nword[${wi}] = ${pyStr(wv)}`,which==='list'?1:5);
+  ctx.add(Select('marks index',['0','1','2'],li,v=>{li=v;draw();}),Range('new value',0,100,lv,v=>{lv=v;draw();}),
+    Btns(Btn('Change the list',()=>{L[+li]=lv;flash=+li;wErr=false;draw();code('list');ctx.out(pyVal(L));},'primary')),
+    Select('word index',['0','1','2'],wi,v=>{wi=v;draw();}),Text('new letter',wv,v=>{wv=v;draw();}),
+    Btns(Btn('Change the string',()=>{wErr=true;flash=-1;draw();code('str');ctx.out("TypeError: 'str' object does not support item assignment",'err');},'warn'),Btn('Reset',()=>{L=[78,85,92];flash=-1;wErr=false;draw();code('list');ctx.out('[78, 85, 92]');})));
+  draw();code('list');ctx.out('[78, 85, 92]');
+});
+
+topic('list','list-methods','List methods',
+'Pick a method, fill in its value, and press Run. Each call shows the list after the change and what the method returned.',
+'append, insert, extend, remove, pop and clear <b>change</b> the list. index and count only <b>report</b>.',
+ctx=>{
+  let L=[5,8,2,8],m='append',x='7',ix=1,log=['nums = [5, 8, 2, 8]'],fl=[],ret=null,removed=null;
+  const sig={append:['x'],insert:['i','x'],extend:['list'],remove:['x'],pop:[],popi:['i'],index:['x'],count:['x'],clear:[]};
+  const sub=h('div',{class:'ctl-sub'});
+  const controls=()=>{sub.replaceChildren();const s=sig[m];
+    if(s.includes('i'))sub.append(Range('i',-4,6,ix,v=>{ix=v;}));
+    if(s.includes('x'))sub.append(Text('x',x,v=>{x=v;}));
+    if(s.includes('list'))sub.append(Text('items to add',x,v=>{x=v;},{ph:'1, 2'}));};
+  const draw=()=>{ctx.stage.replaceChildren(h('div',{class:'row'},h('span',{class:'tag'},'nums')),brackets(cellRow(L.map(pyVal),{neg:true,cls:i=>fl.includes(i)?'new pop':''})),
+      h('div',{class:'row'},removed!=null?h('span',{class:'chip bad'},'removed '+pyVal(removed)):null,h('span',{class:'chip'},'returned: '+(ret===null?'None':ret))),stats([['len(nums)',L.length]]));
+    ctx.code(log.join('\n'),log.length-1);};
+  const run=()=>{
+    fl=[];removed=null;ret=null;
+    const p=parseLits(x);const val=p.items&&p.items[0]?p.items[0].val:null;const vsrc=p.items&&p.items[0]?p.items[0].src:x;
+    const same=(a,b)=>a===b;let line;
+    try{
+      if(['append','insert','remove','index','count'].includes(m)&&(p.error||p.items.length!==1))throw new Error(p.error||'Type exactly one value for x');
+      if(m==='append'){line=`nums.append(${vsrc})`;L.push(val);fl=[L.length-1];}
+      else if(m==='insert'){line=`nums.insert(${ix}, ${vsrc})`;let k=ix<0?Math.max(0,L.length+ix):Math.min(ix,L.length);L.splice(k,0,val);fl=[k];}
+      else if(m==='extend'){if(p.error)throw new Error(p.error);line=`nums.extend([${x}])`;const s=L.length;L.push(...p.items.map(i=>i.val));fl=seq(s,L.length);}
+      else if(m==='remove'){line=`nums.remove(${vsrc})`;const k=L.findIndex(v=>same(v,val));if(k<0)throw new Error('ValueError: list.remove(x): x not in list');removed=L.splice(k,1)[0];}
+      else if(m==='pop'){line='nums.pop()';if(!L.length)throw new Error('IndexError: pop from empty list');removed=L.pop();ret=pyVal(removed);}
+      else if(m==='popi'){line=`nums.pop(${ix})`;if(!L.length)throw new Error('IndexError: pop from empty list');const k=ix<0?ix+L.length:ix;if(k<0||k>=L.length)throw new Error('IndexError: pop index out of range');removed=L.splice(k,1)[0];ret=pyVal(removed);}
+      else if(m==='index'){line=`nums.index(${vsrc})`;const k=L.findIndex(v=>same(v,val));if(k<0)throw new Error(`ValueError: ${vsrc} is not in list`);ret=String(k);fl=[k];}
+      else if(m==='count'){line=`nums.count(${vsrc})`;const ks=L.map((v,k)=>same(v,val)?k:-1).filter(k=>k>=0);ret=String(ks.length);fl=ks;}
+      else if(m==='clear'){line='nums.clear()';L=[];}
+      log.push(line+(ret!==null?`   # returns ${ret}`:''));draw();ctx.out(pyVal(L));
+    }catch(e){log.push((line||`nums.${m}(...)`)+'   # error');draw();ctx.out(e.message,'err');}
+  };
+  ctx.add(Select('method',[['append','append(x)'],['insert','insert(i, x)'],['extend','extend(list)'],['remove','remove(x)'],['pop','pop()'],['popi','pop(i)'],['index','index(x)'],['count','count(x)'],['clear','clear()']],m,v=>{m=v;if(v==='extend')x='1, 2';else if(['remove','index','count'].includes(v))x='8';controls();}),sub,
+    Btns(Btn('Run',run,'primary'),Btn('Reset',()=>{L=[5,8,2,8];log=['nums = [5, 8, 2, 8]'];fl=[];ret=null;removed=null;draw();ctx.out('[5, 8, 2, 8]');})));
+  controls();draw();ctx.out('[5, 8, 2, 8]');
+});
+/* =================== MODULES & PACKAGES =================== */
+topic('mod','mod-what','Fundamentals of modules',
+'A module is a Python file full of ready-made tools. Import it, then use its tools with a dot: math.sqrt(16).',
+'Python comes with many modules already installed. Importing one saves you from writing and testing that code yourself.',
+ctx=>{
+  const marks=[78,85,92,85,64];
+  const LIB={
+    math:{about:'square roots, rounding, powers, pi',fns:{
+      sqrt:{p:[0,100,16],call:x=>`math.sqrt(${x})`,run:x=>pyFloat(Math.sqrt(x))},
+      pow:{p:[0,12,3],call:x=>`math.pow(${x}, 2)`,run:x=>pyFloat(x*x)},
+      ceil:{p:[0,10,4.2,0.1],call:x=>`math.ceil(${x})`,run:x=>String(Math.ceil(x))},
+      floor:{p:[0,10,4.7,0.1],call:x=>`math.floor(${x})`,run:x=>String(Math.floor(x))},
+      factorial:{p:[0,12,5],call:x=>`math.factorial(${x})`,run:x=>{let f=1;for(let i=2;i<=x;i++)f*=i;return String(f);}},
+      pi:{call:()=>'math.pi',run:()=>'3.141592653589793'}}},
+    random:{about:'random numbers and random picks',fns:{
+      randint:{call:()=>'random.randint(1, 6)',run:()=>String(1+Math.floor(Math.random()*6)),again:true},
+      choice:{call:()=>'random.choice(["rock", "paper", "scissors"])',run:()=>['rock','paper','scissors'][Math.floor(Math.random()*3)],again:true},
+      random:{call:()=>'random.random()',run:()=>String(Math.random()),again:true}}},
+    statistics:{about:'averages of a list of numbers',fns:{
+      mean:{call:()=>`statistics.mean(${pyVal(marks)})`,run:()=>String(mean(marks))},
+      median:{call:()=>`statistics.median(${pyVal(marks)})`,run:()=>String(median(marks))},
+      mode:{call:()=>`statistics.mode(${pyVal(marks)})`,run:()=>'85'}}}};
+  let mod='math',fn='sqrt',x=16,result='';
+  const sub=h('div',{class:'ctl-sub'});
+  const controls=()=>{sub.replaceChildren(Select('tool',Object.keys(LIB[mod].fns),fn,v=>{fn=v;controls();go();}));const f=LIB[mod].fns[fn];
+    if(f.p){x=f.p[2];sub.append(Range('x',f.p[0],f.p[1],x,v=>{x=v;go();},{step:f.p[3]||1}));}
+    if(f.again)sub.append(Btns(Btn('Run again',go,'primary')));};
+  const go=()=>{const f=LIB[mod].fns[fn];result=f.run(x);draw();};
+  const draw=()=>{const f=LIB[mod].fns[fn];const call=f.call(Number.isInteger(x)?x:+(+x).toFixed(1));
+    ctx.stage.replaceChildren(h('div',{class:'two'},Object.entries(LIB).map(([k,v])=>h('div',{class:'toolbox'+(k===mod?' on':'')},h('h4',{},k+'.py'),h('div',{class:'note'},v.about),h('div',{class:'chips'},Object.keys(v.fns).map(n=>h('span',{class:'chip'+(k===mod&&n===fn?' on':'')},n)))))),
+      h('div',{class:'row'},h('span',{class:'tag'},call),arrow('returns'),h('div',{class:'tile pop'},result)));
+    ctx.code(`import ${mod}\nresult = ${call}\nprint(result)`,1);ctx.out(result);};
+  ctx.add(Select('module',Object.keys(LIB),mod,v=>{mod=v;fn=Object.keys(LIB[v].fns)[0];controls();go();}),sub);controls();go();
+});
+
+topic('mod','mod-create','Creating a module',
+'Any .py file you write is a module. Put a function in greet.py, then import it from main.py in the same folder.',
+'The module name is the file name without .py. If the file is in a different folder, Python cannot find it.',
+ctx=>{
+  let word='Hello',name='Asha',same=true,phase=0;
+  const draw=()=>{
+    const g=`def hello(name):\n    return "${word}, " + name + "!"`;const m=`import greet\nprint(greet.hello(${pyStr(name)}))`;
+    const ok=same;const res=`${word}, ${name}!`;
+    ctx.stage.replaceChildren(
+      h('div',{class:'row',style:'align-items:stretch'},
+        h('div',{class:'col',style:'flex:1;min-width:220px'},cap('project/'),fileCard('main.py',m,i=>phase===1&&i===0?'on':phase>=2&&i===1?'on':'',{on:phase===1})),
+        h('div',{class:'arrow',style:'align-self:center'},h('span',{class:'a'},ok?'⇄':'✕'),h('span',{class:'l'},'import greet')),
+        h('div',{class:'col',style:'flex:1;min-width:220px'},cap(same?'project/':'other_folder/'),fileCard('greet.py',g,i=>phase===2&&ok?'on':'',{on:phase===2&&ok}))),
+      phase===3?(ok?h('div',{class:'okbox pop'},res):errbox("ModuleNotFoundError: No module named 'greet'\nmain.py and greet.py must be in the same folder.")):null);
+    ctx.code(`# greet.py\n${g}\n\n# main.py\n${m}`);
+  };
+  const run=()=>{phase=1;draw();ctx.out('Python looks for greet.py next to main.py…','muted');
+    ctx.after(700,()=>{if(!same){phase=3;draw();ctx.out("ModuleNotFoundError: No module named 'greet'",'err');return;}phase=2;draw();ctx.out('Found it. Running greet.hello…','muted');
+      ctx.after(700,()=>{phase=3;draw();ctx.out(`${word}, ${name}!`);});});};
+  ctx.add(Select('greeting',['Hello','Namaste','Good morning','Hi'],word,v=>{word=v;phase=0;draw();}),Text('name',name,v=>{name=v;phase=0;draw();}),
+    Check('greet.py is in the same folder',same,v=>{same=v;phase=0;draw();}),Btns(Btn('Run main.py',run,'primary')));
+  draw();ctx.out('Press "Run main.py"','muted');
+});
+
+topic('mod','mod-import','Import mechanics and syntax',
+'There are several ways to write an import. Each one decides which names appear in your program and how you call the tools.',
+'Python loads a module only once. A second import of the same module reuses the one already loaded.',
+ctx=>{
+  const ALL=['sqrt','pi','floor','ceil','pow','factorial','e'];
+  const S={
+    whole:{line:'import math',names:['math'],call:'math.sqrt(25)',bad:'sqrt(25)',badErr:"NameError: name 'sqrt' is not defined"},
+    alias:{line:'import math as m',names:['m'],call:'m.sqrt(25)',bad:'math.sqrt(25)',badErr:"NameError: name 'math' is not defined"},
+    some:{line:'from math import sqrt, pi',names:['sqrt','pi'],call:'sqrt(25)',bad:'math.sqrt(25)',badErr:"NameError: name 'math' is not defined"},
+    rename:{line:'from math import sqrt as root',names:['root'],call:'root(25)',bad:'sqrt(25)',badErr:"NameError: name 'sqrt' is not defined"},
+    star:{line:'from math import *',names:ALL,call:'sqrt(25)',bad:null}};
+  let s='whole',mine=false;
+  const draw=()=>{const d=S[s];const used=s==='some'?['sqrt','pi']:s==='rename'?['sqrt']:s==='star'?ALL:[];
+    const yours=[...d.names];const clash=s==='star'&&mine;
+    ctx.stage.replaceChildren(h('div',{class:'two'},
+      h('div',{class:'toolbox on'},h('h4',{},'math module'),h('div',{class:'chips'},ALL.map(n=>h('span',{class:'chip'+(used.includes(n)||['whole','alias'].includes(s)?' on':'')},n)),h('span',{class:'chip'},'+ many more'))),
+      h('div',{class:'toolbox'},h('h4',{},'names in your program'),h('div',{class:'chips'},mine&&s!=='star'?h('span',{class:'chip'},'pow = 99'):null,clash?h('span',{class:'chip bad'},'pow = 99'):null,yours.map(n=>h('span',{class:'chip '+(['math','m'].includes(n)?'mod':'on')},n+(['math','m'].includes(n)?' (whole module)':s==='rename'?' (is sqrt)':'')))))),
+      h('div',{class:'row'},h('div',{class:'okbox'},`✓ ${d.call}  →  5.0`),d.bad?h('div',{class:'errbox'},`✕ ${d.bad}\n${d.badErr}`):null),
+      clash?errbox('Your own variable pow was replaced by math.pow.\nThat is why import * is risky.'):null);
+    ctx.code(`${mine?'pow = 99\n':''}${d.line}\nprint(${d.call})${clash?'\nprint(pow)   # not 99 any more!':''}`,mine?1:0);
+    ctx.out(`5.0${clash?'\n<built-in function pow>':''}`);};
+  ctx.add(Select('import style',Object.entries(S).map(([k,v])=>[k,v.line]),s,v=>{s=v;draw();}),Check('I already have a variable named pow',mine,v=>{mine=v;draw();}));draw();
+});
+
+topic('mod','pkg-what','Fundamentals of packages',
+'Functions live in modules, and modules live in packages. A package is a folder that groups related modules together.',
+'NumPy, Pandas and Matplotlib, which come later in this course, are all packages.',
+ctx=>{
+  let lvl='package';
+  const D={function:{def:'A named block of code that does one job.',code:'from school.marks import average\nprint(average([80, 90]))'},
+    module:{def:'One .py file that holds functions and variables.',code:'from school import marks\nprint(marks.average([80, 90]))'},
+    package:{def:'A folder of modules with an __init__.py file inside.',code:'import school.marks\nprint(school.marks.average([80, 90]))'}};
+  const draw=()=>{
+    ctx.stage.replaceChildren(h('div',{class:'nest'+(lvl==='package'?' on':'')},h('div',{class:'nh'},'school/',h('span',{},'package')),
+      h('div',{class:'two'},
+        h('div',{class:'nest'+(lvl==='module'?' on':'')},h('div',{class:'nh'},'marks.py',h('span',{},'module')),
+          h('div',{class:'nest'+(lvl==='function'?' on':'')},h('div',{class:'nh'},'average()',h('span',{},'function'))),h('div',{class:'nest'},h('div',{class:'nh'},'highest()',h('span',{},'function')))),
+        h('div',{class:'nest'},h('div',{class:'nh'},'attendance.py',h('span',{},'module')),h('div',{class:'nest'},h('div',{class:'nh'},'mark_present()',h('span',{},'function'))))),
+      h('div',{class:'nh',style:'color:var(--muted)'},'__init__.py',h('span',{},'marks the folder as a package'))),
+      h('div',{class:'tile'},lvl,h('small',{},D[lvl].def)));
+    ctx.code(D[lvl].code);ctx.out('85.0');};
+  ctx.add(Select('highlight',[['package','Package (folder)'],['module','Module (file)'],['function','Function (inside a file)']],lvl,v=>{lvl=v;draw();}));draw();
+});
+
+const TREE=[
+  {p:'project/',d:0,dir:true,role:'Your project folder. You run programs from here.'},
+  {p:'main.py',d:1,role:'The program you run. It uses the school package.',src:'from school import marks\n\nprint(marks.average([80, 90]))'},
+  {p:'school/',d:1,dir:true,role:'A package: a folder of related modules.',imp:'school'},
+  {p:'__init__.py',d:2,role:'Marks school/ as a package. It runs first whenever the package is imported. Often empty.',src:'# school/__init__.py\n# can be empty',imp:'school'},
+  {p:'marks.py',d:2,role:'A module with functions about marks.',src:'def average(m):\n    return sum(m) / len(m)\n\ndef highest(m):\n    return max(m)',imp:'school.marks'},
+  {p:'attendance.py',d:2,role:'A module with functions about attendance.',src:'def mark_present(name):\n    print(name, "is present")',imp:'school.attendance'},
+  {p:'reports/',d:2,dir:true,role:'A sub-package: a package inside a package.',imp:'school.reports'},
+  {p:'__init__.py',d:3,role:'Marks reports/ as a package too.',src:'# school/reports/__init__.py',imp:'school.reports'},
+  {p:'report_card.py',d:3,role:'A module inside the sub-package.',src:'from school.marks import average\n\ndef make_card(name, m):\n    return name + ": " + str(average(m))',imp:'school.reports.report_card'}];
+function treeEl(items,{on,tgt,click,why}={}){return h('div',{class:'tree'},items.map((t,i)=>h('button',{type:'button',class:'node'+(t.dir?' dir':'')+(i===on?' on':'')+(i===tgt?' tgt':'')+(t.isNew?' new':''),style:`margin-left:${t.d*22}px`,onclick:click?()=>click(i):null},h('span',{class:'ic'},t.dir?'▸':'·'),t.p,why&&why(i)?h('span',{class:'why'},why(i)):null)));}
+
+topic('mod','pkg-structure','Python package structure',
+'Click any file or folder to see what it holds and the name you would use to import it.',
+'Every package folder has its own __init__.py. A folder inside a package with its own __init__.py is a sub-package.',
+ctx=>{
+  let on=4;
+  const draw=()=>{const t=TREE[on];
+    ctx.stage.replaceChildren(h('div',{class:'two'},treeEl(TREE,{on,click:i=>{on=i;draw();}}),
+      h('div',{class:'col'},h('div',{class:'tile',style:'font-size:1.15rem'},t.p),h('p',{class:'note'},t.role),t.imp?stats([['import name',t.imp]]):null)));
+    ctx.code(t.src||`# ${t.p} is a folder`);ctx.out(t.imp?`import ${t.imp}`:on===1?'python main.py':'(folder)');};
+  draw();
+});
+
+topic('mod','pkg-create','Creating a package',
+'Build the school package step by step. Press Next to add each piece.',
+'The order matters less than the result: a folder, an __init__.py inside it, and your modules.',
+ctx=>{
+  const STEPS=[
+    {say:'Start with an empty project folder.',tree:[0],file:null},
+    {say:'Make a folder called school. This will become the package.',tree:[0,2],file:null},
+    {say:'Add an empty __init__.py inside school/. Now Python treats it as a package.',tree:[0,2,3],file:3},
+    {say:'Add marks.py with your functions.',tree:[0,2,3,4],file:4},
+    {say:'Write main.py next to the school folder. It imports the package.',tree:[0,1,2,3,4],file:1},
+    {say:'Run python main.py.',tree:[0,1,2,3,4],file:1,run:true}];
+  let k=0;
+  const draw=()=>{const s=STEPS[k];const items=s.tree.map(i=>({...TREE[i],isNew:k>0&&!STEPS[k-1].tree.includes(i)}));
+    ctx.stage.replaceChildren(h('div',{class:'steps'},STEPS.map((_,i)=>h('span',{class:'dot'+(i<=k?' on':'')}))),h('div',{class:'tile',style:'font-size:1.05rem;font-family:var(--body)'},`Step ${k+1}. ${s.say}`),
+      h('div',{class:'two'},treeEl(items,{on:s.file!=null?s.tree.indexOf(s.file):-1}),s.file!=null?fileCard(TREE[s.file].p,TREE[s.file].src):h('div',{class:'empty'},'no files yet')),
+      s.run?h('div',{class:'okbox pop'},'85.0'):null);
+    ctx.code(s.file!=null?TREE[s.file].src:'# nothing to write yet');ctx.out(s.run?'85.0':'—',s.run?'':'muted');
+    back.disabled=k===0;next.disabled=k===STEPS.length-1;};
+  const back=Btn('← Back',()=>{k--;draw();}),next=Btn('Next →',()=>{k++;draw();},'primary');
+  ctx.add(Btns(back,next,Btn('Start over',()=>{k=0;draw();})));draw();
+});
+
+topic('mod','pkg-init','The __init__.py file',
+'__init__.py runs first, every time the package is imported. Change what it contains and how main.py imports, then see what happens.',
+'A shortcut line in __init__.py lets people write <b>school.average</b> instead of <b>school.marks.average</b>.',
+ctx=>{
+  let init='empty',main='A';
+  const INIT={empty:'# empty',msg:'print("school package loaded")',short:'from .marks import average',both:'print("school package loaded")\nfrom .marks import average'};
+  const MAIN={A:'import school\nprint(school.average([80, 90]))',B:'from school.marks import average\nprint(average([80, 90]))',C:'from school import average\nprint(average([80, 90]))'};
+  const draw=()=>{
+    const hasMsg=init==='msg'||init==='both',hasShort=init==='short'||init==='both';
+    let ok=true,err='';
+    if(main==='A'&&!hasShort){ok=false;err="AttributeError: module 'school' has no attribute 'average'";}
+    if(main==='C'&&!hasShort){ok=false;err="ImportError: cannot import name 'average' from 'school'";}
+    const visitsMarks=main==='B'||hasShort;
+    const out=[];if(hasMsg)out.push('school package loaded');out.push(ok?'85.0':err);
+    ctx.stage.replaceChildren(h('div',{class:'two'},fileCard('school/__init__.py',INIT[init],null,{on:true,note:'runs first'}),fileCard('main.py',MAIN[main])),
+      h('div',{class:'flowv'},
+        h('div',{class:'fstep on'},h('span',{class:'num'},'1'),'main.py starts the import'),
+        h('div',{class:'fstep on'},h('span',{class:'num'},'2'),`school/__init__.py runs${hasMsg?' and prints its message':''}`),
+        h('div',{class:'fstep '+(visitsMarks?'on':'off')},h('span',{class:'num'},'3'),visitsMarks?'school/marks.py is loaded':'school/marks.py is never loaded'),
+        h('div',{class:'fstep '+(ok?'on':'bad')},h('span',{class:'num'},'4'),ok?'average([80, 90]) gives 85.0':err)));
+    ctx.code(`# school/__init__.py\n${INIT[init]}\n\n# main.py\n${MAIN[main]}`);ctx.out(out.join('\n'),ok?'':'err');};
+  ctx.add(Select('__init__.py contains',[['empty','nothing (empty)'],['msg','a print message'],['short','a shortcut import'],['both','message + shortcut']],init,v=>{init=v;draw();}),
+    Select('main.py imports with',[['A','import school'],['B','from school.marks import average'],['C','from school import average']],main,v=>{main=v;draw();}));draw();
+});
+
+topic('mod','pkg-imports','Absolute vs relative imports',
+'Absolute imports spell out the full path from the top of the project. Relative imports use dots to start from where you are.',
+'One dot means "this package". Each extra dot climbs one folder up. Relative imports only work inside a package.',
+ctx=>{
+  const MODS={main:{label:'main.py',parts:[]},marks:{label:'school/marks.py',parts:['school'],mod:'marks',fn:'average'},att:{label:'school/attendance.py',parts:['school'],mod:'attendance',fn:'mark_present'},card:{label:'school/reports/report_card.py',parts:['school','reports'],mod:'report_card',fn:'make_card'}};
+  const idxOf={main:1,marks:4,att:5,card:8};
+  let here='card',want='marks';
+  const draw=()=>{
+    const H=MODS[here],W=MODS[want];
+    const abs=`from ${[...W.parts,W.mod].join('.')} import ${W.fn}`;let rel,relNote;
+    if(here===want){rel=null;relNote='Same file: no import needed.';}
+    else if(here==='main'){rel=null;relNote='main.py is not inside a package, so it cannot use relative imports. Use the absolute one.';}
+    else{let k=0;while(k<H.parts.length&&k<W.parts.length&&H.parts[k]===W.parts[k])k++;const up=H.parts.length-k;rel=`from ${'.'.repeat(1+up)}${[...W.parts.slice(k),W.mod].join('.')} import ${W.fn}`;relNote=up===0?'One dot: start in my own package.':`${1+up} dots: start in my package, then go up ${up} folder${up>1?'s':''}.`;}
+    ctx.stage.replaceChildren(h('div',{class:'two'},treeEl(TREE,{on:idxOf[here],tgt:here===want?-1:idxOf[want],why:i=>i===idxOf[here]?'you are here':i===idxOf[want]&&here!==want?'you want this':''}),
+      h('div',{class:'col'},cap('Absolute'),h('div',{class:'okbox'},abs),h('p',{class:'note'},'Full path from the project folder. Works from anywhere.'),
+        cap('Relative'),rel?h('div',{class:'okbox'},rel):h('div',{class:'errbox'},'not possible here'),h('p',{class:'note'},relNote))));
+    ctx.code(`# inside ${H.label}\n${abs}\n${rel?rel+'   # same thing':'# relative import not possible here'}`);ctx.out(rel?'Both lines import the same function.':relNote,rel?'':'muted');};
+  const opts=Object.entries(MODS).map(([k,v])=>[k,v.label]);
+  ctx.add(Select('you are in',opts,here,v=>{here=v;draw();}),Select('you want',opts.filter(o=>o[0]!=='main'),want,v=>{want=v;draw();}));draw();
+});
+
+topic('mod','main-guard','if __name__ == "__main__"',
+'Python sets __name__ to "__main__" in the file you run, and to the module name in files that are imported. The if-check uses that to skip test code on import.',
+'Green lines run. Grey lines are skipped. Switch how the program starts to see the difference.',
+ctx=>{
+  let how='direct';
+  const G='def hello(name):\n    return "Hello, " + name\n\nprint("greet.py loaded")\n\nif __name__ == "__main__":\n    print(hello("test"))';
+  const M='import greet\n\nprint(greet.hello("Asha"))';
+  const draw=()=>{const direct=how==='direct';
+    const gCls=i=>{if(i===6)return direct?'ran':'skip';if(i===5||i===3||i===0||i===1)return 'ran';return '';};
+    const out=direct?['greet.py loaded','Hello, test']:['greet.py loaded','Hello, Asha'];
+    ctx.stage.replaceChildren(h('div',{class:'row'},h('span',{class:'tag'},`python ${direct?'greet.py':'main.py'}`),varTag('__name__ in greet.py',direct?'"__main__"':'"greet"')),
+      h('div',{class:'two'},fileCard('greet.py',G,gCls,{on:direct,note:direct?'run directly':'imported'}),direct?h('div',{class:'empty'},'main.py is not used'):fileCard('main.py',M,i=>i===0||i===2?'ran':'',{on:true,note:'run directly'})),
+      h('div',{class:direct?'okbox':'tile'},direct?'The test line ran, because greet.py is the file being run.':'The test line was skipped, because greet.py was only imported.'));
+    ctx.code(direct?G:M);ctx.out(out.join('\n'));};
+  ctx.add(Select('start the program with',[['direct','python greet.py'],['import','python main.py (imports greet)']],how,v=>{how=v;draw();}));draw();
+});
+/* =================== NUMPY =================== */
+topic('np','np-intro','Introduction to NumPy',
+'NumPy arrays do maths on every number at once. The same symbol does something very different on a Python list. Compare them side by side.',
+'Install once with <b>pip install numpy</b>, then <b>import numpy as np</b>. np is the nickname everyone uses.',
+ctx=>{
+  let txt='10, 20, 30, 40',op='times';
+  const OPS={times:{sym:'* 2',list:L=>({v:[...L,...L]}),arr:L=>L.map(x=>x*2)},
+    plus:{sym:'+ 10',list:()=>({e:'TypeError: can only concatenate list (not "int") to list'}),arr:L=>L.map(x=>x+10)},
+    pow:{sym:'** 2',list:()=>({e:"TypeError: unsupported operand type(s) for ** or pow(): 'list' and 'int'"}),arr:L=>L.map(x=>x*x)},
+    self:{sym:'+ itself',list:L=>({v:[...L,...L]}),arr:L=>L.map(x=>x+x)},
+    gt:{sym:'> 25',list:()=>({e:"TypeError: '>' not supported between instances of 'list' and 'int'"}),arr:L=>L.map(x=>x>25),bool:true}};
+  const draw=()=>{
+    const p=parseNums(txt);const o=OPS[op];
+    const lexpr=op==='self'?'nums + nums':`nums ${o.sym}`,aexpr=op==='self'?'arr + arr':`arr ${o.sym}`;
+    ctx.code(`import numpy as np\nnums = [${txt}]\narr = np.array(nums)\nprint(${aexpr})\nprint(${lexpr})`);
+    if(p.error){ctx.stage.replaceChildren(errbox(p.error));ctx.out(p.error,'err');return;}
+    const L=p.nums;const lr=o.list(L),ar=o.arr(L);const dt=o.bool?'bool':dtypeOf(L);
+    const fmt=v=>typeof v==='boolean'?(v?'True':'False'):String(v);
+    ctx.stage.replaceChildren(h('div',{class:'two'},
+      h('div',{class:'panel'},h('h3',{},'Python list'),cellRow(L.map(String),{idx:false,small:true}),arrow(lexpr,'down'),lr.e?h('div',{class:'errbox'},lr.e):cellRow(lr.v.map(String),{idx:false,small:true,cls:i=>i>=L.length?'cb':'ca'}),h('p',{class:'note'},lr.e?'Lists do not do maths on their items.':'The list was repeated, not doubled.')),
+      h('div',{class:'panel'},h('h3',{},'NumPy array'),cellRow(L.map(String),{idx:false,small:true}),arrow(aexpr,'down'),cellRow(ar.map(fmt),{idx:false,small:true,cls:()=>'ok'}),h('p',{class:'note'},'Every element was changed at once.'))));
+    ctx.out(`${npRepr(ar,dt)}\n${lr.e||pyVal(lr.v)}`,lr.e?'err':'');
+  };
+  ctx.add(Text('nums =',txt,v=>{txt=v;draw();},{wide:true}),Select('operation',Object.entries(OPS).map(([k,v])=>[k,v.sym]),op,v=>{op=v;draw();}));draw();
+});
+
+topic('np','np-lists','Creating arrays from lists and tuples',
+'np.array() turns a list or tuple into an array. Every element must end up the same type, so NumPy converts them if it has to.',
+'Mix whole numbers with one decimal and they all become floats. Mix in any text and they all become text.',
+ctx=>{
+  let txt='[1, 2, 3.5]';
+  const input=Text('np.array( ... )',txt,v=>{txt=v;draw();},{wide:true});
+  const conv=t=>{let s=t.trim();const isTuple=s.startsWith('(');s=s.replace(/\(/g,'[').replace(/\)/g,']').replace(/\bTrue\b/g,'true').replace(/\bFalse\b/g,'false').replace(/'([^'"]*)'/g,'"$1"');return {v:JSON.parse(s),isTuple};};
+  const draw=()=>{
+    ctx.code(`import numpy as np\narr = np.array(${txt})\nprint(arr)\nprint(arr.dtype, arr.shape)`);
+    let v,isTuple;try{({v,isTuple}=conv(txt));if(!Array.isArray(v))throw 0;}catch(e){const m='SyntaxError: write a list like [1, 2, 3] or a tuple like (1, 2, 3)';ctx.stage.replaceChildren(errbox(m));ctx.out(m,'err');return;}
+    const nested=v.some(Array.isArray);
+    if(nested&&(!v.every(Array.isArray)||new Set(v.map(r=>r.length)).size>1||v.some(r=>r.some(Array.isArray)))){
+      const m=`ValueError: setting an array element with a sequence. The requested array has an inhomogeneous shape after 1 dimensions.`;
+      ctx.stage.replaceChildren(h('div',{class:'col'},v.map(r=>Array.isArray(r)?cellRow(r.map(x=>JSON.stringify(x)),{idx:false,small:true}):cellRow([JSON.stringify(r)],{idx:false,small:true}))),errbox('Rows have different lengths, so they cannot form a rectangle.\n'+m));ctx.out(m,'err');return;}
+    const flat=nested?v.flat():v;
+    const ty=x=>typeof x==='string'?'str':typeof x==='boolean'?'bool':Number.isInteger(x)?'int':'float';
+    const hasDot=/\d\.\d*|\.\d/.test(txt.replace(/"[^"]*"|'[^']*'/g,''));
+    const types=flat.map(x=>ty(x)==='int'&&hasDot?'num':ty(x));
+    let dt;const anyStr=flat.some(x=>typeof x==='string');
+    if(anyStr){let w=0;flat.forEach(x=>{w=Math.max(w,typeof x==='string'?x.length:typeof x==='boolean'?5:Number.isInteger(x)&&!hasDot?21:32);});dt='<U'+w;}
+    else if(hasDot)dt='float64';else if(flat.every(x=>typeof x==='boolean'))dt='bool';else dt='int64';
+    const cast=x=>dt.startsWith('<U')?(typeof x==='boolean'?(x?'True':'False'):Number.isInteger(x)&&hasDot?x.toFixed(1):String(x)):dt==='float64'?+x:dt==='bool'?x:(typeof x==='boolean'?+x:x);
+    const shape=nested?[v.length,v[0].length]:[v.length];
+    const arr=nested?v.map(r=>r.map(cast)):v.map(cast);
+    const srcTy=t=>t==='num'?'int':t;
+    const show=x=>dt.startsWith('<U')?`'${x}'`:dt==='bool'?(x?'True':'False'):dt==='float64'?fmtF(x):String(x);
+    ctx.stage.replaceChildren(cap(isTuple?'Python tuple':'Python list'),
+      nested?h('div',{class:'col'},v.map(r=>h('div',{class:'cells small'},r.map(x=>h('div',{class:'box t-'+srcTy(ty(x))},JSON.stringify(x).replace(/true|false/,m=>m==='true'?'True':'False')))))):
+        h('div',{class:'cells'},v.map(x=>h('div',{class:'cell'},h('div',{class:'box t-'+srcTy(ty(x))},typeof x==='string'?`'${x}'`:typeof x==='boolean'?(x?'True':'False'):String(x)),h('span',{class:'ix'},srcTy(ty(x)))))),
+      arrow('np.array()','down'),cap('NumPy array: one type for everything'),
+      nested?grid2(arr.map(r=>r.map(show)),{cls:()=>'res'}):cellRow(arr.map(show),{cls:()=>'ok'}),
+      stats([['dtype',dt],['shape','('+shape.join(', ')+(shape.length===1?',':'')+')'],['ndim',shape.length]]));
+    ctx.out(`${npRepr(arr,dt)}\n${dt} (${shape.join(', ')}${shape.length===1?',':''})`);
+  };
+  ctx.add(input,Btns(...['[4, 7, 9]','(4, 7, 9)','[1, 2, 3.5]','[[1, 2], [3, 4]]','[1, "two", 3]','[True, False, True]','[[1, 2], [3]]'].map(p=>Btn(p,()=>{txt=p;input.input.value=p;draw();},'mono'))));draw();
+});
+
+topic('np','np-scratch','Creating arrays from scratch',
+'You do not always need a list first. NumPy has functions that build arrays of zeros, ones, number ranges and more.',
+'arange skips the stop value, like range(). linspace includes it and asks how many numbers you want.',
+ctx=>{
+  let fn='zeros',r=1,c=5,a=0,b=10,s=2,num=5,fill=7,seed=0;
+  const sub=h('div',{class:'ctl-sub'});
+  const controls=()=>{sub.replaceChildren();
+    if(['zeros','ones','full','randint'].includes(fn))sub.append(Range('rows (1 = 1D)',1,5,r,v=>{r=v;draw();}),Range('columns',1,8,c,v=>{c=v;draw();}));
+    if(fn==='full')sub.append(Range('fill value',0,9,fill,v=>{fill=v;draw();}));
+    if(fn==='arange')sub.append(Range('start',-5,10,a,v=>{a=v;draw();}),Range('stop',0,25,b,v=>{b=v;draw();}),Range('step',1,5,s,v=>{s=v;draw();}));
+    if(fn==='linspace')sub.append(Range('start',0,10,a,v=>{a=v;draw();}),Range('stop',0,10,b,v=>{b=v;draw();}),Range('how many',2,9,num,v=>{num=v;draw();}));
+    if(fn==='eye')sub.append(Range('size',1,6,num,v=>{num=v;draw();}));
+    if(fn==='randint')sub.append(Btns(Btn('Roll again',()=>{seed++;draw();},'primary')));};
+  const draw=()=>{
+    let arr,dt,call;const shp=r===1?`${c}`:`(${r}, ${c})`;
+    const mk=f=>r===1?seq(0,c).map(f):seq(0,r).map(i=>seq(0,c).map(j=>f(i*c+j)));
+    if(fn==='zeros'){arr=mk(()=>0);dt='float64';call=`np.zeros(${shp})`;}
+    else if(fn==='ones'){arr=mk(()=>1);dt='float64';call=`np.ones(${shp})`;}
+    else if(fn==='full'){arr=mk(()=>fill);dt='int64';call=`np.full(${shp}, ${fill})`;}
+    else if(fn==='randint'){arr=mk(()=>1+Math.floor(Math.random()*6));dt='int64';call=`np.random.randint(1, 7, size=${shp})`;}
+    else if(fn==='arange'){arr=[];for(let x=a;x<b;x+=s)arr.push(x);dt='int64';call=`np.arange(${a}, ${b}, ${s})`;}
+    else if(fn==='linspace'){arr=seq(0,num).map(k=>a+k*(b-a)/(num-1));dt='float64';call=`np.linspace(${a}, ${b}, ${num})`;}
+    else{arr=seq(0,num).map(i=>seq(0,num).map(j=>i===j?1:0));dt='float64';call=`np.eye(${num})`;}
+    const show=x=>dt==='float64'?fmtF(x):String(x);
+    const is2=Array.isArray(arr[0]);
+    ctx.stage.replaceChildren(h('div',{class:'row'},h('span',{class:'tag'},call)),
+      arr.length===0?h('div',{class:'empty'},'empty array: start is already past stop'):is2?grid2(arr.map(row=>row.map(show)),{cls:(i,j)=>arr[i][j]?'res':''}):cellRow(arr.map(show),{cls:i=>arr[i]?'ok':''}),
+      stats([['shape',is2?`(${arr.length}, ${arr[0].length})`:`(${arr.length},)`],['dtype',dt],['size',is2?arr.length*arr[0].length:arr.length]]));
+    ctx.code(`import numpy as np\narr = ${call}\nprint(arr)`);ctx.out(npRepr(arr,dt));
+  };
+  ctx.add(Select('function',[['zeros','np.zeros'],['ones','np.ones'],['full','np.full'],['arange','np.arange'],['linspace','np.linspace'],['eye','np.eye'],['randint','np.random.randint']],fn,v=>{fn=v;if(v==='linspace'){a=0;b=1;num=5;}if(v==='eye')num=3;if(v==='arange'){a=0;b=10;s=2;}controls();draw();}),sub);controls();draw();
+});
+
+topic('np','np-dtypes','NumPy standard data types',
+'Every array has one dtype. It decides what values fit and how many bytes each one takes. Pick a dtype and watch the values convert.',
+'Converting a float to an int <b>cuts off</b> the decimals (it does not round). int8 can only hold -128 to 127.',
+ctx=>{
+  let txt='1.7, 2, -3.9, 0, 120',dt='int32';
+  const SIZE={int8:1,int32:4,int64:8,float32:4,float64:8,bool:1};
+  const draw=()=>{
+    const p=parseLits(txt);ctx.code(`import numpy as np\narr = np.array([${txt}], dtype="${dt}")\nprint(arr)\nprint(arr.itemsize, "bytes each")`);
+    if(p.error){ctx.stage.replaceChildren(errbox(p.error));ctx.out(p.error,'err');return;}
+    const it=p.items;let out,err=null,size=SIZE[dt],realDt=dt;
+    if(dt==='str'){const w=Math.max(1,...it.map(x=>x.type==='str'?x.val.length:x.type==='int'?21:x.type==='float'?32:5));realDt='<U'+w;size=4*w;out=it.map(x=>x.type==='str'?x.val:x.src);}
+    else{
+      const bad=it.find(x=>x.type==='str'&&isNaN(+x.val)||x.type==='NoneType');
+      if(bad)err=`ValueError: invalid literal for ${dt.startsWith('int')?'int() with base 10':'float()'}: ${bad.src}`;
+      else{const nums=it.map(x=>x.type==='bool'?(x.val?1:0):+x.val);
+        if(dt.startsWith('int')){out=nums.map(Math.trunc);const lim=dt==='int8'?[-128,127]:dt==='int32'?[-2147483648,2147483647]:[-Infinity,Infinity];const o=out.find(v=>v<lim[0]||v>lim[1]);if(o!==undefined)err=`OverflowError: Python integer ${o} out of bounds for ${dt}`;}
+        else if(dt==='bool')out=nums.map(v=>v!==0);
+        else out=nums.map(v=>dt==='float32'?+Math.fround(v).toPrecision(7):v);}
+    }
+    if(err){ctx.stage.replaceChildren(cellRow(it.map(x=>x.src),{idx:false}),errbox(err));ctx.out(err,'err');return;}
+    const show=v=>realDt.startsWith('<U')?`'${v}'`:dt==='bool'?(v?'True':'False'):dt.startsWith('float')?fmtF(v):String(v);
+    ctx.stage.replaceChildren(cap('values you wrote'),cellRow(it.map(x=>x.src),{idx:false,small:true}),arrow(`dtype="${dt}"`,'down'),
+      h('div',{class:'cells'},out.map((v,i)=>h('div',{class:'cell'},h('div',{class:'box '+(show(v)!==it[i].src?'hl':'ok')},show(v)),h('div',{style:`display:grid;grid-template-columns:repeat(${Math.min(size,8)},9px);gap:2px;margin-top:4px`},seq(0,Math.min(size,32)).map(()=>h('span',{style:'width:9px;height:9px;border-radius:2px;background:var(--violet)'})))))),
+      h('p',{class:'note'},'Orange boxes changed when converted. Each purple square is one byte of memory.'),
+      stats([['dtype',realDt],['itemsize',size+' bytes'],['nbytes (total)',size*out.length+' bytes']]));
+    ctx.out(`${npRepr(out,realDt.startsWith('<U')?realDt:dt)}\n${size} bytes each`);
+  };
+  ctx.add(Text('values',txt,v=>{txt=v;draw();},{wide:true}),Select('dtype',['int8','int32','int64','float32','float64','bool',['str','str (text)']],dt,v=>{dt=v;draw();}),
+    Btns(Btn('Try 200 in int8',()=>{txt='1.7, 2, -3.9, 0, 200';dt='int8';ctx.controls.querySelector('input[type=text]').value=txt;ctx.controls.querySelector('select').value='int8';draw();})));draw();
+});
+
+topic('np','np-attrs','NumPy array attributes',
+'Attributes describe an array: how many dimensions, its shape, how many items, and how much memory it uses. Change the shape to see them update.',
+'Attributes have no brackets: <b>arr.shape</b>, not arr.shape().',
+ctx=>{
+  let nd=2,d0=2,d1=3,d2=4,dt='int64';
+  const SZ={int8:1,int32:4,int64:8,float64:8};
+  const sub=h('div',{class:'ctl-sub'});
+  const controls=()=>{sub.replaceChildren();if(nd>=1)sub.append(Range(nd===1?'length':nd===2?'rows':'layers',1,nd===3?3:6,d0,v=>{d0=v;draw();}));if(nd>=2)sub.append(Range(nd===2?'columns':'rows',1,6,d1,v=>{d1=v;draw();}));if(nd===3)sub.append(Range('columns',1,5,d2,v=>{d2=v;draw();}));};
+  const draw=()=>{
+    const shape=nd===1?[d0]:nd===2?[d0,d1]:[d0,d1,d2];const size=shape.reduce((x,y)=>x*y,1);
+    let k=0;const cell=()=>String(k++);
+    let vis;
+    if(nd===1)vis=cellRow(seq(0,d0).map(cell),{idx:false,small:true});
+    else if(nd===2)vis=grid2(seq(0,d0).map(()=>seq(0,d1).map(cell)),{labels:false});
+    else vis=h('div',{class:'row',style:'align-items:flex-start'},seq(0,d0).map(L=>h('div',{class:'col'},cap('layer '+L),grid2(seq(0,d1).map(()=>seq(0,d2).map(cell)),{labels:false}))));
+    const sh='('+shape.join(', ')+(nd===1?',':'')+')';
+    ctx.stage.replaceChildren(vis,h('div',{class:'tw'},h('table',{class:'df'},h('tr',{},h('th',{class:'ix'},'attribute'),h('th',{},'value'),h('th',{style:'text-align:left'},'meaning')),
+      [['arr.ndim',nd,'number of dimensions'],['arr.shape',sh,'size along each dimension'],['arr.size',size,'total number of items'],['arr.dtype',dt,'type of every item'],['arr.itemsize',SZ[dt],'bytes per item'],['arr.nbytes',SZ[dt]*size,'total bytes = size × itemsize']].map(r=>h('tr',{},h('td',{class:'ix'},r[0]),h('td',{},r[1]),h('td',{class:'s'},r[2]))))));
+    ctx.code(`import numpy as np\narr = np.arange(${size}${dt==='int64'?'':`, dtype="${dt}"`}).reshape${nd===1?`(${d0})`:sh}\nprint(arr.ndim)\nprint(arr.shape)\nprint(arr.size)\nprint(arr.dtype)\nprint(arr.itemsize)\nprint(arr.nbytes)`);
+    ctx.out([nd,sh,size,dt,SZ[dt],SZ[dt]*size].join('\n'));
+  };
+  ctx.add(Select('dimensions',[['1','1D'],['2','2D'],['3','3D']],String(nd),v=>{nd=+v;d0=nd===3?2:nd===1?5:2;controls();draw();}),sub,Select('dtype',Object.keys(SZ),dt,v=>{dt=v;draw();}));controls();draw();
+});
+
+topic('np','np-index','Array indexing: accessing elements',
+'A 2D array is indexed with [row, column] inside one pair of brackets. Click a cell, or pick a mode to grab a whole row, column or block.',
+'a[:, 2] means "every row, column 2". The colon on its own means "all of them".',
+ctx=>{
+  const A=seq(0,4).map(r=>seq(0,5).map(c=>r*5+c+1));
+  let mode='one',r=1,c=2,r1=1,r2=3,c1=1,c2=4;
+  const sub=h('div',{class:'ctl-sub'});let rS,cS;
+  const controls=()=>{sub.replaceChildren();
+    if(mode==='one'||mode==='neg'){const ro=mode==='neg'?['-1','-2','-3','-4']:['0','1','2','3'],co=mode==='neg'?['-1','-2','-3','-4','-5']:['0','1','2','3','4'];if(!ro.includes(String(r)))r=+ro[0];if(!co.includes(String(c)))c=+co[0];rS=Select('row',ro,String(r),v=>{r=+v;draw();});cS=Select('column',co,String(c),v=>{c=+v;draw();});sub.append(rS,cS);}
+    if(mode==='row'){if(r<0)r=1;sub.append(Select('row',['0','1','2','3'],String(r),v=>{r=+v;draw();}));}
+    if(mode==='col'){if(c<0)c=2;sub.append(Select('column',['0','1','2','3','4'],String(c),v=>{c=+v;draw();}));}
+    if(mode==='block')sub.append(Range('row start',0,4,r1,v=>{r1=v;draw();}),Range('row stop',0,4,r2,v=>{r2=v;draw();}),Range('col start',0,5,c1,v=>{c1=v;draw();}),Range('col stop',0,5,c2,v=>{c2=v;draw();}));};
+  const draw=()=>{
+    const R=r<0?r+4:r,C=c<0?c+5:c;let sel,expr,res,dt='int64';
+    if(mode==='one'||mode==='neg'){sel=(i,j)=>i===R&&j===C;expr=`a[${r}, ${c}]`;res=String(A[R][C]);}
+    else if(mode==='row'){sel=i=>i===R;expr=`a[${r}]`;res=npRepr(A[R],dt);}
+    else if(mode==='col'){sel=(i,j)=>j===C;expr=`a[:, ${c}]`;res=npRepr(A.map(x=>x[C]),dt);}
+    else{sel=(i,j)=>i>=r1&&i<r2&&j>=c1&&j<c2;expr=`a[${r1}:${r2}, ${c1}:${c2}]`;const b=A.slice(r1,r2).map(x=>x.slice(c1,c2));res=b.length&&b[0].length?npRepr(b,dt):'[]';}
+    ctx.stage.replaceChildren(h('div',{class:'row'},h('span',{class:'tag'},expr)),
+      grid2(A.map(x=>x.map(String)),{cls:(i,j)=>sel(i,j)?'hl':'',click:(mode==='one'||mode==='neg')?(i,j)=>{r=mode==='neg'?i-4:i;c=mode==='neg'?j-5:j;rS.input.value=String(r);cS.input.value=String(c);draw();}:null,rowLab:i=>mode==='neg'?`${i} / ${i-4}`:i,colLab:j=>mode==='neg'?`${j} / ${j-5}`:j}),
+      h('div',{class:'tile',style:'white-space:pre'},res));
+    ctx.code(`import numpy as np\na = np.arange(1, 21).reshape(4, 5)\nprint(${expr})`,2);ctx.out(res);};
+  ctx.add(Select('pick',[['one','one element  a[r, c]'],['neg','negative indexes'],['row','a whole row  a[r]'],['col','a whole column  a[:, c]'],['block','a block  a[r1:r2, c1:c2]']],mode,v=>{mode=v;controls();draw();}),sub);controls();draw();
+});
+
+topic('np','np-reshape','Reshaping arrays',
+'reshape() rearranges the same items into a new shape. It fills row by row. Rows × columns must equal the number of items.',
+'Use -1 for one dimension and NumPy works it out: reshape(3, -1) on 12 items gives (3, 4).',
+ctx=>{
+  let rows='3',cols='4',shown=[3,4];
+  const gridEl=h('div',{class:'grid',style:'grid-template-columns:repeat(4,auto)'});
+  const items=seq(1,13).map(v=>h('div',{class:'g','data-k':'n'+v,style:`background:color-mix(in srgb,var(--blue-soft),var(--orange-soft) ${Math.round((v-1)/11*100)}%)`},v));
+  gridEl.append(...items);
+  const msg=h('div');
+  const draw=()=>{
+    let R=rows==='1D'?null:+rows,C=+cols,err=null,shape;
+    if(rows==='1D')shape=[12];
+    else if(R===-1&&C===-1)err='ValueError: can only specify one unknown dimension';
+    else if(R===-1){if(12%C)err=`ValueError: cannot reshape array of size 12 into shape (newaxis,${C})`;else shape=[12/C,C];}
+    else if(C===-1){if(12%R)err=`ValueError: cannot reshape array of size 12 into shape (${R},newaxis)`;else shape=[R,12/R];}
+    else if(R*C!==12)err=`ValueError: cannot reshape array of size 12 into shape (${R},${C})\n${R} × ${C} = ${R*C}, but there are 12 items.`;
+    else shape=[R,C];
+    const expr=rows==='1D'?'a.reshape(12)':`a.reshape(${rows}, ${cols})`;
+    ctx.code(`import numpy as np\na = np.arange(1, 13)\nb = ${expr}\nprint(b.shape)\nprint(b)`,2);
+    if(err){gridEl.style.opacity='.35';msg.replaceChildren(errbox(err));ctx.out(err.split('\n')[0],'err');return;}
+    gridEl.style.opacity='1';msg.replaceChildren(stats([['shape',shape.length===1?'(12,)':`(${shape[0]}, ${shape[1]})`],['size',12],['ndim',shape.length]]));
+    flip(gridEl,()=>{gridEl.style.gridTemplateColumns=`repeat(${shape.length===1?12:shape[1]},auto)`;});
+    shown=shape;
+    const vals=seq(1,13);ctx.out(`${shape.length===1?'(12,)':`(${shape[0]}, ${shape[1]})`}\n${npRepr(shape.length===1?vals:seq(0,shape[0]).map(i=>vals.slice(i*shape[1],i*shape[1]+shape[1])),'int64')}`);
+  };
+  const opts=['1','2','3','4','5','6','12','-1'];
+  ctx.stage.append(h('div',{class:'tw',style:'padding:6px'},gridEl),msg,h('p',{class:'note'},'Colour runs from blue (1) to orange (12), so you can follow the fill order.'));
+  const rS=Select('rows',[['1D','(1D)'],...opts],rows,v=>{rows=v;draw();}),cS=Select('columns',opts,cols,v=>{cols=v;draw();});
+  ctx.add(rS,cS,Btns(...[['2 × 6','2','6'],['3 × 4','3','4'],['4 × 3','4','3'],['6 × 2','6','2'],['5 × ? (error)','5','-1'],['flatten','1D','12']].map(([t,a,b])=>Btn(t,()=>{rows=a;cols=b;rS.input.value=a;cS.input.value=b;draw();},'mono'))));
+  draw();
+});
+
+topic('np','np-agg','Common aggregation functions',
+'Aggregation squeezes many numbers into one answer: the sum, mean, smallest and so on. With axis you can do it per column or per row.',
+'axis=0 works <b>down</b> the columns (one answer per test). axis=1 works <b>across</b> the rows (one answer per student).',
+ctx=>{
+  let M=[[78,85,62,90],[55,70,81,66],[92,88,95,79]],fn='mean',axis='0';
+  const names=['Asha','Ravi','Meera'];
+  const F={sum:sum,mean:mean,min:a=>Math.min(...a),max:a=>Math.max(...a),median:median,std:a=>stdev(a)};
+  const draw=()=>{
+    const f=F[fn];const R=M.length,C=M[0].length;let res,dt=['sum','min','max'].includes(fn)?'int64':'float64',hl=()=>false;
+    const fmt=v=>dt==='int64'?String(v):+v.toFixed(2)+'';
+    let G=M.map(r=>r.map(String));
+    if(axis==='none'){res=f(M.flat());if(fn==='min'||fn==='max')hl=(i,j)=>M[i][j]===res;}
+    else if(axis==='0'){res=seq(0,C).map(j=>f(M.map(r=>r[j])));G=[...G,res.map(fmt)];if(fn==='min'||fn==='max')hl=(i,j)=>i<R&&M[i][j]===res[j];}
+    else{res=M.map(r=>f(r));G=G.map((r,i)=>[...r,fmt(res[i])]);if(fn==='min'||fn==='max')hl=(i,j)=>j<C&&M[i][j]===res[i];}
+    const call=`np.${fn}(m${axis==='none'?'':', axis='+axis})`;
+    ctx.stage.replaceChildren(h('div',{class:'row'},h('span',{class:'tag'},call)),
+      grid2(G,{cls:(i,j)=>(axis==='0'&&i===R)||(axis==='1'&&j===C)?'res':hl(i,j)?'hl':'',rowLab:i=>i<R?names[i]:`${fn} ↓`,colLab:j=>j<C?'T'+(j+1):`${fn} →`}),
+      axis==='none'?h('div',{class:'tile'},`${fn} of all 12 marks = ${fmt(res)}`):null,
+      h('p',{class:'note'},(fn==='min'||fn==='max'?'Orange cells are the ones picked. ':'')+(fn==='std'?'std = standard deviation: how spread out the numbers are. Results shown rounded to 2 places.':'Green cells are the results.')));
+    ctx.code(`import numpy as np\nm = np.array(${pyVal(M).replace(/\], \[/g,'],\n              [')})\nprint(${call})`,4);
+    ctx.out(Array.isArray(res)?npRepr(res,dt):dt==='int64'?String(res):pyFloat(res));
+  };
+  ctx.add(Select('function',Object.keys(F),fn,v=>{fn=v;draw();}),Select('axis',[['none','none (all items)'],['0','axis=0 (down columns)'],['1','axis=1 (across rows)']],axis,v=>{axis=v;draw();}),
+    Btns(Btn('New marks',()=>{M=M.map(r=>r.map(()=>40+Math.floor(Math.random()*61)));draw();})));draw();
+});
+/* =================== PANDAS =================== */
+const STU=[
+  {Name:'Asha',Section:'9A',Maths:88,Science:91,English:79},
+  {Name:'Ravi',Section:'9B',Maths:72,Science:68,English:85},
+  {Name:'Meera',Section:'9A',Maths:95,Science:89,English:92},
+  {Name:'Kabir',Section:'9B',Maths:64,Science:70,English:null},
+  {Name:'Zoya',Section:'9A',Maths:81,Science:null,English:88},
+  {Name:'Dev',Section:'9B',Maths:58,Science:62,English:71}].map((r,i)=>({...r,_i:i}));
+const SCOLS=['Name','Section','Maths','Science','English'],NUMC=['Maths','Science','English'];
+const DF_CODE='df = pd.DataFrame({\n    "Name": ["Asha", "Ravi", "Meera", "Kabir", "Zoya", "Dev"],\n    "Section": ["9A", "9B", "9A", "9B", "9A", "9B"],\n    "Maths": [88, 72, 95, 64, 81, 58],\n    "Science": [91, 68, 89, 70, None, 62],\n    "English": [79, 85, 92, None, 88, 71]\n})';
+const isNumCol=(rows,c)=>rows.every(r=>typeof r[c]==='number'||r[c]==null);
+const isFloatCol=(rows,c)=>isNumCol(rows,c)&&rows.some(r=>r[c]==null||!Number.isInteger(r[c]));
+function cellTxt(v,f){if(v==null)return 'NaN';if(typeof v==='boolean')return v?'True':'False';if(typeof v==='number')return f?(Number.isInteger(v)?v.toFixed(1):String(+v.toFixed(6))):String(v);return v;}
+function dfTable(rows,cols,{rowCls,cellCls,headCls,mini}={}){
+  const fl={};cols.forEach(c=>fl[c]=isFloatCol(rows,c));
+  return h('div',{class:'tw'},h('table',{class:'df'+(mini?' mini':'')},h('tr',{},h('th',{class:'ix'},''),cols.map(c=>h('th',{class:headCls?headCls(c)||'':''},c))),
+    rows.map((r,i)=>h('tr',{class:rowCls?rowCls(r,i)||'':''},h('td',{class:'ix'+(cellCls&&cellCls('_ix',r,i)?' '+cellCls('_ix',r,i):'')},r._i??i),cols.map(c=>{const v=r[c];return h('td',{class:[v==null?'nan':'',typeof v==='string'?'s':'',typeof v==='boolean'?(v?'T':'F'):'',cellCls?cellCls(c,r,i)||'':''].join(' ')},cellTxt(v,fl[c]));})))));
+}
+function fmtVals(vals,forceFloat){if(!forceFloat&&vals.every(v=>typeof v==='number'&&Number.isInteger(v)))return {s:vals.map(String),dt:'int64'};
+  if(vals.every(v=>v==null||typeof v==='number')){const allInt=vals.every(v=>v==null||Number.isInteger(v));return {s:vals.map(v=>v==null?'NaN':allInt?v.toFixed(1):v.toFixed(6)),dt:'float64'};}
+  return {s:vals.map(v=>v==null?'NaN':String(v)),dt:'object'};}
+function seriesRepr(labels,vals,{name,indexName,dtype}={}){
+  const f=fmtVals(vals,dtype==='float64');const L=labels.map(String);const w1=Math.max(...L.map(s=>s.length)),w2=Math.max(...f.s.map(s=>s.length));
+  return (indexName?indexName+'\n':'')+L.map((l,i)=>l.padEnd(w1)+'    '+f.s[i].padStart(w2)).join('\n')+'\n'+(name!=null?`Name: ${name}, `:'')+`dtype: ${dtype||f.dt}`;
+}
+const numsOf=(rows,c)=>rows.map(r=>r[c]).filter(v=>v!=null);
+
+topic('pd','pd-intro','Introduction to Pandas',
+'Pandas works with tables of data called DataFrames. Pick a part of the table to see its name and how to reach it in code.',
+'Every column of a DataFrame is a <b>Series</b>. The bold numbers on the left are the <b>index</b>, the row labels.',
+ctx=>{
+  let part='series';
+  const P={index:{code:'print(df.index)',out:'RangeIndex(start=0, stop=6, step=1)',say:'The index labels each row. By default it counts 0, 1, 2…'},
+    columns:{code:'print(list(df.columns))',out:"['Name', 'Section', 'Maths', 'Science', 'English']",say:'Column names are the headings along the top.'},
+    values:{code:'print(df.shape)',out:'(6, 5)',say:'The values are the data itself: 6 rows and 5 columns.'},
+    series:{code:'print(df["Maths"])',out:seriesRepr(seq(0,6),STU.map(r=>r.Maths),{name:'Maths'}),say:'One column on its own is a Series: values plus the index.'},
+    row:{code:'print(df.loc[2])',out:'Name       Meera\nSection       9A\nMaths         95\nScience     89.0\nEnglish     92.0\nName: 2, dtype: object',say:'df.loc[label] picks one row by its index label.'}};
+  const draw=()=>{
+    ctx.stage.replaceChildren(dfTable(STU,SCOLS,{headCls:c=>part==='columns'||(part==='series'&&c==='Maths')?'colhl':'',
+      cellCls:(c,r,i)=>c==='_ix'?(part==='index'?'colhl':''):part==='values'?'colhl':part==='series'&&c==='Maths'?'colhl':part==='row'&&i===2?'colhl':''}),
+      h('div',{class:'tile',style:'font-size:1.05rem;font-family:var(--body)'},P[part].say));
+    ctx.code(`import pandas as pd\n${DF_CODE}\n${P[part].code}`,7);ctx.out(P[part].out);};
+  ctx.add(Select('show me',[['index','the index'],['columns','the column names'],['values','the values'],['series','one column (a Series)'],['row','one row']],part,v=>{part=v;draw();}));draw();
+});
+
+topic('pd','pd-series','Creating a Pandas Series from a list',
+'A Series is a list with labels. Give it values and, if you like, your own labels. Then look an item up by its label.',
+'The number of labels must match the number of values, or Pandas raises a ValueError.',
+ctx=>{
+  let vals='88, 72, 95',labs='Asha, Ravi, Meera',pick='Ravi';
+  const sub=h('div',{class:'ctl-sub'});
+  const draw=(rebuild=true)=>{
+    const p=parseNums(vals);const L=labs.trim()?labs.split(',').map(s=>s.trim()):null;
+    ctx.code(`import pandas as pd\ns = pd.Series([${vals}]${L?`, index=[${L.map(x=>pyStr(x)).join(', ')}]`:''})\nprint(s)\nprint(s[${L?pyStr(pick):pick}])`);
+    if(p.error){ctx.stage.replaceChildren(errbox(p.error));ctx.out(p.error,'err');sub.replaceChildren();return;}
+    const labels=L||seq(0,p.nums.length).map(String);
+    if(L&&L.length!==p.nums.length){const e=`ValueError: Length of values (${p.nums.length}) does not match length of index (${L.length})`;ctx.stage.replaceChildren(errbox(e));ctx.out(e,'err');sub.replaceChildren();return;}
+    if(!labels.includes(pick))pick=labels[0]||'';
+    if(rebuild)sub.replaceChildren(Select('look up s[ ... ]',labels,pick,v=>{pick=v;draw(false);}));
+    const k=labels.indexOf(pick);
+    ctx.stage.replaceChildren(h('div',{class:'row',style:'align-items:flex-start'},
+      h('div',{class:'grid',style:'grid-template-columns:auto auto'},h('div',{class:'g lab',style:'color:var(--orange)'},'index'),h('div',{class:'g lab'},'value'),
+        labels.map((l,i)=>[h('div',{class:'g '+(i===k?'hl':''),style:'border-color:var(--orange);justify-items:start'},l),h('div',{class:'g '+(i===k?'hl':'')},p.items[i].src)])),
+      h('div',{class:'col'},h('div',{class:'tile'},`s[${L?pyStr(pick):pick}] → ${k>=0?p.items[k].src:'?'}`),h('p',{class:'note'},L?'You chose the labels, so you look items up by name.':'No labels given, so Pandas numbered them 0, 1, 2…'))));
+    ctx.out(`${seriesRepr(labels,p.nums,{dtype:dtypeOf(p.nums)})}\n${k>=0?p.items[k].src:''}`);
+  };
+  ctx.add(Text('values',vals,v=>{vals=v;draw();},{wide:true}),Text('labels (blank = 0, 1, 2…)',labs,v=>{labs=v;draw();},{wide:true}),sub);draw();
+});
+
+topic('pd','pd-dataframe','Creating a DataFrame from a dictionary',
+'Each key in the dictionary becomes a column heading and each list becomes that column. Add students or columns and watch both sides change.',
+'All the lists must be the <b>same length</b>. One row of the table takes one item from every list.',
+ctx=>{
+  const extra=[['Kabir',64,70,77],['Zoya',81,85,88],['Dev',58,62,71],['Ira',90,93,84]];
+  let n=3,eng=false,broken=false;
+  const base=[['Asha',88,91,79],['Ravi',72,68,85],['Meera',95,89,92]];
+  const colCls=['ca','cb','cv','ok'];
+  const draw=()=>{
+    const data=[...base,...extra].slice(0,n);
+    const cols=['Name','Maths','Science',...(eng?['English']:[])];
+    const lists=cols.map((c,ci)=>{let v=data.map(r=>r[ci]);if(broken&&c==='Science')v=v.slice(0,-1);return v;});
+    const dictCode='data = {\n'+cols.map((c,i)=>`    ${pyStr(c).replace(/'/g,'"')}: ${pyVal(lists[i]).replace(/'/g,'"')}`).join(',\n')+'\n}';
+    ctx.code(`import pandas as pd\n${dictCode}\ndf = pd.DataFrame(data)\nprint(df)`);
+    const dictView=h('div',{class:'col'},cap('dictionary'),cols.map((c,i)=>h('div',{class:'row',style:'gap:10px'},h('span',{class:'tag',style:'min-width:6.5em;justify-content:center'},`"${c}"`),h('span',{class:'op',style:'font-size:1.2rem'},':'),cellRow(lists[i].map(String),{idx:false,small:true,cls:()=>colCls[i]}))));
+    if(broken){const e='ValueError: All arrays must be of the same length';ctx.stage.replaceChildren(dictView,errbox(e+'\nScience has one item fewer than the other lists.'));ctx.out(e,'err');return;}
+    const rows=data.map((r,i)=>{const o={_i:i};cols.forEach((c,ci)=>o[c]=r[ci]);return o;});
+    const hc={Name:'',Maths:'',Science:'',English:''};
+    ctx.stage.replaceChildren(dictView,arrow('pd.DataFrame(data)','down'),dfTable(rows,cols,{headCls:c=>'',cellCls:c=>''}),stats([['df.shape',`(${rows.length}, ${cols.length})`]]));
+    ctx.out(dfTable(rows,cols,{mini:true}));
+  };
+  ctx.add(Btns(Btn('Add a student',()=>{if(n<7){n++;draw();}},'primary'),Btn('Remove last',()=>{if(n>1){n--;draw();}})),
+    Check('Add an English column',eng,v=>{eng=v;draw();}),Check('Break it: make Science one item short',broken,v=>{broken=v;draw();}));draw();
+});
+
+topic('pd','pd-read','Reading a CSV or Excel file',
+'A CSV file is plain text: one row per line, commas between the values. pd.read_csv() turns it into a DataFrame. Edit the file and watch.',
+'head(n) shows the first n rows, tail(n) the last n. An empty value between two commas becomes NaN.',
+ctx=>{
+  let csv='Name,Section,Maths,Science\nAsha,9A,88,91\nRavi,9B,72,68\nMeera,9A,95,89\nKabir,9B,64,\nZoya,9A,81,77\nDev,9B,58,62',fn='head',n=3;
+  const nR=Range('n',1,10,n,v=>{n=v;draw();});
+  const draw=()=>{
+    const lines=csv.split('\n').filter(l=>l.trim()!=='');
+    ctx.code(`import pandas as pd\ndf = pd.read_csv("marks.csv")\nprint(df.${fn}(${n}))\nprint(df.shape)`,2);
+    const src=h('div',{class:'file'},h('div',{class:'file-h'},'marks.csv'),h('pre',{},lines.map((l,i)=>h('span',{class:'ln'},l.split(',').map((p,k)=>[k?h('span',{style:'color:var(--orange);font-weight:700'},','):null,p])))));
+    if(!lines.length){ctx.stage.replaceChildren(src,errbox('EmptyDataError: No columns to parse from file'));ctx.out('EmptyDataError: No columns to parse from file','err');return;}
+    const head=lines[0].split(',').map(s=>s.trim());
+    for(let i=1;i<lines.length;i++){const k=lines[i].split(',').length;if(k>head.length){const e=`ParserError: Error tokenizing data. C error: Expected ${head.length} fields in line ${i+1}, saw ${k}`;ctx.stage.replaceChildren(src,errbox(e));ctx.out(e,'err');return;}}
+    let rows=lines.slice(1).map((l,i)=>{const p=l.split(',');const o={_i:i};head.forEach((c,k)=>{const v=(p[k]??'').trim();o[c]=v===''?null:v;});return o;});
+    head.forEach(c=>{if(rows.every(r=>r[c]==null||!isNaN(+r[c])))rows.forEach(r=>{if(r[c]!=null)r[c]=+r[c];});});
+    const shown=fn==='head'?rows.slice(0,n):rows.slice(Math.max(0,rows.length-n));
+    ctx.stage.replaceChildren(h('div',{class:'row',style:'align-items:flex-start'},src,arrow('pd.read_csv()'),h('div',{class:'col'},cap(`df.${fn}(${n})`),dfTable(shown,head))),
+      stats([['df.shape',`(${rows.length}, ${head.length})`],['rows shown',shown.length]]));
+    ctx.out(h('div',{},dfTable(shown,head,{mini:true}),`(${rows.length}, ${head.length})`));
+  };
+  ctx.add(Area('marks.csv',csv,v=>{csv=v;draw();},5),Select('show',['head','tail'],fn,v=>{fn=v;draw();}),nR);
+  const note=h('p',{class:'note',style:'flex-basis:100%;margin:0'},'For Excel files use pd.read_excel("marks.xlsx"). It needs the openpyxl package installed.');
+  ctx.add(note);draw();
+});
+
+topic('pd','pd-filter','Selecting and filtering data',
+'df["Maths"] picks one column. df[condition] keeps only the rows where the condition is True. Move the slider and watch rows drop out.',
+'Combine conditions with <b>&</b> (and). Wrap each condition in its own brackets.',
+ctx=>{
+  let mode='filter',col='Maths',op='>',th=75,sec=false,pick=['Name','Maths'];
+  const sub=h('div',{class:'ctl-sub'});
+  const OPS={'>':(a,b)=>a>b,'>=':(a,b)=>a>=b,'<':(a,b)=>a<b,'<=':(a,b)=>a<=b,'==':(a,b)=>a===b};
+  const controls=()=>{sub.replaceChildren();
+    if(mode==='one')sub.append(Select('column',SCOLS,col,v=>{col=v;draw();}));
+    if(mode==='many')sub.append(...SCOLS.map(c=>Check(c,pick.includes(c),v=>{pick=v?SCOLS.filter(x=>x===c||pick.includes(x)):pick.filter(x=>x!==c);draw();})));
+    if(mode==='filter')sub.append(Select('column',NUMC,col==='Name'||col==='Section'?'Maths':col,v=>{col=v;draw();}),Select('test',Object.keys(OPS),op,v=>{op=v;draw();}),Range('value',40,100,th,v=>{th=v;draw();}),Check('and Section is "9A"',sec,v=>{sec=v;draw();}));};
+  const draw=()=>{
+    if(mode==='one'){
+      ctx.stage.replaceChildren(dfTable(STU,SCOLS,{headCls:c=>c===col?'colhl':'',cellCls:c=>c===col?'colhl':''}),arrow(`df["${col}"]  is a Series`,'down'));
+      ctx.code(`s = df["${col}"]\nprint(s)`,0);ctx.out(seriesRepr(seq(0,6),STU.map(r=>r[col]),{name:col}));return;}
+    if(mode==='many'){const cols=SCOLS.filter(c=>pick.includes(c));
+      ctx.stage.replaceChildren(dfTable(STU,SCOLS,{headCls:c=>pick.includes(c)?'colhl':'',cellCls:c=>pick.includes(c)?'colhl':''}),arrow(`df[${pyVal(cols).replace(/'/g,'"')}]  is a DataFrame`,'down'));
+      ctx.code(`small = df[${pyVal(cols).replace(/'/g,'"')}]\nprint(small)`,0);ctx.out(cols.length?dfTable(STU,cols,{mini:true}):'Empty DataFrame (pick at least one column)');return;}
+    if(!NUMC.includes(col))col='Maths';
+    const mask=STU.map(r=>r[col]!=null&&OPS[op](r[col],th)&&(!sec||r.Section==='9A'));
+    const cond=`df["${col}"] ${op} ${th}`;const full=sec?`(${cond}) & (df["Section"] == "9A")`:cond;
+    const rows=STU.map((r,i)=>({...r,keep:mask[i]}));
+    ctx.stage.replaceChildren(dfTable(rows,[...SCOLS,'keep'],{rowCls:r=>r.keep?'keep':'drop',headCls:c=>c===col||c==='keep'?'colhl':''}),
+      h('p',{class:'note'},'The keep column is the True/False test Pandas runs on every row. NaN never passes a test.'),stats([['rows kept',mask.filter(Boolean).length+' of 6']]));
+    ctx.code(`mask = ${full}\nresult = df[mask]\nprint(result)`,1);
+    const kept=STU.filter((_,i)=>mask[i]);ctx.out(kept.length?dfTable(kept,SCOLS,{mini:true}):'Empty DataFrame (no row passed the test)');
+  };
+  ctx.add(Select('do',[['one','select one column'],['many','select several columns'],['filter','filter rows']],mode,v=>{mode=v;controls();draw();}),sub);controls();draw();
+});
+
+topic('pd','pd-missing','Handling missing data',
+'Real data has gaps. Pandas shows a missing value as NaN. Pick a way to find or fix the gaps and compare before and after.',
+'Dropping rows loses data. Filling with 0 can pull averages down. Filling with the column mean is often a fairer choice.',
+ctx=>{
+  let act='count',col='Science';
+  const sub=h('div',{class:'ctl-sub'});
+  const controls=()=>{sub.replaceChildren();if(act==='mean')sub.append(Select('column',['Science','English'],col,v=>{col=v;draw();}));};
+  const draw=()=>{
+    const before=dfTable(STU,SCOLS);let after,code,out;
+    if(act==='isnull'){const rows=STU.map(r=>{const o={_i:r._i};SCOLS.forEach(c=>o[c]=r[c]==null);return o;});after=dfTable(rows,SCOLS);code='print(df.isnull())';out=dfTable(rows,SCOLS,{mini:true});}
+    else if(act==='count'){const vals=SCOLS.map(c=>STU.filter(r=>r[c]==null).length);after=h('div',{class:'tile',style:'white-space:pre;font-size:1.05rem'},seriesRepr(SCOLS,vals));code='print(df.isnull().sum())';out=seriesRepr(SCOLS,vals);}
+    else if(act==='dropna'){const rows=STU.filter(r=>SCOLS.every(c=>r[c]!=null));after=dfTable(rows,SCOLS);code='clean = df.dropna()\nprint(clean)';out=dfTable(rows,SCOLS,{mini:true});}
+    else if(act==='zero'){const rows=STU.map(r=>{const o={...r};SCOLS.forEach(c=>{if(o[c]==null)o[c]=0;});return o;});after=dfTable(rows,SCOLS,{cellCls:(c,r,i)=>STU[i][c]==null?'chg':''});code='filled = df.fillna(0)\nprint(filled)';out=dfTable(rows,SCOLS,{mini:true});}
+    else{const m=mean(numsOf(STU,col));const rows=STU.map(r=>({...r,[col]:r[col]==null?m:r[col]}));after=dfTable(rows,SCOLS,{cellCls:(c,r,i)=>c===col&&STU[i][c]==null?'chg':''});
+      code=`avg = df["${col}"].mean()\ndf["${col}"] = df["${col}"].fillna(avg)\nprint(avg)\nprint(df)`;out=h('div',{},pyFloat(m),dfTable(rows,SCOLS,{mini:true}));}
+    ctx.stage.replaceChildren(cap('before'),before,arrow(act==='count'?'count the gaps':act==='isnull'?'True where missing':'after','down'),cap('after'),after);
+    ctx.code(code);ctx.out(out);
+  };
+  ctx.add(Select('action',[['isnull','find gaps: isnull()'],['count','count gaps: isnull().sum()'],['dropna','drop rows with gaps: dropna()'],['zero','fill gaps with 0: fillna(0)'],['mean','fill with the column mean']],act,v=>{act=v;controls();draw();}),sub);controls();draw();
+});
+
+topic('pd','pd-agg','Common aggregation functions',
+'Aggregation functions turn a whole column into one number. With groupby you get one answer for each group.',
+'Pandas skips NaN automatically, so count() can be smaller than the number of rows.',
+ctx=>{
+  let col='Maths',fn='mean',grp=false;
+  const F={sum:sum,mean:mean,min:a=>Math.min(...a),max:a=>Math.max(...a),median:median,count:a=>a.length};
+  const draw=()=>{
+    const f=F[fn];const floatCol=isFloatCol(STU,col);
+    const fmtR=v=>fn==='count'?String(v):(['sum','min','max'].includes(fn)&&!floatCol)?String(v):pyFloat(v);
+    if(!grp){
+      const vals=numsOf(STU,col);const r=f(vals);const mx=Math.max(...vals);
+      const hl=i=>{const v=STU[i][col];if(v==null)return 'dim';if(fn==='min'||fn==='max')return v===r?'hl':'';return '';};
+      ctx.stage.replaceChildren(h('div',{class:'col',style:'gap:6px'},h('div',{class:'bars'},STU.map((s,i)=>h('div',{class:'barc'},h('span',{class:'barv'},s[col]==null?'NaN':s[col]),h('div',{class:'bar '+hl(i),style:`height:${s[col]==null?2:s[col]/100*180}px`}))),
+          fn==='mean'||fn==='median'?h('div',{class:'meanline',style:`bottom:${r/100*180}px`},h('span',{},`${fn} ${+r.toFixed(2)}`)):null),
+          h('div',{class:'barlabels'},STU.map(s=>h('span',{},s.Name)))),
+        h('div',{class:'tile'},`df["${col}"].${fn}() = ${fmtR(r)}`),fn==='count'&&r<6?h('p',{class:'note'},`Only ${r} of 6 rows have a value. The NaN was skipped.`):null);
+      ctx.code(`print(df["${col}"].${fn}())`);ctx.out(fmtR(r));
+    }else{
+      const G=['9A','9B'].map(g=>({g,v:f(numsOf(STU.filter(r=>r.Section===g),col))}));
+      ctx.stage.replaceChildren(h('div',{class:'two'},G.map(({g,v})=>h('div',{class:'panel'},h('h3',{},'Section '+g),dfTable(STU.filter(r=>r.Section===g),['Name',col],{mini:true}),h('div',{class:'tile'},`${fn} = ${fmtR(v)}`)))));
+      const asFloat=fn==='mean'||fn==='median'||(floatCol&&fn!=='count');
+      ctx.code(`print(df.groupby("Section")["${col}"].${fn}())`);
+      ctx.out(seriesRepr(G.map(x=>x.g),G.map(x=>x.v),{name:col,indexName:'Section',dtype:asFloat?'float64':'int64'}));
+    }
+  };
+  ctx.add(Select('column',NUMC,col,v=>{col=v;draw();}),Select('function',Object.keys(F),fn,v=>{fn=v;draw();}),Check('group by Section',grp,v=>{grp=v;draw();}));draw();
+});
+
+topic('pd','pd-stats','Summary statistics',
+'describe() gives a full report for a column in one line: how many values, the mean, the spread, and the five-number summary.',
+'25%, 50% and 75% are the values a quarter, half and three quarters of the way up the sorted list. 50% is the median.',
+ctx=>{
+  let col='Maths';
+  const draw=()=>{
+    const v=numsOf(STU,col);const st={count:v.length,mean:mean(v),std:stdev(v,1),min:Math.min(...v),'25%':quantile(v,.25),'50%':quantile(v,.5),'75%':quantile(v,.75),max:Math.max(...v)};
+    const keys=Object.keys(st);const vals=keys.map(k=>st[k].toFixed(6));const w=Math.max(...vals.map(s=>s.length));
+    const rep=keys.map((k,i)=>k.padEnd(5)+'    '+vals[i].padStart(w)).join('\n')+`\nName: ${col}, dtype: float64`;
+    const X=x=>40+(x-40)/60*560;
+    const svg=`<svg viewBox="0 0 640 170" class="chart" role="img" aria-label="Box plot of ${col}">
+      <line x1="40" y1="130" x2="600" y2="130" class="axis"/>${[40,50,60,70,80,90,100].map(t=>`<line x1="${X(t)}" y1="130" x2="${X(t)}" y2="136" class="axis"/><text x="${X(t)}" y="154" text-anchor="middle">${t}</text>`).join('')}
+      <line x1="${X(st.min)}" y1="70" x2="${X(st['25%'])}" y2="70" style="stroke:var(--ink);stroke-width:2"/><line x1="${X(st['75%'])}" y1="70" x2="${X(st.max)}" y2="70" style="stroke:var(--ink);stroke-width:2"/>
+      <line x1="${X(st.min)}" y1="55" x2="${X(st.min)}" y2="85" style="stroke:var(--ink);stroke-width:2"/><line x1="${X(st.max)}" y1="55" x2="${X(st.max)}" y2="85" style="stroke:var(--ink);stroke-width:2"/>
+      <rect x="${X(st['25%'])}" y="45" width="${X(st['75%'])-X(st['25%'])}" height="50" rx="6" style="fill:var(--blue-soft);stroke:var(--blue);stroke-width:2"/>
+      <line x1="${X(st['50%'])}" y1="45" x2="${X(st['50%'])}" y2="95" style="stroke:var(--blue);stroke-width:4"/>
+      <path d="M${X(st.mean)} 62 l8 8 l-8 8 l-8 -8z" style="fill:var(--orange)"/>
+      ${v.map(x=>`<circle cx="${X(x)}" cy="115" r="5" style="fill:var(--violet)"/>`).join('')}
+      <text x="${X(st.min)}" y="38" text-anchor="middle">min</text><text x="${X(st['25%'])}" y="38" text-anchor="middle">25%</text><text x="${X(st['50%'])}" y="24" text-anchor="middle" style="fill:var(--blue);font-weight:700">median</text><text x="${X(st['75%'])}" y="38" text-anchor="middle">75%</text><text x="${X(st.max)}" y="38" text-anchor="middle">max</text>
+    </svg>`;
+    const box=h('div',{html:svg});
+    ctx.stage.replaceChildren(box,h('p',{class:'note'},'Purple dots are the actual marks. The blue box holds the middle half of them, the orange diamond is the mean.'),
+      h('div',{class:'tw'},h('table',{class:'df'},h('tr',{},keys.map(k=>h('th',{},k))),h('tr',{},keys.map(k=>h('td',{},+st[k].toFixed(2)))))));
+    ctx.code(`print(df["${col}"].describe())`);ctx.out(rep);
+  };
+  ctx.add(Select('column',NUMC,col,v=>{col=v;draw();}));draw();
+});
+/* =================== MATPLOTLIB =================== */
+function niceTicks(lo,hi,n=5){if(hi===lo)hi=lo+1;const span=hi-lo;const step0=span/n;const mag=10**Math.floor(Math.log10(step0));const f=step0/mag;const step=(f<1.5?1:f<3?2:f<7?5:10)*mag;const a=Math.floor(lo/step)*step,b=Math.ceil(hi/step)*step;const t=[];for(let x=a;x<=b+step/2;x+=step)t.push(+x.toFixed(6));return t;}
+const PCOL={'tab:blue':'var(--blue)','tab:orange':'var(--orange)','tab:green':'var(--green)','tab:purple':'var(--violet)'};
+function chartSVG(o){
+  const W=640,H=400,m={l:64,r:24,t:o.title?52:24,b:58};const iw=W-m.l-m.r,ih=H-m.t-m.b;const col=PCOL[o.color]||'var(--blue)';
+  let s=`<svg viewBox="0 0 ${W} ${H}" class="chart" role="img" aria-label="${esc(o.title||o.type+' chart')}"><rect x="0" y="0" width="${W}" height="${H}" rx="12" class="fig"/>`;
+  if(o.title)s+=`<text x="${m.l+iw/2}" y="30" text-anchor="middle" class="ttl">${esc(o.title)}</text>`;
+  if(o.type==='pie'){
+    const tot=sum(o.values);const cx=W/2,cy=m.t+ih/2,R=Math.min(iw,ih)/2-24;let a0=0;const cols=['var(--blue)','var(--orange)','var(--green)','var(--violet)','var(--red)','var(--muted)'];
+    o.values.forEach((v,i)=>{const a1=a0+v/tot*2*Math.PI;const p=(a)=>[cx+R*Math.cos(a),cy-R*Math.sin(a)];const [x0,y0]=p(a0),[x1,y1]=p(a1);const big=a1-a0>Math.PI?1:0;
+      s+=v>=tot?`<circle cx="${cx}" cy="${cy}" r="${R}" style="fill:${cols[i%6]}"/>`:`<path d="M${cx},${cy} L${x0},${y0} A${R},${R} 0 ${big},0 ${x1},${y1} Z" style="fill:${cols[i%6]};stroke:var(--panel);stroke-width:2"/>`;
+      const am=(a0+a1)/2;s+=`<text x="${cx+(R+18)*Math.cos(am)}" y="${cy-(R+18)*Math.sin(am)+4}" text-anchor="${Math.cos(am)>0.1?'start':Math.cos(am)<-0.1?'end':'middle'}" class="axl">${esc(o.labels[i])}</text>`;
+      if(o.showVals)s+=`<text x="${cx+R*.6*Math.cos(am)}" y="${cy-R*.6*Math.sin(am)+4}" text-anchor="middle" style="fill:var(--panel);font-weight:700">${(v/tot*100).toFixed(1)}%</text>`;a0=a1;});
+    return s+'</svg>';
+  }
+  let xs,ys,xt,yt,xmap,ymap,cat=false;
+  if(o.type==='scatter'){xt=niceTicks(Math.min(...o.xs),Math.max(...o.xs));yt=niceTicks(Math.min(...o.ys),Math.max(...o.ys));}
+  else if(o.type==='hist'){const lo=Math.min(...o.values),hi=Math.max(...o.values);const w=(hi-lo)/o.bins;const counts=Array(o.bins).fill(0);o.values.forEach(v=>{let k=Math.floor((v-lo)/w);if(k>=o.bins)k=o.bins-1;counts[k]++;});o.edges=seq(0,o.bins+1).map(k=>lo+k*w);o.counts=counts;xt=niceTicks(lo,hi);xt=xt.filter(t=>t>=lo-1e-9&&t<=hi+1e-9);if(xt.length<2)xt=[lo,hi];yt=niceTicks(0,Math.max(...counts));o.xmin=lo;o.xmax=hi;}
+  else{cat=true;const lo=o.type==='plot'?Math.min(...o.values):0;yt=niceTicks(Math.min(0,lo>0&&o.type==='plot'?lo-2:lo),Math.max(...o.values));if(o.type==='plot'&&lo>0)yt=niceTicks(lo-2,Math.max(...o.values));}
+  const horiz=o.type==='barh';
+  if(horiz){xt=yt;yt=null;}
+  const vmin=(horiz?xt:yt||xt)[0],vmax=(horiz?xt:yt||xt).at(-1);
+  if(o.type==='scatter'){xmap=x=>m.l+(x-xt[0])/(xt.at(-1)-xt[0])*iw;ymap=y=>m.t+ih-(y-yt[0])/(yt.at(-1)-yt[0])*ih;}
+  else if(o.type==='hist'){xmap=x=>m.l+(x-o.xmin)/(o.xmax-o.xmin)*iw;ymap=y=>m.t+ih-(y-yt[0])/(yt.at(-1)-yt[0])*ih;}
+  else if(horiz){xmap=v=>m.l+(v-xt[0])/(xt.at(-1)-xt[0])*iw;}
+  else ymap=y=>m.t+ih-(y-yt[0])/(yt.at(-1)-yt[0])*ih;
+  // grid + ticks
+  const N=o.labels?o.labels.length:0;const band=(horiz?ih:iw)/Math.max(N,1);
+  if(yt)yt.forEach(t=>{const y=ymap(t);if(o.grid)s+=`<line x1="${m.l}" y1="${y}" x2="${m.l+iw}" y2="${y}" class="gridl"/>`;s+=`<text x="${m.l-10}" y="${y+4}" text-anchor="end">${t}</text>`;});
+  if(horiz)xt.forEach(t=>{const x=xmap(t);if(o.grid)s+=`<line x1="${x}" y1="${m.t}" x2="${x}" y2="${m.t+ih}" class="gridl"/>`;s+=`<text x="${x}" y="${m.t+ih+20}" text-anchor="middle">${t}</text>`;});
+  if(o.type==='scatter'||o.type==='hist')xt.forEach(t=>{const x=xmap(t);if(o.grid)s+=`<line x1="${x}" y1="${m.t}" x2="${x}" y2="${m.t+ih}" class="gridl"/>`;s+=`<text x="${x}" y="${m.t+ih+20}" text-anchor="middle">${+t.toFixed(2)}</text>`;});
+  if(cat&&!horiz)o.labels.forEach((l,i)=>{s+=`<text x="${m.l+band*(i+.5)}" y="${m.t+ih+20}" text-anchor="middle">${esc(l)}</text>`;});
+  if(horiz)o.labels.forEach((l,i)=>{s+=`<text x="${m.l-10}" y="${m.t+band*(i+.5)+4}" text-anchor="end">${esc(l)}</text>`;});
+  // marks
+  if(o.type==='bar')o.values.forEach((v,i)=>{const x=m.l+band*i+band*.18,w=band*.64,y=ymap(v),y0=ymap(Math.max(0,yt[0]));s+=`<rect x="${x}" y="${Math.min(y,y0)}" width="${w}" height="${Math.abs(y0-y)}" rx="3" style="fill:${col}"/>`;if(o.showVals)s+=`<text x="${x+w/2}" y="${y-6}" text-anchor="middle" class="val">${v}</text>`;});
+  if(horiz)o.values.forEach((v,i)=>{const y=m.t+band*i+band*.18,hh=band*.64,x0=xmap(Math.max(0,xt[0]));s+=`<rect x="${x0}" y="${y}" width="${xmap(v)-x0}" height="${hh}" rx="3" style="fill:${col}"/>`;if(o.showVals)s+=`<text x="${xmap(v)+6}" y="${y+hh/2+4}" class="val">${v}</text>`;});
+  if(o.type==='plot'){const pts=o.values.map((v,i)=>[m.l+band*(i+.5),ymap(v)]);s+=`<polyline points="${pts.map(p=>p.join(',')).join(' ')}" style="fill:none;stroke:${col};stroke-width:3;stroke-linejoin:round"/>`;if(o.marker)pts.forEach(([x,y])=>s+=`<circle cx="${x}" cy="${y}" r="5.5" style="fill:${col}"/>`);if(o.showVals)pts.forEach(([x,y],i)=>s+=`<text x="${x}" y="${y-12}" text-anchor="middle" class="val">${o.values[i]}</text>`);}
+  if(o.type==='scatter')o.xs.forEach((x,i)=>{s+=`<circle cx="${xmap(x)}" cy="${ymap(o.ys[i])}" r="7" style="fill:${col};fill-opacity:.85"/>`;});
+  if(o.type==='hist')o.counts.forEach((c,k)=>{const x0=xmap(o.edges[k]),x1=xmap(o.edges[k+1]);const y=ymap(c);s+=`<rect x="${x0}" y="${y}" width="${x1-x0}" height="${m.t+ih-y}" style="fill:${col};stroke:var(--panel);stroke-width:1.5"/>`;if(o.showVals&&c)s+=`<text x="${(x0+x1)/2}" y="${y-6}" text-anchor="middle" class="val">${c}</text>`;});
+  s+=`<line x1="${m.l}" y1="${m.t+ih}" x2="${m.l+iw}" y2="${m.t+ih}" class="axis"/><line x1="${m.l}" y1="${m.t}" x2="${m.l}" y2="${m.t+ih}" class="axis"/>`;
+  if(o.xlabel)s+=`<text x="${m.l+iw/2}" y="${H-12}" text-anchor="middle" class="axl">${esc(o.xlabel)}</text>`;
+  if(o.ylabel)s+=`<text transform="translate(18 ${m.t+ih/2}) rotate(-90)" text-anchor="middle" class="axl">${esc(o.ylabel)}</text>`;
+  return s+'</svg>';
+}
+
+topic('plt','plt-types','Chart types',
+'Matplotlib turns numbers into charts. Pick a chart type, edit the numbers, and the code updates with it.',
+'Pick the chart that fits the question: <b>line</b> for change over time, <b>bar</b> to compare, <b>scatter</b> for a link between two values, <b>pie</b> for parts of a whole, <b>hist</b> for how values are spread. Full Matplotlib lessons will be added after the live session.',
+ctx=>{
+  const D={
+    bar:{labels:['Asha','Ravi','Meera','Kabir','Zoya','Dev'],vals:'88, 72, 95, 64, 81, 58',title:'Maths marks',xl:'Student',yl:'Marks',xv:'names',yv:'marks'},
+    barh:{labels:['Cricket','Football','Badminton','Chess','Kabaddi'],vals:'14, 9, 7, 5, 3',title:'Favourite sport (class vote)',xl:'Votes',yl:'',xv:'sports',yv:'votes'},
+    plot:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],vals:'31, 33, 34, 32, 35, 36, 33',title:'Temperature this week',xl:'Day',yl:'°C',xv:'days',yv:'temps'},
+    scatter:{xs:[140,145,150,152,155,158,160,163,165,170],ys:[4,5,5,6,6,7,7,8,8,9],title:'Height vs shoe size',xl:'Height (cm)',yl:'Shoe size'},
+    pie:{labels:['Snacks','Books','Games','Savings'],vals:'30, 25, 20, 25',title:'How pocket money is spent'},
+    hist:{values:[45,52,58,61,63,66,68,70,72,73,75,77,78,80,82,85,88,90,93,97],title:'Marks of 20 students',xl:'Marks',yl:'Number of students'}};
+  let type='bar',color='tab:blue',grid=true,showVals=true,bins=5,title=D.bar.title,vals=D.bar.vals,marker=true;
+  const sub=h('div',{class:'ctl-sub'});
+  const controls=()=>{sub.replaceChildren(Text('title',title,v=>{title=v;draw();},{wide:true}));
+    if(['bar','barh','plot','pie'].includes(type))sub.append(Text(`values (${D[type].labels.length} numbers)`,vals,v=>{vals=v;draw();},{wide:true}));
+    if(type==='hist')sub.append(Range('bins',3,10,bins,v=>{bins=v;draw();}));
+    if(type!=='pie')sub.append(Select('color',Object.keys(PCOL),color,v=>{color=v;draw();}),Check('grid',grid,v=>{grid=v;draw();}));
+    if(type==='plot')sub.append(Check('markers',marker,v=>{marker=v;draw();}));
+    sub.append(Check(type==='pie'?'show percentages':'show values',showVals,v=>{showVals=v;draw();}));};
+  const draw=()=>{
+    const d=D[type];let code='import matplotlib.pyplot as plt\n',o={type,title,color,grid,showVals,marker,xlabel:d.xl,ylabel:d.yl};
+    if(['bar','barh','plot','pie'].includes(type)){const p=parseNums(vals);if(p.error||p.nums.length!==d.labels.length){const e=p.error||`Type exactly ${d.labels.length} numbers, one for each label.`;ctx.stage.replaceChildren(errbox(e));ctx.out(e,'err');return;}
+      if(p.nums.some(v=>v<0)&&type==='pie'){ctx.stage.replaceChildren(errbox('ValueError: Wedge sizes must be non negative'));ctx.out('ValueError: Wedge sizes must be non negative','err');return;}
+      o.labels=d.labels;o.values=p.nums;
+      const xv=type==='pie'?'labels':d.xv,yv=type==='pie'?'amounts':d.yv;
+      code+=`${xv} = ${pyVal(d.labels).replace(/'/g,'"')}\n${yv} = [${p.nums.join(', ')}]\n`;
+      if(type==='pie')code+=`plt.pie(${yv}, labels=${xv}${showVals?', autopct="%1.1f%%"':''})\n`;
+      else code+=`plt.${type}(${xv}, ${yv}${type==='plot'&&marker?', marker="o"':''}, color="${color}")\n`;}
+    else if(type==='scatter'){o.xs=d.xs;o.ys=d.ys;code+=`heights = ${pyVal(d.xs)}\nshoes = ${pyVal(d.ys)}\nplt.scatter(heights, shoes, color="${color}")\n`;}
+    else{o.values=d.values;o.bins=bins;code+=`marks = ${pyVal(d.values)}\nplt.hist(marks, bins=${bins}, color="${color}", edgecolor="white")\n`;}
+    if(title)code+=`plt.title(${pyStr(title).replace(/^'|'$/g,'"')})\n`;
+    if(type!=='pie'){if(d.xl)code+=`plt.xlabel("${d.xl}")\n`;if(d.yl)code+=`plt.ylabel("${d.yl}")\n`;if(grid)code+='plt.grid(True)\n';}
+    code+='plt.show()';
+    ctx.stage.replaceChildren(h('div',{html:chartSVG(o)}),h('p',{class:'note'},'Example data, made up for practice.'));
+    ctx.code(code);ctx.out('A window opens showing the chart.\n(Close it to let the program finish.)','muted');
+  };
+  ctx.add(Select('chart',[['bar','bar'],['barh','barh (horizontal bar)'],['plot','plot (line)'],['scatter','scatter'],['pie','pie'],['hist','hist (histogram)']],type,v=>{type=v;title=D[v].title;vals=D[v].vals||'';controls();draw();}),sub);controls();draw();
+});
+
+topic('plt','plt-anatomy','Parts of a chart',
+'Every Matplotlib chart is built from the same parts. Pick a part to light it up and see which line of code controls it.',
+'<b>fig</b> is the whole picture. <b>ax</b> is one chart inside it. Most styling calls start with ax.',
+ctx=>{
+  let part='title';
+  const code='import matplotlib.pyplot as plt\ntests = ["T1", "T2", "T3", "T4", "T5"]\na = [72, 78, 75, 83, 88]\nb = [65, 70, 74, 72, 80]\nfig, ax = plt.subplots()\nax.plot(tests, a, marker="o", label="9A")\nax.plot(tests, b, marker="o", label="9B")\nax.set_title("Class average by test")\nax.set_xlabel("Test")\nax.set_ylabel("Average marks")\nax.legend()\nax.grid(True)\nplt.show()';
+  const P={figure:{lines:[4],say:'The Figure is the whole window or image. One figure can hold several charts.'},axes:{lines:[4],say:'The Axes is one chart: the box where data is drawn, with its own x and y axes.'},
+    title:{lines:[7],say:'The title sits above the axes.'},xlabel:{lines:[8],say:'The x label names what runs along the bottom.'},ylabel:{lines:[9],say:'The y label names what runs up the side.'},
+    ticks:{lines:[1,2,3],say:'Ticks are the small marks and numbers on each axis. Matplotlib picks them from your data.'},line:{lines:[5,6],say:'Each ax.plot() call draws one line.'},
+    markers:{lines:[5,6],say:'marker="o" puts a dot on every data point.'},legend:{lines:[10],say:'The legend matches each line to its label="…" name.'},grid:{lines:[11],say:'Grid lines help the eye read values across.'}};
+  const T=['T1','T2','T3','T4','T5'],A=[72,78,75,83,88],B=[65,70,74,72,80];
+  const draw=()=>{
+    const W=640,H=420,m={l:70,r:30,t:56,b:62},iw=W-m.l-m.r,ih=H-m.t-m.b;const y=v=>m.t+ih-(v-60)/(90-60)*ih;const x=i=>m.l+iw*(i+.5)/5;
+    const g=k=>part===k?' glow':'';
+    let s=`<svg viewBox="0 0 ${W} ${H}" class="chart" role="img" aria-label="Line chart of class averages with ${part} highlighted"><rect x="2" y="2" width="${W-4}" height="${H-4}" rx="12" class="fig${g('figure')}" style="stroke:var(--line);stroke-width:2"/>`;
+    s+=`<rect x="${m.l}" y="${m.t}" width="${iw}" height="${ih}" class="axes${g('axes')}" style="fill:none;stroke:transparent;stroke-width:2"/>`;
+    [60,65,70,75,80,85,90].forEach(t=>{s+=`<line x1="${m.l}" y1="${y(t)}" x2="${m.l+iw}" y2="${y(t)}" class="gridl${g('grid')}"/><text x="${m.l-10}" y="${y(t)+4}" text-anchor="end" class="${g('ticks')}">${t}</text>`;});
+    T.forEach((t,i)=>{s+=`<line x1="${x(i)}" y1="${m.t}" x2="${x(i)}" y2="${m.t+ih}" class="gridl${g('grid')}"/><text x="${x(i)}" y="${m.t+ih+20}" text-anchor="middle" class="${g('ticks')}">${t}</text>`;});
+    s+=`<line x1="${m.l}" y1="${m.t+ih}" x2="${m.l+iw}" y2="${m.t+ih}" class="axis"/><line x1="${m.l}" y1="${m.t}" x2="${m.l}" y2="${m.t+ih}" class="axis"/>`;
+    [[A,'var(--blue)'],[B,'var(--orange)']].forEach(([D,c])=>{s+=`<polyline points="${D.map((v,i)=>x(i)+','+y(v)).join(' ')}" class="${g('line').trim()}" style="fill:none;stroke:${c};stroke-width:3"/>`;D.forEach((v,i)=>s+=`<circle cx="${x(i)}" cy="${y(v)}" r="${part==='markers'?8:5}" style="fill:${c};${part==='markers'?'stroke:var(--orange);stroke-width:3':''}"/>`);});
+    s+=`<g><rect x="${m.l+14}" y="${m.t+12}" width="84" height="56" rx="6" class="${g('legend').trim()}" style="fill:var(--panel);stroke:var(--line)"/><line x1="${m.l+24}" y1="${m.t+31}" x2="${m.l+46}" y2="${m.t+31}" style="stroke:var(--blue);stroke-width:3"/><text x="${m.l+54}" y="${m.t+35}" class="${g('legend')}">9A</text><line x1="${m.l+24}" y1="${m.t+53}" x2="${m.l+46}" y2="${m.t+53}" style="stroke:var(--orange);stroke-width:3"/><text x="${m.l+54}" y="${m.t+57}" class="${g('legend')}">9B</text></g>`;
+    s+=`<text x="${m.l+iw/2}" y="34" text-anchor="middle" class="ttl${g('title')}">Class average by test</text><text x="${m.l+iw/2}" y="${H-16}" text-anchor="middle" class="axl${g('xlabel')}">Test</text><text transform="translate(22 ${m.t+ih/2}) rotate(-90)" text-anchor="middle" class="axl${g('ylabel')}">Average marks</text></svg>`;
+    ctx.stage.replaceChildren(h('div',{html:s}),h('div',{class:'tile',style:'font-size:1.02rem;font-family:var(--body)'},P[part].say));
+    ctx.code(code,P[part].lines);ctx.out(`Part: ${part}\nControlled by line ${P[part].lines.map(l=>l+1).join(' and ')} of the code.`);
+  };
+  ctx.add(Select('part',Object.keys(P),part,v=>{part=v;draw();}),Btns(...Object.keys(P).map(k=>Btn(k,()=>{part=k;ctx.controls.querySelector('select').value=k;draw();},'mono'))));draw();
+});
+/* =================== WIRING =================== */
+(function(){
+  const modSel=$('#modSel'),topSel=$('#topSel'),stage=$('#stage'),controls=$('#controls'),codeEl=$('#code'),outEl=$('#out');
+  let cur=null,timers=[];
+  MODULES.forEach(m=>modSel.append(h('option',{value:m.id},`${m.name} (${TOPICS.filter(t=>t.mod===m.id).length})`)));
+  const fillTopics=mod=>{topSel.replaceChildren(...TOPICS.filter(t=>t.mod===mod).map((t,i)=>h('option',{value:t.id},`${i+1}. ${t.title}`)));};
+  function show(id){
+    const t=TOPICS.find(x=>x.id===id)||TOPICS[0];
+    timers.forEach(x=>{clearInterval(x);clearTimeout(x);});timers=[];
+    cur=t;
+    if(modSel.value!==t.mod){modSel.value=t.mod;fillTopics(t.mod);}
+    topSel.value=t.id;
+    const inMod=TOPICS.filter(x=>x.mod===t.mod);const mod=MODULES.find(m=>m.id===t.mod);
+    $('#eyebrow').textContent=`${mod.name} · ${inMod.indexOf(t)+1} of ${inMod.length}`;
+    $('#topicTitle').textContent=t.title;$('#blurb').textContent=t.blurb;$('#tip').innerHTML=t.tip?'<b>Teacher tip.</b> '+t.tip:'';
+    const gi=TOPICS.indexOf(t);$('#pos').textContent=`${gi+1} / ${TOPICS.length}`;
+    $('#prevBtn').disabled=gi===0;$('#nextBtn').disabled=gi===TOPICS.length-1;
+    stage.replaceChildren();controls.replaceChildren();codeEl.innerHTML='';outEl.className='out';outEl.replaceChildren();
+    const ctx={stage,controls,add:(...els)=>controls.append(...els),
+      code:(src,active)=>{codeEl.innerHTML=codeHTML(src,i=>(Array.isArray(active)?active.includes(i):active===i)?'on':'');},
+      out:(v,kind)=>{outEl.className='out'+(kind?' '+kind:'');outEl.replaceChildren(typeof v==='string'?document.createTextNode(v):v);},
+      every:(ms,fn)=>{const id=setInterval(fn,ms);timers.push(id);return id;},
+      after:(ms,fn)=>{const id=setTimeout(fn,ms);timers.push(id);return id;}};
+    try{t.build(ctx);}catch(e){console.error(e);ctx.out('This visual hit a problem: '+e.message,'err');}
+    try{history.replaceState(null,'','#'+t.id);}catch(e){}
+    try{localStorage.setItem('pyLabTopic',t.id);}catch(e){}
+  }
+  modSel.addEventListener('change',()=>{fillTopics(modSel.value);show(TOPICS.find(t=>t.mod===modSel.value).id);});
+  topSel.addEventListener('change',()=>show(topSel.value));
+  const step=d=>{const i=TOPICS.indexOf(cur)+d;if(i>=0&&i<TOPICS.length)show(TOPICS[i].id);};
+  $('#prevBtn').addEventListener('click',()=>step(-1));$('#nextBtn').addEventListener('click',()=>step(1));
+  document.addEventListener('keydown',e=>{if(e.target.closest&&e.target.closest('input,textarea,select'))return;if(e.altKey||e.ctrlKey||e.metaKey)return;if(e.key==='ArrowRight')step(1);if(e.key==='ArrowLeft')step(-1);});
+  window.addEventListener('hashchange',()=>{const id=(location.hash||'').slice(1);if(cur&&id!==cur.id&&TOPICS.some(t=>t.id===id))show(id);});
+  let start=(location.hash||'').slice(1);
+  if(!TOPICS.some(t=>t.id===start)){try{start=localStorage.getItem('pyLabTopic')||'';}catch(e){start='';}}
+  if(!TOPICS.some(t=>t.id===start))start=TOPICS[0].id;
+  modSel.value=TOPICS.find(t=>t.id===start).mod;fillTopics(modSel.value);show(start);
+})();
+
+</script>
+</body>
+</html>
