@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NumPy Quiz · Class 10 Python</title>
+<meta name="description" content="20 multiple-choice questions on NumPy for Class 10 ICSE.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=JetBrains+Mono:wght@400;600;700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+
+<style>
+.back{font-weight:700;text-decoration:none;font-size:.95rem}.back:hover{text-decoration:underline}
+.seg{display:inline-flex;border:2px solid var(--line);border-radius:12px;overflow:hidden;background:var(--panel)}
+.seg button{border:0;background:none;padding:.55rem 1rem;font-weight:700;cursor:pointer;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field label,.lbl{font:700 .74rem var(--body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.field input[type=text]{border:2px solid var(--line);border-radius:10px;background:var(--panel);padding:.55rem .75rem;width:min(20rem,100%)}
+.check{display:flex;gap:8px;align-items:center;font-weight:600}
+.check input{width:18px;height:18px;accent-color:var(--blue)}
+.top{display:flex;flex-direction:column;gap:10px}
+.rail{height:8px;border-radius:99px;background:var(--sunk);overflow:hidden}
+.rail i{display:block;height:100%;background:var(--blue);border-radius:99px;transition:width .3s}
+.map{display:flex;flex-wrap:wrap;gap:6px}
+.map button{width:34px;height:34px;border-radius:9px;border:2px solid var(--line);background:var(--panel);font:600 .8rem var(--mono);cursor:pointer;color:var(--muted);font-variant-numeric:tabular-nums}
+.map button.done{border-color:var(--blue);color:var(--blue);background:var(--blue-soft)}
+.map button.ok{border-color:var(--good);color:var(--good);background:var(--good-soft)}
+.map button.no{border-color:var(--bad);color:var(--bad);background:var(--bad-soft)}
+.map button.cur{outline:3px solid var(--orange);outline-offset:1px}
+.qhead{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline}
+.qnum{font:700 .85rem var(--mono);color:var(--muted)}
+.qtext{font-size:1.15rem;font-weight:600;max-width:65ch}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{display:flex;gap:14px;align-items:flex-start;text-align:left;padding:12px 14px;border-radius:12px;border:2px solid var(--line);background:var(--panel);cursor:pointer;width:100%;transition:border-color .15s,background .15s}
+.opt:hover:not(:disabled){border-color:var(--blue)}
+.opt:disabled{cursor:default}
+.opt .k{flex:none;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font:700 .9rem var(--mono);background:var(--sunk);color:var(--muted)}
+.opt .t{flex:1;min-width:0;padding-top:3px;overflow-wrap:anywhere}
+.opt .t.mono{font:500 .98rem/1.5 var(--mono);white-space:pre-wrap}
+.opt .s{flex:none;font:700 .8rem var(--body);padding-top:6px}
+.opt.sel{border-color:var(--blue);background:var(--blue-soft)}
+.opt.sel .k{background:var(--blue);color:var(--panel)}
+.opt.right{border-color:var(--good);background:var(--good-soft)}
+.opt.right .k{background:var(--good);color:var(--panel)}
+.opt.right .s{color:var(--good)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt.wrong .k{background:var(--bad);color:var(--panel)}
+.opt.wrong .s{color:var(--bad)}
+.ex{border-radius:12px;padding:12px 14px;background:var(--sunk);font-size:.98rem}
+.ex b{display:block;margin-bottom:2px}
+.ex.ok b{color:var(--good)}.ex.no b{color:var(--bad)}
+.warn{background:var(--orange-soft);border-radius:12px;padding:12px 14px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.keys{font-size:.85rem}
+kbd{font:600 .8rem var(--mono);border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:0 5px;background:var(--panel)}
+.score{display:flex;flex-wrap:wrap;gap:12px 28px;align-items:flex-end}
+.big{font:600 clamp(3rem,10vw,4.5rem)/1 var(--display);font-variant-numeric:tabular-nums}
+.big small{font-size:.4em;color:var(--muted)}
+.review{display:flex;flex-direction:column;gap:14px}
+.ritem{border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px;background:var(--panel);min-width:0}
+.ritem.ok{border-left:4px solid var(--good)}.ritem.no{border-left:4px solid var(--bad)}
+.ans{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:.95rem}
+.pill{font:700 .75rem var(--body);padding:2px 9px;border-radius:99px}
+.pill.ok{background:var(--good-soft);color:var(--good)}.pill.no{background:var(--bad-soft);color:var(--bad)}
+@media (max-width:520px){.opt{flex-wrap:wrap}.opt .s{flex-basis:100%;padding:0 0 0 44px}.qtext{font-size:1.05rem}}
+</style>
+</head>
+<body>
+<header class="site-header"><div class="in"><a class="brand" href="/"><span class="p">&gt;&gt;&gt;</span>Class 10 Python Quizzes</a></div></header>
+<main class="wrap" id="app"></main>
+<script>window.__Q="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";</script>
+<script>
+'use strict';
+/* Answers are lightly scrambled so they are not readable in the page source. This only stops casual peeking. */
+const UNIT=(()=>{const k='py10-icse-quiz';const b=atob(window.__Q);const u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i)^k.charCodeAt(i%k.length);return JSON.parse(new TextDecoder().decode(u));})();
+const L='ABCD';
+const app=document.getElementById('app');
+const h=(tag,props,...kids)=>{const el=document.createElement(tag);if(props)for(const[k,v]of Object.entries(props)){if(v==null||v===false)continue;if(k==='class')el.className=v;else if(k.startsWith('on'))el.addEventListener(k.slice(2),v);else if(k==='html')el.innerHTML=v;else el.setAttribute(k,v===true?'':v);}for(const c of kids.flat()){if(c==null||c===false)continue;el.append(c instanceof Node?c:document.createTextNode(String(c)));}return el;};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const rich=s=>esc(s).replace(/`([^`]+)`/g,'<code>$1</code>');
+const store={get(k){try{return localStorage.getItem(k);}catch(e){return null;}},set(k,v){try{localStorage.setItem(k,v);}catch(e){}}};
+let cfg={mode:store.get('quizMode')==='test'?'test':'practice',shuffle:false,name:store.get('quizName')||''};
+let S=null;
+function shuffled(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function startScreen(){
+  const modeHelp={practice:'You see the right answer and a short explanation after every question.',test:'Answers stay hidden until you submit. You can go back and change answers before that.'};
+  const name=h('input',{type:'text',id:'studentName',value:cfg.name,placeholder:'Your name (optional)',autocomplete:'off',oninput:e=>{cfg.name=e.target.value;store.set('quizName',cfg.name);}});
+  const shuf=h('input',{type:'checkbox',id:'shuffleQs',onchange:e=>{cfg.shuffle=e.target.checked;}});shuf.checked=cfg.shuffle;
+  app.replaceChildren(
+    h('header',{class:'top'},h('a',{class:'back',href:'/'},'← All quizzes'),h('p',{class:'eyebrow'},'Class 10 ICSE · Python quiz'),h('h1',{},UNIT.name),h('p',{class:'muted'},`${UNIT.qs.length} questions. One at a time, four options each.`)),
+    h('section',{class:'panel'},
+      h('div',{class:'field'},h('span',{class:'lbl'},'Mode'),h('div',{class:'row'},h('div',{class:'seg',role:'group','aria-label':'Mode'},['practice','test'].map(m=>h('button',{type:'button','aria-pressed':String(cfg.mode===m),onclick:()=>{cfg.mode=m;store.set('quizMode',m);startScreen();}},m==='practice'?'Practice':'Test')))),h('p',{class:'muted'},modeHelp[cfg.mode])),
+      h('div',{class:'row',style:'gap:20px'},h('div',{class:'field'},h('label',{for:'studentName'},'Name'),name),h('label',{class:'check',for:'shuffleQs'},shuf,'Shuffle question order')),
+      h('div',{class:'row'},h('button',{type:'button',class:'btn primary',onclick:()=>begin()},'Start quiz'),h('span',{class:'muted keys'},'Keys: ',h('kbd',{},'A'),'–',h('kbd',{},'D'),' to answer, ',h('kbd',{},'Enter'),' for next'))));
+}
+function begin(qsOverride){
+  let qs=Array.isArray(qsOverride)?qsOverride:UNIT.qs.map(q=>({...q}));
+  if(cfg.shuffle&&!Array.isArray(qsOverride))qs=shuffled(qs);
+  S={qs,i:0,picks:Array(qs.length).fill(null),checked:Array(qs.length).fill(false),mode:cfg.mode,done:false,warn:false,title:Array.isArray(qsOverride)?'Retry: wrong answers':UNIT.name};
+  quizScreen();window.scrollTo(0,0);
+}
+function quizScreen(){
+  const q=S.qs[S.i],N=S.qs.length,pick=S.picks[S.i],checked=S.checked[S.i];
+  const answered=S.picks.filter(p=>p!=null).length;
+  const correctSoFar=S.qs.filter((x,k)=>S.checked[k]&&S.picks[k]===x.ans).length;
+  const mapBtns=S.qs.map((x,k)=>{let c='';if(S.mode==='practice'&&S.checked[k])c=S.picks[k]===x.ans?'ok':'no';else if(S.picks[k]!=null)c='done';return h('button',{type:'button',class:c+(k===S.i?' cur':''),'aria-label':'Question '+(k+1),onclick:()=>{S.i=k;S.warn=false;quizScreen();}},k+1);});
+  const opts=q.opts.map((o,k)=>{let cls='opt',status='';
+    if(S.mode==='practice'&&checked){if(k===q.ans){cls+=' right';status='Correct answer';}else if(k===pick){cls+=' wrong';status='Your answer';}}else if(k===pick)cls+=' sel';
+    return h('button',{type:'button',class:cls,disabled:S.mode==='practice'&&checked,onclick:()=>choose(k)},h('span',{class:'k'},L[k]),h('span',{class:'t'+(q.mono?' mono':''),html:q.mono?esc(o):rich(o)}),status?h('span',{class:'s'},status):null);});
+  const isLast=S.i===N-1;let footer;
+  if(S.mode==='practice')footer=h('div',{class:'row'},S.i>0?h('button',{type:'button',class:'btn small',onclick:()=>go(-1)},'← Back'):null,h('span',{class:'spacer'}),checked?h('button',{type:'button',class:'btn primary',onclick:()=>isLast?finish():go(1)},isLast?'See results':'Next question →'):h('span',{class:'muted keys'},'Pick an answer to check it'));
+  else footer=h('div',{class:'row'},h('button',{type:'button',class:'btn small',disabled:S.i===0,onclick:()=>go(-1)},'← Back'),h('button',{type:'button',class:'btn small',disabled:isLast,onclick:()=>go(1)},'Next →'),h('span',{class:'spacer'}),h('button',{type:'button',class:'btn primary',onclick:()=>{if(answered<N&&!S.warn){S.warn=true;quizScreen();}else finish();}},'Submit test'));
+  app.replaceChildren(
+    h('header',{class:'top'},h('div',{class:'row'},h('h2',{},S.title),h('span',{class:'spacer'}),h('span',{class:'muted keys'},S.mode==='practice'?`Score ${correctSoFar} / ${S.checked.filter(Boolean).length}`:`${answered} of ${N} answered`),h('button',{type:'button',class:'btn small',onclick:()=>{S=null;startScreen();}},'Quit')),
+      h('div',{class:'rail',role:'progressbar','aria-valuemin':'0','aria-valuemax':String(N),'aria-valuenow':String(S.i+1)},h('i',{style:`width:${(S.i+1)/N*100}%`})),h('nav',{class:'map','aria-label':'Questions'},mapBtns)),
+    h('section',{class:'panel','aria-live':'polite'},
+      h('div',{class:'qhead'},h('span',{class:'qnum'},`Question ${S.i+1} of ${N}`)),
+      h('p',{class:'qtext',html:rich(q.q)}),q.code?h('pre',{class:'code'},q.code):null,
+      h('div',{class:'opts',role:'group','aria-label':'Options'},opts),
+      S.mode==='practice'&&checked?h('div',{class:'ex '+(pick===q.ans?'ok':'no')},h('b',{},pick===q.ans?'Correct.':`Not quite. The answer is ${L[q.ans]}.`),h('span',{html:rich(q.ex)})):null,
+      S.mode==='test'&&S.warn&&answered<N?h('div',{class:'warn'},h('span',{},`${N-answered} question${N-answered>1?'s are':' is'} still unanswered. Unanswered questions score zero.`),h('button',{type:'button',class:'btn small',onclick:finish},'Submit anyway')):null,
+      footer));
+}
+function choose(k){if(S.mode==='practice'){if(S.checked[S.i])return;S.picks[S.i]=k;S.checked[S.i]=true;}else{S.picks[S.i]=k;S.warn=false;}quizScreen();}
+function go(d){S.i=Math.max(0,Math.min(S.qs.length-1,S.i+d));S.warn=false;quizScreen();window.scrollTo({top:0});}
+let onlyWrong=false;
+function finish(){S.done=true;onlyWrong=false;resultScreen();window.scrollTo(0,0);}
+function resultScreen(){
+  const N=S.qs.length,right=S.qs.filter((q,k)=>S.picks[k]===q.ans).length,pct=Math.round(right/N*100);
+  const wrong=S.qs.filter((q,k)=>S.picks[k]!==q.ans);
+  const verdict=pct>=90?'Excellent work.':pct>=75?'Good. Review the ones you missed.':pct>=50?'Getting there. Go through the explanations below.':'Revise this unit, then try again.';
+  const items=S.qs.map((q,k)=>({q,k})).filter(({q,k})=>!onlyWrong||S.picks[k]!==q.ans).map(({q,k})=>{const ok=S.picks[k]===q.ans,p=S.picks[k];const mono=q.mono?'font-family:var(--mono)':'';
+    return h('article',{class:'ritem '+(ok?'ok':'no')},h('div',{class:'qhead'},h('span',{class:'qnum'},`Q${k+1}`),h('span',{class:'pill '+(ok?'ok':'no')},ok?'Correct':p==null?'Not answered':'Wrong')),
+      h('p',{class:'qtext',style:'font-size:1.02rem',html:rich(q.q)}),q.code?h('pre',{class:'code'},q.code):null,
+      h('div',{class:'ans'},h('span',{},'Your answer: ',h('b',{},p==null?'—':L[p]),p!=null?h('span',{style:mono},' '+q.opts[p].replace(/\n/g,' ⏎ ')):null),ok?null:h('span',{},'Correct: ',h('b',{},L[q.ans]),h('span',{style:mono},' '+q.opts[q.ans].replace(/\n/g,' ⏎ ')))),
+      h('div',{class:'ex',html:rich(q.ex)}));});
+  const only=h('input',{type:'checkbox',id:'onlyWrong',onchange:e=>{onlyWrong=e.target.checked;resultScreen();}});only.checked=onlyWrong;
+  app.replaceChildren(
+    h('header',{class:'top'},h('p',{class:'eyebrow'},S.title+(cfg.name?' · '+cfg.name:'')),h('h1',{},'Your result')),
+    h('section',{class:'panel'},h('div',{class:'score'},h('div',{class:'big'},right,h('small',{},' / '+N)),h('div',{},h('p',{style:'font:600 1.4rem var(--display)'},pct+'%'),h('p',{class:'muted'},verdict))),
+      h('div',{class:'row'},wrong.length?h('button',{type:'button',class:'btn primary',onclick:()=>begin(wrong.map(q=>({...q})))},`Retry the ${wrong.length} wrong question${wrong.length>1?'s':''}`):null,h('button',{type:'button',class:'btn',onclick:()=>{S=null;startScreen();}},'Take this quiz again'),h('a',{class:'btn',href:'/'},'All quizzes'))),
+    h('section',{class:'review'},h('div',{class:'row'},h('h2',{},'Answer review'),h('span',{class:'spacer'}),h('label',{class:'check',for:'onlyWrong'},only,'Show only wrong answers')),items.length?items:h('p',{class:'muted'},'No wrong answers. Every question is correct.')));
+}
+document.addEventListener('keydown',e=>{
+  if(!S||S.done)return;if(e.target.closest&&e.target.closest('input,textarea'))return;if(e.ctrlKey||e.metaKey||e.altKey)return;
+  const k=e.key.toUpperCase();const idx='ABCD'.indexOf(k)>=0?'ABCD'.indexOf(k):'1234'.indexOf(k);
+  if(idx>=0){e.preventDefault();choose(idx);return;}
+  if(e.key==='Enter'&&!(e.target.closest&&e.target.closest('button'))){e.preventDefault();if(S.mode==='practice'){if(S.checked[S.i]){S.i===S.qs.length-1?finish():go(1);}}else if(S.i<S.qs.length-1)go(1);}
+  if(e.key==='ArrowRight'&&S.mode==='test')go(1);if(e.key==='ArrowLeft'&&S.mode==='test')go(-1);
+});
+startScreen();
+</script>
+</body>
+</html>

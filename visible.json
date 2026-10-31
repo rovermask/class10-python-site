@@ -1,0 +1,8 @@
+{
+  "strings": true,
+  "lists": true,
+  "modules": true,
+  "numpy": true,
+  "pandas": true,
+  "matplotlib": true
+}

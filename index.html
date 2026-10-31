@@ -3,29 +3,37 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Class 10 Python</title>
-<meta name="description" content="Quizzes, interactive visuals and practice for Class 10 ICSE Python.">
+<title>Class 10 Python Quizzes</title>
+<meta name="description" content="Unit quizzes for Class 10 ICSE Python.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=JetBrains+Mono:wght@400;600;700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap">
 <link rel="stylesheet" href="/assets/site.css">
 <style>
-.hero{display:flex;flex-direction:column;gap:10px;padding-top:12px}
-.hero p.lead{font-size:1.1rem;color:var(--muted);max-width:60ch}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:14px}
-.card{display:flex;flex-direction:column;gap:8px;padding:20px;border-radius:16px;border:2px solid var(--line);background:var(--panel);text-decoration:none;color:var(--ink);transition:border-color .15s}
-.card:hover{border-color:var(--blue)}
-.card h2{font-size:1.3rem}.card p{color:var(--muted)}
-.card .go{margin-top:auto;font-weight:700;color:var(--blue)}
-.chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{font:600 .9rem var(--mono);text-decoration:none;padding:6px 12px;border-radius:99px;border:1.5px solid var(--line);background:var(--panel);color:var(--ink)}
-.chip:hover{border-color:var(--blue);color:var(--blue)}
+.groups{display:flex;flex-direction:column;gap:18px}
+.group h2{font:700 .76rem var(--body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.units{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:12px}
+.unit{display:flex;flex-direction:column;gap:6px;padding:18px;border-radius:16px;border:2px solid var(--line);background:var(--panel);text-decoration:none;color:var(--ink);transition:border-color .15s}
+.unit:hover{border-color:var(--blue)}
+.unit b{font:600 1.2rem var(--display)}
+.unit span{font:600 .85rem var(--mono);color:var(--muted)}
+.unit .go{margin-top:6px;font:700 .95rem var(--body);color:var(--blue)}
 </style>
 </head>
 <body>
-<header class="site-header"><div class="in"><a class="brand" href="/"><span class="p">&gt;&gt;&gt;</span>Class 10 Python</a><nav class="nav" aria-label="Main"><a href="/" aria-current="page">Home</a><a href="/quiz">Quizzes</a><a href="/lab">Visual Lab</a><a href="/practice">Practice sheet</a></nav></div></header>
+<header class="site-header"><div class="in"><a class="brand" href="/"><span class="p">&gt;&gt;&gt;</span>Class 10 Python Quizzes</a></div></header>
 <main class="wrap">
-<section class="hero"><p class="eyebrow">ICSE 2027 · Class 10</p><h1>Python for Class 10</h1><p class="lead">Everything for our Python course in one place: quizzes to test yourself, visuals that show what the code does, and practice questions.</p></section>
-<section class="cards"><a class="card" href="/quiz"><h2>Unit quizzes</h2><p>120 questions across 6 units. Practice mode explains every answer; test mode scores you at the end.</p><span class="go">Open →</span></a><a class="card" href="/lab"><h2>Visual Lab</h2><p>One interactive picture for every lesson: slicing, loops, imports, reshaping, filtering and charts.</p><span class="go">Open →</span></a><a class="card" href="/practice"><h2>Strings practice sheet</h2><p>110 code questions on all 10 string lessons. Solve on paper first, then check in Python.</p><span class="go">Open →</span></a></section>
-<section class="panel"><h2>Jump to a unit quiz</h2><div class="chips"><a class="chip" href="/quiz#strings">Strings</a><a class="chip" href="/quiz#lists">Lists</a><a class="chip" href="/quiz#modules">Modules &amp; Packages</a><a class="chip" href="/quiz#numpy">NumPy</a><a class="chip" href="/quiz#pandas">Pandas</a><a class="chip" href="/quiz#matplotlib">Matplotlib</a></div></section>
+<header style="display:flex;flex-direction:column;gap:8px"><p class="eyebrow">Class 10 ICSE · Python</p><h1>Unit quizzes</h1><p class="muted">Pick a quiz. Practice mode explains every answer; test mode scores you at the end.</p></header>
+<section class="panel" id="list" aria-live="polite"><p class="muted">Loading quizzes…</p></section>
 </main>
+<script>
+'use strict';
+const UNITS=[{"key":"strings","name":"Strings","n":20},{"key":"lists","name":"Lists","n":20},{"key":"modules","name":"Modules & Packages","n":20},{"key":"numpy","name":"NumPy","n":20},{"key":"pandas","name":"Pandas","n":20},{"key":"matplotlib","name":"Matplotlib","n":20}],GROUPS=[{"name":"Python","keys":["strings","lists","modules"]},{"name":"Data science","keys":["numpy","pandas","matplotlib"]}];
+const list=document.getElementById('list');
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+fetch('/visible.json',{cache:'no-store'}).then(r=>r.ok?r.json():{}).catch(()=>({})).then(vis=>{
+  const groups=GROUPS.map(g=>({name:g.name,us:UNITS.filter(u=>g.keys.includes(u.key)&&vis[u.key]===true)})).filter(g=>g.us.length);
+  list.innerHTML=groups.length?'<div class="groups">'+groups.map(g=>'<div class="group"><h2>'+esc(g.name)+'</h2><div class="units">'+g.us.map(u=>'<a class="unit" href="/quiz/'+u.key+'"><b>'+esc(u.name)+'</b><span>'+u.n+' questions</span><span class="go">Start →</span></a>').join('')+'</div></div>').join('')+'</div>'
+    :'<p class="muted">No quizzes are open right now. Check back when your teacher opens one.</p>';
+});
+</script>
 </body>
 </html>

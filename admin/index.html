@@ -3,17 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Teacher Area · Class 10 Python</title>
-<meta name="description" content="Answer keys for the Class 10 Python quizzes and practice sheet.">
+<title>Teacher Area · Class 10 Python Quizzes</title>
+<meta name="description" content="Show or hide quizzes and see answer keys.">
 <meta name="robots" content="noindex, nofollow"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=JetBrains+Mono:wght@400;600;700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap">
 <link rel="stylesheet" href="/assets/site.css">
 <style>
 .tabs{display:flex;flex-wrap:wrap;gap:8px}
 .tabs a{font-weight:700;text-decoration:none;padding:.45rem .9rem;border-radius:10px;border:2px solid var(--line);background:var(--panel);color:var(--ink)}
 .tabs a:hover{border-color:var(--blue)}
+.switches{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:10px}
+.sw{display:flex;gap:12px;align-items:center;padding:12px 14px;border-radius:12px;border:2px solid var(--line);background:var(--panel);cursor:pointer;font-weight:700}
+.sw input{width:20px;height:20px;accent-color:var(--good);flex:none}
+.sw .st{margin-left:auto;font:700 .75rem var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.sw.on{border-color:var(--good);background:var(--good-soft)}
+.sw.on .st{color:var(--good)}
+.status{font-weight:600}.status.bad{color:var(--bad)}.status.ok{color:var(--good)}
 .unitnav{display:flex;flex-wrap:wrap;gap:6px}
 .unitnav a{font:600 .85rem var(--mono);text-decoration:none;padding:4px 10px;border-radius:99px;border:1.5px solid var(--line);color:var(--ink)}
-.unitkey,.sec{display:flex;flex-direction:column;gap:8px;padding-top:14px;border-top:1px solid var(--line)}
+.unitkey{display:flex;flex-direction:column;gap:8px;padding-top:14px;border-top:1px solid var(--line)}
 .dist{font:700 .82rem var(--mono);color:var(--good)}
 .order{font-size:.92rem}.order span{font-family:var(--mono);word-spacing:.3em}
 details{border:1px solid var(--line);border-radius:12px;background:var(--panel)}
@@ -30,15 +37,17 @@ details[open] summary .qt{white-space:normal}
 .opts .k{font:700 .85rem var(--mono);width:1.4em}
 .opts .mono{font-family:var(--mono);white-space:pre-wrap}
 .ex{color:var(--muted)}
-.kq{display:flex;flex-direction:column;gap:6px;padding:8px 0}
 .note li{margin-bottom:6px}
 </style>
 </head>
 <body>
-<header class="site-header"><div class="in"><a class="brand" href="/"><span class="p">&gt;&gt;&gt;</span>Class 10 Python</a><nav class="nav" aria-label="Main"><a href="/">Home</a><a href="/quiz">Quizzes</a><a href="/lab">Visual Lab</a><a href="/practice">Practice sheet</a></nav></div></header>
+<header class="site-header"><div class="in"><a class="brand" href="/"><span class="p">&gt;&gt;&gt;</span>Class 10 Python Quizzes</a></div></header>
 <main class="wrap">
-<header style="display:flex;flex-direction:column;gap:8px"><p class="eyebrow">Teacher area · password protected</p><h1>Answer keys</h1><p class="muted">Only people with the admin username and password can open this page.</p></header>
-<nav class="tabs" aria-label="Sections"><a href="#quiz-keys">Quiz answer keys</a><a href="#sheet-key">Strings practice sheet key</a><a href="#notes">Notes</a></nav>
+<header style="display:flex;flex-direction:column;gap:8px"><p class="eyebrow">Teacher area · password protected</p><h1>Quizzes</h1><p class="muted">Only people with the admin username and password can open this page.</p></header>
+<nav class="tabs" aria-label="Sections"><a href="#show">Show or hide</a><a href="#quiz-keys">Answer keys</a><a href="#notes">Notes</a></nav>
+<section class="panel" id="show"><h2>Show to students</h2><p class="muted">Tick a quiz to show it on the students' page. Untick to hide it; a hidden quiz's link stops working too. Each change takes about a minute to reach students.</p>
+<div class="switches" id="switches"></div>
+<p class="status" id="status" aria-live="polite">Loading…</p></section>
 <section class="panel" id="quiz-keys"><h2>Quiz answer keys</h2><p class="muted">Each unit has 20 questions with exactly 5 correct answers on each of A, B, C and D. Click a question to see its options and explanation.</p>
 <div class="unitnav"><a href="#key-strings">Strings</a><a href="#key-lists">Lists</a><a href="#key-modules">Modules &amp; Packages</a><a href="#key-numpy">NumPy</a><a href="#key-pandas">Pandas</a><a href="#key-matplotlib">Matplotlib</a></div><section class="unitkey" id="key-strings"><div class="row"><h3>Strings</h3><span class="spacer"></span><span class="dist">A 5 · B 5 · C 5 · D 5</span></div><p class="order"><b>Answer string:</b> <span>1D 2D 3C 4D 5B 6B 7D 8A 9C 10A 11B 12B 13D 14B 15C 16A 17A 18C 19A 20C</span></p><details><summary><span class="n">Q1</span><span class="a">D</span><span class="qt">Which statement about Python strings is true?</span></summary><div class="body"><ol class="opts"><li class=""><span class="k">A</span><span class="">Single-quoted and double-quoted strings are different data types.</span></li><li class=""><span class="k">B</span><span class="">The first character of a string is at index 1.</span></li><li class=""><span class="k">C</span><span class="">A string can only hold letters and digits.</span></li><li class="right"><span class="k">D</span><span class="">A string&#x27;s characters cannot be changed after it is created.</span></li></ol><p class="ex">Strings are immutable. Quotes of either kind make the same str type, and indexing starts at 0.</p></div></details><details><summary><span class="n">Q2</span><span class="a">D</span><span class="qt">What is the output of this code?</span></summary><div class="body"><pre class="code">s = &quot;Python&quot;
 print(s[-2])</pre><ol class="opts"><li class=""><span class="k">A</span><span class="mono">n</span></li><li class=""><span class="k">B</span><span class="mono">h</span></li><li class=""><span class="k">C</span><span class="mono">t</span></li><li class="right"><span class="k">D</span><span class="mono">o</span></li></ol><p class="ex">Negative indexes count from the right: n is -1, o is -2.</p></div></details><details><summary><span class="n">Q3</span><span class="a">C</span><span class="qt">What is the output of this code?</span></summary><div class="body"><pre class="code">print(len(&quot;Hi there\n&quot;))</pre><ol class="opts"><li class=""><span class="k">A</span><span class="mono">10</span></li><li class=""><span class="k">B</span><span class="mono">11</span></li><li class="right"><span class="k">C</span><span class="mono">9</span></li><li class=""><span class="k">D</span><span class="mono">8</span></li></ol><p class="ex">&quot;Hi there&quot; has 8 characters, and \n is one more character.</p></div></details><details><summary><span class="n">Q4</span><span class="a">D</span><span class="qt">What is the output of this code?</span></summary><div class="body"><pre class="code">s = &quot;COMPUTER&quot;
@@ -180,108 +189,42 @@ print(len(bars))</pre><ol class="opts"><li class="right"><span class="k">A</span
 counts, edges, bars = plt.hist([1, 2, 2, 3, 3, 3], bins=3)
 print(int(max(counts)))</pre><ol class="opts"><li class=""><span class="k">A</span><span class="mono">1</span></li><li class=""><span class="k">B</span><span class="mono">2</span></li><li class="right"><span class="k">C</span><span class="mono">3</span></li><li class=""><span class="k">D</span><span class="mono">6</span></li></ol><p class="ex">The value 3 appears three times, so the tallest bin holds 3 values.</p></div></details><details><summary><span class="n">Q15</span><span class="a">C</span><span class="qt">What does <code>plt.grid(True)</code> add to a chart?</span></summary><div class="body"><ol class="opts"><li class=""><span class="k">A</span><span class="">Numbers on top of each bar</span></li><li class=""><span class="k">B</span><span class="">A table of the data under the chart</span></li><li class="right"><span class="k">C</span><span class="">Light lines across the chart that make values easier to read</span></li><li class=""><span class="k">D</span><span class="">A border around the whole window</span></li></ol><p class="ex">Grid lines help the eye read values across the chart.</p></div></details><details><summary><span class="n">Q16</span><span class="a">A</span><span class="qt">A pie chart uses <code>autopct=&quot;%1.1f%%&quot;</code>. The largest slice is half of the pie. What label does it show? (This code prints the same text.)</span></summary><div class="body"><pre class="code">print(&quot;%1.1f%%&quot; % 50)</pre><ol class="opts"><li class="right"><span class="k">A</span><span class="mono">50.0%</span></li><li class=""><span class="k">B</span><span class="mono">0.5</span></li><li class=""><span class="k">C</span><span class="mono">50.00%</span></li><li class=""><span class="k">D</span><span class="mono">50%</span></li></ol><p class="ex">%1.1f gives one decimal place, and %% prints a % sign.</p></div></details><details><summary><span class="n">Q17</span><span class="a">B</span><span class="qt">What happens when this code runs?</span></summary><div class="body"><pre class="code">import matplotlib.pyplot as plt
 plt.plot([1, 2, 3], [2, 4])</pre><ol class="opts"><li class=""><span class="k">A</span><span class="mono">It plots 3 points, the last at y = 0</span></li><li class="right"><span class="k">B</span><span class="mono">ValueError</span></li><li class=""><span class="k">C</span><span class="mono">It plots 2 points</span></li><li class=""><span class="k">D</span><span class="mono">TypeError</span></li></ol><p class="ex">x and y must have the same number of values.</p></div></details><details><summary><span class="n">Q18</span><span class="a">A</span><span class="qt">What does <code>color=&quot;green&quot;</code> do in <code>plt.bar(names, marks, color=&quot;green&quot;)</code>?</span></summary><div class="body"><ol class="opts"><li class="right"><span class="k">A</span><span class="">Draws every bar in green</span></li><li class=""><span class="k">B</span><span class="">Turns the background green</span></li><li class=""><span class="k">C</span><span class="">Writes the labels in green</span></li><li class=""><span class="k">D</span><span class="">Draws only the tallest bar in green</span></li></ol><p class="ex">color sets the fill colour of the bars.</p></div></details><details><summary><span class="n">Q19</span><span class="a">D</span><span class="qt">How is <code>plt.barh(names, marks)</code> different from <code>plt.bar(names, marks)</code>?</span></summary><div class="body"><ol class="opts"><li class=""><span class="k">A</span><span class="">It sorts the bars from highest to lowest</span></li><li class=""><span class="k">B</span><span class="">It draws the bars in half height</span></li><li class=""><span class="k">C</span><span class="">It draws a histogram instead of bars</span></li><li class="right"><span class="k">D</span><span class="">It draws the bars horizontally, with names on the y-axis</span></li></ol><p class="ex">The h stands for horizontal.</p></div></details><details><summary><span class="n">Q20</span><span class="a">C</span><span class="qt">What does <code>plt.savefig(&quot;chart.png&quot;)</code> do?</span></summary><div class="body"><ol class="opts"><li class=""><span class="k">A</span><span class="">Opens chart.png and draws it in the window</span></li><li class=""><span class="k">B</span><span class="">Copies the chart to the clipboard</span></li><li class="right"><span class="k">C</span><span class="">Saves the chart as an image file called chart.png</span></li><li class=""><span class="k">D</span><span class="">Deletes chart.png from the folder</span></li></ol><p class="ex">savefig writes the current chart to a file.</p></div></details></section></section>
-<section class="panel" id="sheet-key"><h2>Strings practice sheet key</h2><p class="muted">Every output below was produced by running the code in Python 3.</p><section class="sec"><h3>1. Introduction to Strings</h3><div class="kq"><b>Q1.</b> <pre class="code">&lt;class &#x27;str&#x27;&gt;
-&lt;class &#x27;int&#x27;&gt;</pre></div><div class="kq"><b>Q2.</b> <pre class="code">False</pre><p>A string and a number are never equal, even when they look the same.</p></div><div class="kq"><b>Q3.</b> <pre class="code">11</pre></div><div class="kq"><b>Q4.</b> <pre class="code">3
-0</pre><p>Spaces are characters. <code>&quot;&quot;</code> is the empty string.</p></div><div class="kq"><b>Q5.</b> <pre class="code">55
-10</pre></div><div class="kq"><b>Q6.</b> <pre class="code">15
-123</pre><p><code>int(&quot;12&quot;)</code> makes a number, so <code>+</code> adds. <code>str(12)</code> makes text, so <code>+</code> joins.</p></div><div class="kq"><b>Q7.</b> <pre class="code">I E</pre></div><div class="kq"><b>Q8.</b> <pre class="code">False</pre><p>String comparison is case-sensitive.</p></div><div class="kq"><b>Q9.</b> (a), (b), (d) and (f). <code>&quot;&quot;</code> is an empty string. <code>123</code> is an int and <code>True</code> is a bool.</div><div class="kq"><b>Q10.</b> Sample solution:<pre class="code">name = input(&quot;Enter your full name: &quot;)
-print(&quot;Characters:&quot;, len(name))</pre>Sample run:<pre class="code">Enter your full name: Asha Kumari
-Characters: 11</pre></div></section><section class="sec"><h3>2. Creating a String</h3><div class="kq"><b>Q11.</b> <code>SyntaxError: unterminated string literal (detected at line 1)</code><p>Use double quotes outside the text: <code>s = &quot;It&#x27;s Python&quot;</code>.</p></div><div class="kq"><b>Q12.</b> <pre class="code">He said &#x27;Hi&#x27;</pre></div><div class="kq"><b>Q13.</b> <pre class="code">10.5 4</pre><p><code>10.50</code> is stored as the float <code>10.5</code>, so <code>str()</code> gives <code>&quot;10.5&quot;</code>, which has 4 characters.</p></div><div class="kq"><b>Q14.</b> <pre class="code">True!</pre></div><div class="kq"><b>Q15.</b> <pre class="code">0 &lt;class &#x27;str&#x27;&gt;</pre></div><div class="kq"><b>Q16.</b> <pre class="code">Code: 007
-0071</pre><p><code>input()</code> always returns text, so <code>+</code> joins instead of adding.</p></div><div class="kq"><b>Q17.</b> <pre class="code">Number: 15
-1515</pre><p><code>&quot;15&quot; * 2</code> repeats the text.</p></div><div class="kq"><b>Q18.</b> <pre class="code">345 3</pre><p><code>&quot;3&quot; + &quot;4&quot; + &quot;5&quot;</code> joins three one-character strings.</p></div><div class="kq"><b>Q19.</b> (a). It opens with <code>&quot;</code> but closes with <code>&#x27;</code>, so the string never ends: <code>SyntaxError: unterminated string literal</code>.</div><div class="kq"><b>Q20.</b> Sample solution:<pre class="code">a = int(input(&quot;First number: &quot;))
-b = int(input(&quot;Second number: &quot;))
-print(&quot;Sum:&quot;, a + b)
-# Without int(), input() returns strings, so &quot;10&quot; + &quot;20&quot; joins them into &quot;1020&quot;.</pre>Sample run:<pre class="code">First number: 10
-Second number: 20
-Sum: 30</pre></div></section><section class="sec"><h3>3. Traversing a String</h3><div class="kq"><b>Q21.</b> <pre class="code">I-C-S-E-</pre></div><div class="kq"><b>Q22.</b> <pre class="code">3</pre></div><div class="kq"><b>Q23.</b> <pre class="code">cba</pre><p>Each new character is put in front, so the string comes out reversed.</p></div><div class="kq"><b>Q24.</b> <pre class="code">1
-2</pre></div><div class="kq"><b>Q25.</b> <pre class="code">PPyytthhoonn</pre></div><div class="kq"><b>Q26.</b> <pre class="code">4</pre><p><code>E</code> is uppercase, and <code>&quot;E&quot; in &quot;aeiou&quot;</code> is False. Only u, a, i, o count.</p></div><div class="kq"><b>Q27.</b> 11 times: one turn per character, and the space is a character too.</div><div class="kq"><b>Q28.</b> <code>IndexError: string index out of range</code><p><code>ch</code> is a single character, so only <code>ch[0]</code> exists. Write <code>print(ch)</code> instead.</p></div><div class="kq"><b>Q29.</b> <pre class="code">xyz!</pre></div><div class="kq"><b>Q30.</b> Sample solution:<pre class="code">s = input(&quot;Sentence: &quot;)
-spaces = 0
-for ch in s:
-    if ch == &quot; &quot;:
-        spaces += 1
-print(&quot;Spaces:&quot;, spaces)
-print(&quot;Words:&quot;, spaces + 1)</pre>Sample run:<pre class="code">Sentence: Python is easy to learn
-Spaces: 4
-Words: 5</pre></div></section><section class="sec"><h3>4. Range in String</h3><div class="kq"><b>Q31.</b> <pre class="code">0 L
-1 O
-2 O
-3 P</pre></div><div class="kq"><b>Q32.</b> <pre class="code">PTO</pre></div><div class="kq"><b>Q33.</b> <pre class="code">olleh</pre><p>The range starts at the last index (4) and counts down to 0. The stop value -1 is not included.</p></div><div class="kq"><b>Q34.</b> <pre class="code">bdf</pre></div><div class="kq"><b>Q35.</b> <pre class="code">2
-4</pre><p>Indexes start at 0: b=0, a=1, n=2, a=3, n=4, a=5.</p></div><div class="kq"><b>Q36.</b> <pre class="code">[0, 1, 2, 3]</pre></div><div class="kq"><b>Q37.</b> <code>IndexError: string index out of range</code> after printing:<pre class="code">H
-i</pre><p><code>range(len(s))</code> already covers 0 and 1. Index 2 does not exist, so remove the <code>+ 1</code>.</p></div><div class="kq"><b>Q38.</b> <pre class="code">True</pre><p>Every character matches its mirror position, so <code>same</code> stays True.</p></div><div class="kq"><b>Q39.</b> <pre class="code">abc</pre></div><div class="kq"><b>Q40.</b> Sample solution:<pre class="code">s = input(&quot;Text: &quot;)
-pos = -1
-for i in range(len(s)):
-    if s[i] == &quot; &quot;:
-        pos = i
-        break
-print(pos)</pre>Sample run:<pre class="code">Text: Good morning
-4</pre></div></section><section class="sec"><h3>5. Single-line vs Multi-line Strings</h3><div class="kq"><b>Q41.</b> <pre class="code">3</pre><p>A line break inside the string is stored as one character.</p></div><div class="kq"><b>Q42.</b> <pre class="code">Line1
-Line2</pre></div><div class="kq"><b>Q43.</b> <pre class="code">2</pre></div><div class="kq"><b>Q44.</b> <code>SyntaxError: unterminated string literal (detected at line 1)</code><p>An ordinary string cannot continue onto the next line. Use triple quotes so the text can run over two lines, or keep it on one line as <code>&quot;Hello\nWorld&quot;</code>.</p></div><div class="kq"><b>Q45.</b> <pre class="code">True</pre></div><div class="kq"><b>Q46.</b> <pre class="code">4</pre><p>The string is: line break, H, i, line break.</p></div><div class="kq"><b>Q47.</b> <pre class="code">Good Morning
-12</pre><p>Strings written next to each other inside brackets join into one single-line string. The brackets only let the code continue onto the next line.</p></div><div class="kq"><b>Q48.</b> <pre class="code">1
-3</pre><p>The line breaks are at index 1 and index 3.</p></div><div class="kq"><b>Q49.</b> No. Triple quotes only allow line breaks; they do not add them. <code>s</code> is just <code>Hello</code>, the same as <code>&quot;Hello&quot;</code>.</div><div class="kq"><b>Q50.</b> Sample solution:<pre class="code">address = &quot;&quot;&quot;Delhi Public School
-Sector 12
-Prayagraj&quot;&quot;&quot;
-print(address)
-print(len(address))</pre>Sample run:<pre class="code">Delhi Public School
-Sector 12
-Prayagraj
-39</pre></div></section><section class="sec"><h3>6. String Concatenation</h3><div class="kq"><b>Q51.</b> <pre class="code">RamShyam
-Ram Shyam</pre></div><div class="kq"><b>Q52.</b> <pre class="code">HaHaHa!</pre></div><div class="kq"><b>Q53.</b> <pre class="code">==========</pre></div><div class="kq"><b>Q54.</b> <code>TypeError: can only concatenate str (not &quot;int&quot;) to str</code><p>Text cannot be joined to a number. Write <code>print(&quot;Age: &quot; + str(age))</code>.</p></div><div class="kq"><b>Q55.</b> <pre class="code">510 15</pre></div><div class="kq"><b>Q56.</b> <pre class="code">0123</pre></div><div class="kq"><b>Q57.</b> Output (starts with a space):<pre class="code"> end</pre><p><code>&quot;ab&quot; * 0</code> is the empty string, and <code>print</code> puts a space between its two items. So the line starts with a space.</p></div><div class="kq"><b>Q58.</b> <pre class="code">Hi thereHi there</pre><p>After <code>+=</code>, x is <code>&quot;Hi there&quot;</code>. Then <code>*= 2</code> repeats it.</p></div><div class="kq"><b>Q59.</b> <pre class="code">7771</pre><p><code>*</code> happens before <code>+</code>.</p></div><div class="kq"><b>Q60.</b> Sample solution:<pre class="code">n = 4
-for i in range(1, n + 1):
-    print(&quot;*&quot; * i)</pre>Sample run:<pre class="code">*
-**
-***
-****</pre></div></section><section class="sec"><h3>7. Escape Sequences</h3><div class="kq"><b>Q61.</b> <pre class="code">A	B</pre><p>The output has a tab between A and B.</p></div><div class="kq"><b>Q62.</b> <pre class="code">Line1
-Line2</pre></div><div class="kq"><b>Q63.</b> <pre class="code">3</pre><p><code>\n</code> counts as one character.</p></div><div class="kq"><b>Q64.</b> <pre class="code">C:\new\folder</pre></div><div class="kq"><b>Q65.</b> <pre class="code">It&#x27;s fine</pre></div><div class="kq"><b>Q66.</b> <pre class="code">She said &quot;Yes&quot;</pre></div><div class="kq"><b>Q67.</b> <pre class="code">2</pre><p><code>&quot;\\n&quot;</code> is a backslash followed by the letter n: 2 characters.</p></div><div class="kq"><b>Q68.</b> <pre class="code">C:
-ew	able</pre><p><code>\n</code> became a new line and <code>\t</code> became a tab. The fix is <code>&quot;C:\\new\\table&quot;</code>.</p></div><div class="kq"><b>Q69.</b> <pre class="code">a\tb</pre><p><code>\\t</code> prints a backslash and a t, not a tab.</p></div><div class="kq"><b>Q70.</b> Sample solution:<pre class="code">print(&quot;Name:\tAsha\nClass:\t10&quot;)</pre>Sample run:<pre class="code">Name:	Asha
-Class:	10</pre></div></section><section class="sec"><h3>8. String Slicing</h3><div class="kq"><b>Q71.</b> <pre class="code">C R</pre></div><div class="kq"><b>Q72.</b> <pre class="code">P U</pre><p><code>s[-4]</code> counts 4 from the right: R, E, T, U.</p></div><div class="kq"><b>Q73.</b> <pre class="code">MPU</pre></div><div class="kq"><b>Q74.</b> <pre class="code">COMP
-UTER</pre></div><div class="kq"><b>Q75.</b> <pre class="code">COMPUTER
-True</pre><p><code>s[:]</code> copies the whole string.</p></div><div class="kq"><b>Q76.</b> <pre class="code">TER</pre></div><div class="kq"><b>Q77.</b> <pre class="code">PUT</pre><p><code>-5</code> is P. The stop, <code>-2</code> (E), is not included.</p></div><div class="kq"><b>Q78.</b> <pre class="code">CMUE</pre></div><div class="kq"><b>Q79.</b> <pre class="code">OPTR</pre><p>Start at index 1 and take every second character.</p></div><div class="kq"><b>Q80.</b> <pre class="code">RETUPMOC</pre></div><div class="kq"><b>Q81.</b> <pre class="code">ETUP</pre><p>Starts at index 6 (E) and moves backwards, stopping before index 2.</p></div><div class="kq"><b>Q82.</b> <pre class="code">RET</pre><p>Starts at the last character and moves backwards 3 steps.</p></div><div class="kq"><b>Q83.</b> <code>s[2:2]</code> gives <code>&#x27;&#x27;</code> (start equals stop, so nothing is picked). <code>s[10:]</code> also gives <code>&#x27;&#x27;</code>: slices never raise an error, they just stop at the end. <code>s[10]</code> raises <code>IndexError: string index out of range</code>, because a single index must exist.</div><div class="kq"><b>Q84.</b> <code>s[3:7]</code> or <code>s[-5:-1]</code>.</div><div class="kq"><b>Q85.</b> Sample solution:<pre class="code">roll = &quot;2027ICSE0451&quot;
-print(roll[:4])
-print(roll[4:8])
-print(roll[-4:])
-w = input(&quot;Word: &quot;)
-if w == w[::-1]:
-    print(&quot;Palindrome&quot;)
-else:
-    print(&quot;Not a palindrome&quot;)</pre>Sample run:<pre class="code">2027
-ICSE
-0451
-Word: level
-Palindrome</pre></div></section><section class="sec"><h3>9. Strings are Immutable</h3><div class="kq"><b>Q86.</b> <code>TypeError: &#x27;str&#x27; object does not support item assignment</code><p>Strings cannot be changed in place. Build a new one: <code>s = &quot;b&quot; + s[1:]</code>.</p></div><div class="kq"><b>Q87.</b> <pre class="code">bat</pre></div><div class="kq"><b>Q88.</b> <pre class="code">hello</pre><p><code>upper()</code> returns a new string, but nothing saves it.</p></div><div class="kq"><b>Q89.</b> <pre class="code">hello HELLO</pre></div><div class="kq"><b>Q90.</b> <pre class="code">ICSE! ICSE</pre><p><code>a</code> now points to a new string. <code>b</code> still points to the original one.</p></div><div class="kq"><b>Q91.</b> <pre class="code">Python</pre><p><code>replace()</code> returns a new string, which is thrown away here.</p></div><div class="kq"><b>Q92.</b> <pre class="code">abcd
-abc</pre><p><code>s += &quot;d&quot;</code> makes a new string for <code>s</code>. <code>t</code> still points to the old one.</p></div><div class="kq"><b>Q93.</b> False. Strings are immutable, so <code>s += &quot;x&quot;</code> builds a new string and moves the name <code>s</code> to it. Any other name still pointing at the old string sees no change.</div><div class="kq"><b>Q94.</b> Only (b), which gives <code>&quot;pan&quot;</code>. (a) <code>TypeError</code>: a string does not support item assignment. (c) <code>TypeError</code>: a string does not support item deletion. (d) <code>AttributeError</code>: strings have no <code>append()</code>; that is a list method.</div><div class="kq"><b>Q95.</b> Sample solution:<pre class="code">word = &quot;pen&quot;
-word = word[0] + &quot;a&quot; + word[2:]
-print(word)
-sub = &quot;computer&quot;
-sub = &quot;C&quot; + sub[1:]
-print(sub)</pre>Sample run:<pre class="code">pan
-Computer</pre></div></section><section class="sec"><h3>10. String Methods</h3><div class="kq"><b>Q96.</b> <pre class="code">True True False</pre></div><div class="kq"><b>Q97.</b> <pre class="code">True False True</pre></div><div class="kq"><b>Q98.</b> <pre class="code">True False False</pre><p><code>.</code> is not a digit, and an empty string returns False.</p></div><div class="kq"><b>Q99.</b> <pre class="code">True
-False</pre></div><div class="kq"><b>Q100.</b> <pre class="code">True False True</pre><p><code>isupper()</code> ignores digits, so it is True. <code>isalpha()</code> is False because of the digits.</p></div><div class="kq"><b>Q101.</b> <pre class="code">BOARD EXAM 2027
-board exam 2027
-Board Exam 2027</pre></div><div class="kq"><b>Q102.</b> <pre class="code">1 -1
-3 2</pre><p><code>count()</code> counts matches that do not overlap: b-an-an-a gives 2.</p></div><div class="kq"><b>Q103.</b> <pre class="code">2
-6
--1</pre><p><code>find()</code> is case-sensitive, so <code>&quot;w&quot;</code> is not found in <code>&quot;Hello World&quot;</code>.</p></div><div class="kq"><b>Q104.</b> <pre class="code">2026/10/19
-bbaa</pre><p>The third argument limits it to 2 replacements.</p></div><div class="kq"><b>Q105.</b> <pre class="code">I like Java
-I like Python</pre><p><code>replace()</code> returns a new string, so <code>s</code> is unchanged.</p></div><div class="kq"><b>Q106.</b> <pre class="code">[&#x27;Python&#x27;, &#x27;is&#x27;, &#x27;fun&#x27;]
-[&#x27;10&#x27;, &#x27;20&#x27;, &#x27;30&#x27;]</pre></div><div class="kq"><b>Q107.</b> <pre class="code">[&#x27;a&#x27;, &#x27;b&#x27;, &#x27;c&#x27;]
-[&#x27;a&#x27;, &#x27;b&#x27;, &#x27;&#x27;, &#x27;c&#x27;]</pre><p><code>split()</code> with no argument treats any run of spaces as one break. <code>split(&quot; &quot;)</code> splits at every single space, which leaves an empty string.</p></div><div class="kq"><b>Q108.</b> <pre class="code">A-B-C
-xyz
-I C S E</pre><p><code>join()</code> puts the separator between each character of <code>&quot;ICSE&quot;</code>.</p></div><div class="kq"><b>Q109.</b> <code>TypeError: sequence item 0: expected str instance, int found</code><p><code>join()</code> only joins strings. Store the marks as strings, <code>[&quot;90&quot;, &quot;85&quot;, &quot;77&quot;]</code>, or convert each one with <code>str()</code> before joining.</p></div><div class="kq"><b>Q110.</b> Sample solution:<pre class="code">d = input(&quot;Date (dd/mm/yyyy): &quot;)
-parts = d.split(&quot;/&quot;)
-print(&quot;-&quot;.join([parts[2], parts[1], parts[0]]))
-email = input(&quot;Email: &quot;)
-if email.count(&quot;@&quot;) == 1 and email.endswith(&quot;.com&quot;):
-    print(&quot;Valid&quot;)
-else:
-    print(&quot;Invalid&quot;)</pre>Sample run:<pre class="code">Date (dd/mm/yyyy): 19/10/2026
-2026-10-19
-Email: asha.k@school.com
-Valid</pre></div></section></section>
 <section class="panel note" id="notes"><h2>Notes</h2><ul>
+<li><b>How show/hide works:</b> each change is saved to <code>visible.json</code> in the site's GitHub repo. Vercel then redeploys by itself. This needs <code>GITHUB_TOKEN</code> set in Vercel.</li>
 <li><b>Scores are not saved.</b> The site has no backend, so each student sees their result on their own screen only. Ask students to show or screenshot the results page.</li>
 <li><b>Quiz answers ship with the quiz page,</b> lightly scrambled. A student who knows browser developer tools could still dig them out, so run graded tests in class.</li>
 <li><b>Change the password:</b> Vercel → your project → Settings → Environment Variables → edit <code>ADMIN_PASS</code>, then redeploy.</li>
 </ul></section>
 </main>
+<script>
+'use strict';
+const UNITS=[{"key":"strings","name":"Strings","n":20},{"key":"lists","name":"Lists","n":20},{"key":"modules","name":"Modules & Packages","n":20},{"key":"numpy","name":"NumPy","n":20},{"key":"pandas","name":"Pandas","n":20},{"key":"matplotlib","name":"Matplotlib","n":20}];
+const box=document.getElementById('switches'),statusEl=document.getElementById('status');
+let state={},timer=null,liveTimer=null;
+const say=(t,c)=>{statusEl.textContent=t;statusEl.className='status'+(c?' '+c:'');};
+const same=(a,b)=>UNITS.every(u=>(a[u.key]===true)===(b[u.key]===true));
+function render(){
+  box.replaceChildren(...UNITS.map(u=>{const on=state[u.key]===true;const lab=document.createElement('label');lab.className='sw'+(on?' on':'');
+    const cb=document.createElement('input');cb.type='checkbox';cb.checked=on;cb.addEventListener('change',()=>{state[u.key]=cb.checked;render();say('Saving…');clearTimeout(timer);timer=setTimeout(save,800);});
+    const st=document.createElement('span');st.className='st';st.textContent=on?'Shown':'Hidden';
+    lab.append(cb,document.createTextNode(u.name),st);return lab;}));
+}
+// Compares the saved setting with what the live site is serving, so the teacher knows when the redeploy has finished.
+async function checkLive(){
+  clearTimeout(liveTimer);
+  let live={};try{const r=await fetch('/visible.json',{cache:'no-store'});if(r.ok)live=await r.json();}catch(e){}
+  if(same(live,state))say('Live: students see exactly what is ticked.','ok');
+  else{say('Saved. Vercel is redeploying; students see the change in about a minute.');liveTimer=setTimeout(checkLive,10000);}
+}
+async function save(){
+  try{const r=await fetch('/admin/visibility',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(state)});const j=await r.json().catch(()=>({}));
+    if(!r.ok)throw new Error(j.error||('HTTP '+r.status));state=j.visible;render();checkLive();}
+  catch(e){say('Not saved: '+e.message,'bad');}
+}
+(async()=>{
+  try{const r=await fetch('/admin/visibility',{cache:'no-store'});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||('HTTP '+r.status));state=j.visible;render();checkLive();}
+  catch(e){render();say('Could not load the settings: '+e.message,'bad');}
+})();
+</script>
 </body>
 </html>
