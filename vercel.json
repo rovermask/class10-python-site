@@ -6,8 +6,7 @@
     "entrypoint": "proxy.js",
     "matcher": [
       "/admin",
-      "/admin/:path*",
-      "/quiz/:path*"
+      "/admin/:path*"
     ]
   },
   "redirects": [
@@ -28,15 +27,6 @@
         {
           "key": "Cache-Control",
           "value": "no-store"
-        }
-      ]
-    },
-    {
-      "source": "/visible.json",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache"
         }
       ]
     }

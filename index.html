@@ -22,18 +22,7 @@
 <header class="site-header"><div class="in"><a class="brand" href="/"><span class="p">&gt;&gt;&gt;</span>Class 10 Python Quizzes</a></div></header>
 <main class="wrap">
 <header style="display:flex;flex-direction:column;gap:8px"><p class="eyebrow">Class 10 ICSE · Python</p><h1>Unit quizzes</h1><p class="muted">Pick a quiz. Practice mode explains every answer; test mode scores you at the end.</p></header>
-<section class="panel" id="list" aria-live="polite"><p class="muted">Loading quizzes…</p></section>
+<section class="panel"><div class="groups"><div class="group"><h2>Python</h2><div class="units"><a class="unit" href="/quiz/strings"><b>Strings</b><span>20 questions</span><span class="go">Start →</span></a><a class="unit" href="/quiz/lists"><b>Lists</b><span>20 questions</span><span class="go">Start →</span></a><a class="unit" href="/quiz/modules"><b>Modules &amp; Packages</b><span>20 questions</span><span class="go">Start →</span></a></div></div><div class="group"><h2>Data science</h2><div class="units"><a class="unit" href="/quiz/numpy"><b>NumPy</b><span>20 questions</span><span class="go">Start →</span></a><a class="unit" href="/quiz/pandas"><b>Pandas</b><span>20 questions</span><span class="go">Start →</span></a><a class="unit" href="/quiz/matplotlib"><b>Matplotlib</b><span>20 questions</span><span class="go">Start →</span></a></div></div></div></section>
 </main>
-<script>
-'use strict';
-const UNITS=[{"key":"strings","name":"Strings","n":20},{"key":"lists","name":"Lists","n":20},{"key":"modules","name":"Modules & Packages","n":20},{"key":"numpy","name":"NumPy","n":20},{"key":"pandas","name":"Pandas","n":20},{"key":"matplotlib","name":"Matplotlib","n":20}],GROUPS=[{"name":"Python","keys":["strings","lists","modules"]},{"name":"Data science","keys":["numpy","pandas","matplotlib"]}];
-const list=document.getElementById('list');
-const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-fetch('/visible.json',{cache:'no-store'}).then(r=>r.ok?r.json():{}).catch(()=>({})).then(vis=>{
-  const groups=GROUPS.map(g=>({name:g.name,us:UNITS.filter(u=>g.keys.includes(u.key)&&vis[u.key]===true)})).filter(g=>g.us.length);
-  list.innerHTML=groups.length?'<div class="groups">'+groups.map(g=>'<div class="group"><h2>'+esc(g.name)+'</h2><div class="units">'+g.us.map(u=>'<a class="unit" href="/quiz/'+u.key+'"><b>'+esc(u.name)+'</b><span>'+u.n+' questions</span><span class="go">Start →</span></a>').join('')+'</div></div>').join('')+'</div>'
-    :'<p class="muted">No quizzes are open right now. Check back when your teacher opens one.</p>';
-});
-</script>
 </body>
 </html>

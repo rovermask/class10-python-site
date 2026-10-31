@@ -4,20 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Teacher Area · Class 10 Python Quizzes</title>
-<meta name="description" content="Show or hide quizzes and see answer keys.">
+<meta name="description" content="Answer keys for the Class 10 Python quizzes.">
 <meta name="robots" content="noindex, nofollow"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=JetBrains+Mono:wght@400;600;700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap">
 <link rel="stylesheet" href="/assets/site.css">
 <style>
 .tabs{display:flex;flex-wrap:wrap;gap:8px}
 .tabs a{font-weight:700;text-decoration:none;padding:.45rem .9rem;border-radius:10px;border:2px solid var(--line);background:var(--panel);color:var(--ink)}
 .tabs a:hover{border-color:var(--blue)}
-.switches{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:10px}
-.sw{display:flex;gap:12px;align-items:center;padding:12px 14px;border-radius:12px;border:2px solid var(--line);background:var(--panel);cursor:pointer;font-weight:700}
-.sw input{width:20px;height:20px;accent-color:var(--good);flex:none}
-.sw .st{margin-left:auto;font:700 .75rem var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
-.sw.on{border-color:var(--good);background:var(--good-soft)}
-.sw.on .st{color:var(--good)}
-.status{font-weight:600}.status.bad{color:var(--bad)}.status.ok{color:var(--good)}
 .unitnav{display:flex;flex-wrap:wrap;gap:6px}
 .unitnav a{font:600 .85rem var(--mono);text-decoration:none;padding:4px 10px;border-radius:99px;border:1.5px solid var(--line);color:var(--ink)}
 .unitkey{display:flex;flex-direction:column;gap:8px;padding-top:14px;border-top:1px solid var(--line)}
@@ -43,11 +36,8 @@ details[open] summary .qt{white-space:normal}
 <body>
 <header class="site-header"><div class="in"><a class="brand" href="/"><span class="p">&gt;&gt;&gt;</span>Class 10 Python Quizzes</a></div></header>
 <main class="wrap">
-<header style="display:flex;flex-direction:column;gap:8px"><p class="eyebrow">Teacher area · password protected</p><h1>Quizzes</h1><p class="muted">Only people with the admin username and password can open this page.</p></header>
-<nav class="tabs" aria-label="Sections"><a href="#show">Show or hide</a><a href="#quiz-keys">Answer keys</a><a href="#notes">Notes</a></nav>
-<section class="panel" id="show"><h2>Show to students</h2><p class="muted">Tick a quiz to show it on the students' page. Untick to hide it; a hidden quiz's link stops working too. Each change takes about a minute to reach students.</p>
-<div class="switches" id="switches"></div>
-<p class="status" id="status" aria-live="polite">Loading…</p></section>
+<header style="display:flex;flex-direction:column;gap:8px"><p class="eyebrow">Teacher area · password protected</p><h1>Answer keys</h1><p class="muted">Only people with the admin username and password can open this page.</p></header>
+<nav class="tabs" aria-label="Sections"><a href="#quiz-keys">Answer keys</a><a href="#notes">Notes</a></nav>
 <section class="panel" id="quiz-keys"><h2>Quiz answer keys</h2><p class="muted">Each unit has 20 questions with exactly 5 correct answers on each of A, B, C and D. Click a question to see its options and explanation.</p>
 <div class="unitnav"><a href="#key-strings">Strings</a><a href="#key-lists">Lists</a><a href="#key-modules">Modules &amp; Packages</a><a href="#key-numpy">NumPy</a><a href="#key-pandas">Pandas</a><a href="#key-matplotlib">Matplotlib</a></div><section class="unitkey" id="key-strings"><div class="row"><h3>Strings</h3><span class="spacer"></span><span class="dist">A 5 · B 5 · C 5 · D 5</span></div><p class="order"><b>Answer string:</b> <span>1D 2D 3C 4D 5B 6B 7D 8A 9C 10A 11B 12B 13D 14B 15C 16A 17A 18C 19A 20C</span></p><details><summary><span class="n">Q1</span><span class="a">D</span><span class="qt">Which statement about Python strings is true?</span></summary><div class="body"><ol class="opts"><li class=""><span class="k">A</span><span class="">Single-quoted and double-quoted strings are different data types.</span></li><li class=""><span class="k">B</span><span class="">The first character of a string is at index 1.</span></li><li class=""><span class="k">C</span><span class="">A string can only hold letters and digits.</span></li><li class="right"><span class="k">D</span><span class="">A string&#x27;s characters cannot be changed after it is created.</span></li></ol><p class="ex">Strings are immutable. Quotes of either kind make the same str type, and indexing starts at 0.</p></div></details><details><summary><span class="n">Q2</span><span class="a">D</span><span class="qt">What is the output of this code?</span></summary><div class="body"><pre class="code">s = &quot;Python&quot;
 print(s[-2])</pre><ol class="opts"><li class=""><span class="k">A</span><span class="mono">n</span></li><li class=""><span class="k">B</span><span class="mono">h</span></li><li class=""><span class="k">C</span><span class="mono">t</span></li><li class="right"><span class="k">D</span><span class="mono">o</span></li></ol><p class="ex">Negative indexes count from the right: n is -1, o is -2.</p></div></details><details><summary><span class="n">Q3</span><span class="a">C</span><span class="qt">What is the output of this code?</span></summary><div class="body"><pre class="code">print(len(&quot;Hi there\n&quot;))</pre><ol class="opts"><li class=""><span class="k">A</span><span class="mono">10</span></li><li class=""><span class="k">B</span><span class="mono">11</span></li><li class="right"><span class="k">C</span><span class="mono">9</span></li><li class=""><span class="k">D</span><span class="mono">8</span></li></ol><p class="ex">&quot;Hi there&quot; has 8 characters, and \n is one more character.</p></div></details><details><summary><span class="n">Q4</span><span class="a">D</span><span class="qt">What is the output of this code?</span></summary><div class="body"><pre class="code">s = &quot;COMPUTER&quot;
@@ -190,41 +180,10 @@ counts, edges, bars = plt.hist([1, 2, 2, 3, 3, 3], bins=3)
 print(int(max(counts)))</pre><ol class="opts"><li class=""><span class="k">A</span><span class="mono">1</span></li><li class=""><span class="k">B</span><span class="mono">2</span></li><li class="right"><span class="k">C</span><span class="mono">3</span></li><li class=""><span class="k">D</span><span class="mono">6</span></li></ol><p class="ex">The value 3 appears three times, so the tallest bin holds 3 values.</p></div></details><details><summary><span class="n">Q15</span><span class="a">C</span><span class="qt">What does <code>plt.grid(True)</code> add to a chart?</span></summary><div class="body"><ol class="opts"><li class=""><span class="k">A</span><span class="">Numbers on top of each bar</span></li><li class=""><span class="k">B</span><span class="">A table of the data under the chart</span></li><li class="right"><span class="k">C</span><span class="">Light lines across the chart that make values easier to read</span></li><li class=""><span class="k">D</span><span class="">A border around the whole window</span></li></ol><p class="ex">Grid lines help the eye read values across the chart.</p></div></details><details><summary><span class="n">Q16</span><span class="a">A</span><span class="qt">A pie chart uses <code>autopct=&quot;%1.1f%%&quot;</code>. The largest slice is half of the pie. What label does it show? (This code prints the same text.)</span></summary><div class="body"><pre class="code">print(&quot;%1.1f%%&quot; % 50)</pre><ol class="opts"><li class="right"><span class="k">A</span><span class="mono">50.0%</span></li><li class=""><span class="k">B</span><span class="mono">0.5</span></li><li class=""><span class="k">C</span><span class="mono">50.00%</span></li><li class=""><span class="k">D</span><span class="mono">50%</span></li></ol><p class="ex">%1.1f gives one decimal place, and %% prints a % sign.</p></div></details><details><summary><span class="n">Q17</span><span class="a">B</span><span class="qt">What happens when this code runs?</span></summary><div class="body"><pre class="code">import matplotlib.pyplot as plt
 plt.plot([1, 2, 3], [2, 4])</pre><ol class="opts"><li class=""><span class="k">A</span><span class="mono">It plots 3 points, the last at y = 0</span></li><li class="right"><span class="k">B</span><span class="mono">ValueError</span></li><li class=""><span class="k">C</span><span class="mono">It plots 2 points</span></li><li class=""><span class="k">D</span><span class="mono">TypeError</span></li></ol><p class="ex">x and y must have the same number of values.</p></div></details><details><summary><span class="n">Q18</span><span class="a">A</span><span class="qt">What does <code>color=&quot;green&quot;</code> do in <code>plt.bar(names, marks, color=&quot;green&quot;)</code>?</span></summary><div class="body"><ol class="opts"><li class="right"><span class="k">A</span><span class="">Draws every bar in green</span></li><li class=""><span class="k">B</span><span class="">Turns the background green</span></li><li class=""><span class="k">C</span><span class="">Writes the labels in green</span></li><li class=""><span class="k">D</span><span class="">Draws only the tallest bar in green</span></li></ol><p class="ex">color sets the fill colour of the bars.</p></div></details><details><summary><span class="n">Q19</span><span class="a">D</span><span class="qt">How is <code>plt.barh(names, marks)</code> different from <code>plt.bar(names, marks)</code>?</span></summary><div class="body"><ol class="opts"><li class=""><span class="k">A</span><span class="">It sorts the bars from highest to lowest</span></li><li class=""><span class="k">B</span><span class="">It draws the bars in half height</span></li><li class=""><span class="k">C</span><span class="">It draws a histogram instead of bars</span></li><li class="right"><span class="k">D</span><span class="">It draws the bars horizontally, with names on the y-axis</span></li></ol><p class="ex">The h stands for horizontal.</p></div></details><details><summary><span class="n">Q20</span><span class="a">C</span><span class="qt">What does <code>plt.savefig(&quot;chart.png&quot;)</code> do?</span></summary><div class="body"><ol class="opts"><li class=""><span class="k">A</span><span class="">Opens chart.png and draws it in the window</span></li><li class=""><span class="k">B</span><span class="">Copies the chart to the clipboard</span></li><li class="right"><span class="k">C</span><span class="">Saves the chart as an image file called chart.png</span></li><li class=""><span class="k">D</span><span class="">Deletes chart.png from the folder</span></li></ol><p class="ex">savefig writes the current chart to a file.</p></div></details></section></section>
 <section class="panel note" id="notes"><h2>Notes</h2><ul>
-<li><b>How show/hide works:</b> each change is saved to <code>visible.json</code> in the site's GitHub repo. Vercel then redeploys by itself. This needs <code>GITHUB_TOKEN</code> set in Vercel.</li>
 <li><b>Scores are not saved.</b> The site has no backend, so each student sees their result on their own screen only. Ask students to show or screenshot the results page.</li>
 <li><b>Quiz answers ship with the quiz page,</b> lightly scrambled. A student who knows browser developer tools could still dig them out, so run graded tests in class.</li>
 <li><b>Change the password:</b> Vercel → your project → Settings → Environment Variables → edit <code>ADMIN_PASS</code>, then redeploy.</li>
 </ul></section>
 </main>
-<script>
-'use strict';
-const UNITS=[{"key":"strings","name":"Strings","n":20},{"key":"lists","name":"Lists","n":20},{"key":"modules","name":"Modules & Packages","n":20},{"key":"numpy","name":"NumPy","n":20},{"key":"pandas","name":"Pandas","n":20},{"key":"matplotlib","name":"Matplotlib","n":20}];
-const box=document.getElementById('switches'),statusEl=document.getElementById('status');
-let state={},timer=null,liveTimer=null;
-const say=(t,c)=>{statusEl.textContent=t;statusEl.className='status'+(c?' '+c:'');};
-const same=(a,b)=>UNITS.every(u=>(a[u.key]===true)===(b[u.key]===true));
-function render(){
-  box.replaceChildren(...UNITS.map(u=>{const on=state[u.key]===true;const lab=document.createElement('label');lab.className='sw'+(on?' on':'');
-    const cb=document.createElement('input');cb.type='checkbox';cb.checked=on;cb.addEventListener('change',()=>{state[u.key]=cb.checked;render();say('Saving…');clearTimeout(timer);timer=setTimeout(save,800);});
-    const st=document.createElement('span');st.className='st';st.textContent=on?'Shown':'Hidden';
-    lab.append(cb,document.createTextNode(u.name),st);return lab;}));
-}
-// Compares the saved setting with what the live site is serving, so the teacher knows when the redeploy has finished.
-async function checkLive(){
-  clearTimeout(liveTimer);
-  let live={};try{const r=await fetch('/visible.json',{cache:'no-store'});if(r.ok)live=await r.json();}catch(e){}
-  if(same(live,state))say('Live: students see exactly what is ticked.','ok');
-  else{say('Saved. Vercel is redeploying; students see the change in about a minute.');liveTimer=setTimeout(checkLive,10000);}
-}
-async function save(){
-  try{const r=await fetch('/admin/visibility',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(state)});const j=await r.json().catch(()=>({}));
-    if(!r.ok)throw new Error(j.error||('HTTP '+r.status));state=j.visible;render();checkLive();}
-  catch(e){say('Not saved: '+e.message,'bad');}
-}
-(async()=>{
-  try{const r=await fetch('/admin/visibility',{cache:'no-store'});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||('HTTP '+r.status));state=j.visible;render();checkLive();}
-  catch(e){render();say('Could not load the settings: '+e.message,'bad');}
-})();
-</script>
 </body>
 </html>
