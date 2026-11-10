@@ -33,6 +33,8 @@
 .rail{height:8px;border-radius:99px;background:var(--sunk);overflow:hidden}
 .rail i{display:block;height:100%;background:var(--blue);border-radius:99px;transition:width .3s}
 .map{display:flex;flex-wrap:wrap;gap:6px}
+.mapbox summary{cursor:pointer;font-weight:700;color:var(--blue);font-size:.92rem;padding:2px 0}
+.mapbox[open] summary{margin-bottom:8px}
 .map button{width:34px;height:34px;border-radius:9px;border:2px solid var(--line);background:var(--panel);font:600 .8rem var(--mono);cursor:pointer;color:var(--muted);font-variant-numeric:tabular-nums}
 .map button.done{border-color:var(--blue);color:var(--blue);background:var(--blue-soft)}
 .map button.ok{border-color:var(--good);color:var(--good);background:var(--good-soft)}
@@ -131,7 +133,7 @@ function quizScreen(){
   else footer=h('div',{class:'row'},h('button',{type:'button',class:'btn small',disabled:S.i===0,onclick:()=>go(-1)},'← Back'),h('button',{type:'button',class:'btn small',disabled:isLast,onclick:()=>go(1)},'Next →'),h('span',{class:'spacer'}),h('button',{type:'button',class:'btn primary',onclick:()=>{if(answered<N&&!S.warn){S.warn=true;quizScreen();}else finish();}},'Submit test'));
   app.replaceChildren(
     h('header',{class:'top'},h('div',{class:'row'},h('h2',{},S.title),h('span',{class:'spacer'}),h('span',{class:'muted keys'},S.mode==='practice'?`Score ${correctSoFar} / ${S.checked.filter(Boolean).length}`:`${answered} of ${N} answered`),h('button',{type:'button',class:'btn small',onclick:()=>{S=null;startScreen();}},'Quit')),
-      h('div',{class:'rail',role:'progressbar','aria-valuemin':'0','aria-valuemax':String(N),'aria-valuenow':String(S.i+1)},h('i',{style:`width:${(S.i+1)/N*100}%`})),h('nav',{class:'map','aria-label':'Questions'},mapBtns)),
+      h('div',{class:'rail',role:'progressbar','aria-valuemin':'0','aria-valuemax':String(N),'aria-valuenow':String(S.i+1)},h('i',{style:`width:${(S.i+1)/N*100}%`})),N>30?(()=>{const d=h('details',{class:'mapbox',ontoggle:e=>{S.mapOpen=e.target.open;}},h('summary',{},'Jump to a question'),h('nav',{class:'map','aria-label':'Questions'},mapBtns));d.open=!!S.mapOpen;return d;})():h('nav',{class:'map','aria-label':'Questions'},mapBtns)),
     h('section',{class:'panel','aria-live':'polite'},
       h('div',{class:'qhead'},h('span',{class:'qnum'},`Question ${S.i+1} of ${N}`),multiTopic(S.qs)?h('span',{class:'tag'},q.topic):null),
       h('p',{class:'qtext',html:rich(q.q)}),q.code?h('pre',{class:'code'},q.code):null,

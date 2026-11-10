@@ -5,7 +5,7 @@ A static quiz website for students, plus a teacher area at `/admin` that needs a
 | Path | Who | What |
 | --- | --- | --- |
 | `/` | Everyone | List of all quizzes |
-| `/quiz/<unit>` | Everyone | One quiz per unit: `strings`, `lists`, `modules`, `pandas`, `matplotlib` (20 questions each) and `numpy` (140 questions in 7 topics; link one topic with `/quiz/numpy#slicing`) |
+| `/quiz/<unit>` | Everyone | One quiz per unit: `strings` (120), `lists` (120), `numpy` (140), `pandas` (140) and `matplotlib` (80), split into topics of 20, plus `modules` (20). Link one topic with e.g. `/quiz/pandas#missing-data`; `/admin` lists every topic link |
 | `/admin` | Teacher only | Answer keys for every quiz |
 
 ## Environment variables (Vercel → Project → Settings → Environment Variables)
