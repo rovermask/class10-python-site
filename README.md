@@ -6,7 +6,8 @@ A static quiz website for students, plus a teacher area at `/admin` that needs a
 | --- | --- | --- |
 | `/` | Everyone | List of all quizzes |
 | `/quiz/<unit>` | Everyone | One quiz per unit: `strings` (120), `lists` (120), `numpy` (140), `pandas` (140) and `matplotlib` (80), split into topics of 20, plus `modules` (20). Link one topic with e.g. `/quiz/pandas#missing-data`; `/admin` lists every topic link |
-| `/admin` | Teacher only | Answer keys for every quiz |
+| `/practice` | Everyone | Practice-program PDFs, one per unit: 5 write-the-program questions per topic, no answers |
+| `/admin` | Teacher only | Answer keys for every quiz, and the practice answer-key PDFs (`/admin/practice/<unit>-key.pdf`) |
 
 ## Environment variables (Vercel → Project → Settings → Environment Variables)
 
